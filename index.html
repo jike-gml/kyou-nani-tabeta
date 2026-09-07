@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#fff7e8" />
-  <meta name="description" content="朝食・昼食・夜食・間食を写真で2か月だけ残す食ログアプリ" />
+  <meta name="description" content="朝食・昼食・夕食・間食を写真で2か月だけ残す食ログアプリ" />
   <title>今日何食べた？</title>
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon-192.png" />
@@ -156,6 +156,30 @@
     .memo-hint{color:var(--muted);font-size:.74rem}
     .photo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
+
+    .meal-tabs{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+    .meal-tab{min-height:44px;font-size:.78rem}
+    .meal-tab[data-meal="all"]{background:#faf8f3;border-color:#ded8cd}
+    .meal-tab[data-meal="breakfast"]{background:#fff6cf;border-color:#efda83}
+    .meal-tab[data-meal="lunch"]{background:#eaf6ff;border-color:#a9d7ee}
+    .meal-tab[data-meal="dinner"]{background:#ffede5;border-color:#f1b597}
+    .meal-tab[data-meal="snack"]{background:#ecf8e9;border-color:#abd4a7}
+    .meal-tab.is-active{box-shadow:inset 0 0 0 2px rgba(61,54,47,.2);filter:saturate(1.14) brightness(.96)}
+    .day-cell{min-height:88px}
+    .calendar-grid.is-all .day-cell{min-height:142px;padding:3px}
+    .all-meals{display:grid;gap:2px}
+    .meal-slot{display:flex;align-items:center;justify-content:space-between;min-height:22px;width:100%;padding:2px 4px;border:1px solid transparent;border-radius:4px;font:inherit;font-size:.62rem;font-weight:800;text-align:left}
+    .meal-slot:disabled{opacity:1;color:var(--text);cursor:default}
+    .meal-slot .record-mark{display:none;width:10px;height:10px;border-radius:50%;background:currentColor}
+    .meal-slot.has-record{cursor:pointer}
+    .meal-slot.has-record .record-mark{display:block}
+    .meal-slot.breakfast{background:#fff7d8;color:#ae7c00;border-color:#f3df9a}
+    .meal-slot.lunch{background:#edf8ff;color:#28799f;border-color:#b8dff0}
+    .meal-slot.dinner{background:#fff0ea;color:#bf633d;border-color:#f3c1aa}
+    .meal-slot.snack{background:#eff9ec;color:#4f8e4a;border-color:#badeb5}
+    .thumb-box.breakfast{border-color:#e8cf69}.thumb-box.lunch{border-color:#8bc9e9}.thumb-box.dinner{border-color:#e99a76}.thumb-box.snack{border-color:#90c78a}
+    @media(max-width:430px){.meal-tab{font-size:.67rem;padding:0 3px}.calendar-grid.is-all .day-cell{min-height:130px}.meal-slot{font-size:.56rem;min-height:20px}}
+
     @media(max-width:430px){
       .app-shell{padding-inline:10px}
       .home-meal{min-height:86px}
@@ -181,7 +205,7 @@
       <div class="meal-home-grid" aria-label="今日の食事を記録">
         <button class="home-meal" data-home-meal="breakfast" type="button">朝食<small>写真を撮る</small></button>
         <button class="home-meal" data-home-meal="lunch" type="button">昼食<small>写真を撮る</small></button>
-        <button class="home-meal" data-home-meal="dinner" type="button">夜食<small>写真を撮る</small></button>
+        <button class="home-meal" data-home-meal="dinner" type="button">夕食<small>写真を撮る</small></button>
         <button class="home-meal" data-home-meal="snack" type="button">間食<small>写真を撮る</small></button>
       </div>
 
@@ -199,10 +223,11 @@
       </div>
 
       <nav class="meal-tabs" aria-label="食事の切り替え">
-        <button class="meal-tab is-active" data-meal="breakfast" type="button">朝</button>
-        <button class="meal-tab" data-meal="lunch" type="button">昼</button>
-        <button class="meal-tab" data-meal="dinner" type="button">夜</button>
-        <button class="meal-tab" data-meal="snack" type="button">間</button>
+        <button class="meal-tab is-active" data-meal="all" type="button">全食</button>
+        <button class="meal-tab" data-meal="breakfast" type="button">朝食</button>
+        <button class="meal-tab" data-meal="lunch" type="button">昼食</button>
+        <button class="meal-tab" data-meal="dinner" type="button">夕食</button>
+        <button class="meal-tab" data-meal="snack" type="button">間食</button>
       </nav>
 
       <section class="calendar-toolbar" aria-label="月の切り替え">
@@ -280,13 +305,13 @@
       mealNames: {
         breakfast: '朝食',
         lunch: '昼食',
-        dinner: '夜食',
+        dinner: '夕食',
         snack: '間食'
       },
       shortMealNames: {
         breakfast: '朝',
         lunch: '昼',
-        dinner: '夜',
+        dinner: '夕',
         snack: '間'
       }
     };
@@ -294,6 +319,7 @@
     const state = {
       db: null,
       meal: 'breakfast',
+      calendarMode: 'all',
       today: startOfDay(new Date()),
       viewedMonth: startOfMonth(new Date()),
       selectedDate: toDateKey(new Date()),
@@ -319,6 +345,7 @@
       bindEvents();
       try {
         state.db = await openDatabase();
+        await migrateLegacyDinnerRecords();
         await purgeExpiredRecords();
         await refreshRecords();
         renderHome();
@@ -383,6 +410,7 @@
       els.openCalendar.addEventListener('click', () => {
         state.viewedMonth = startOfMonth(state.today);
         state.selectedDate = toDateKey(state.today);
+        state.calendarMode = 'all';
         renderCalendar();
         history.pushState({ foodlogView: 'calendar' }, '', location.href);
         showView('calendar');
@@ -400,7 +428,8 @@
 
       els.mealTabs.forEach((button) => {
         button.addEventListener('click', () => {
-          state.meal = button.dataset.meal;
+          state.calendarMode = button.dataset.meal;
+          if (state.calendarMode !== 'all') state.meal = state.calendarMode;
           renderCalendar();
         });
       });
@@ -467,6 +496,20 @@
       });
     }
 
+    async function migrateLegacyDinnerRecords() {
+      const all = await getAllRecords();
+      const existing = new Set(all.map(record => record.key));
+      for (const record of all) {
+        if (record.meal !== '夜' && record.meal !== '夜食') continue;
+        const key = recordKey(record.date, 'dinner');
+        if (!existing.has(key)) {
+          await putRecord({ ...record, key, meal: 'dinner' });
+          existing.add(key);
+        }
+        await deleteRecord(record.key);
+      }
+    }
+
     async function refreshRecords() {
       const all = await getAllRecords();
       state.records = new Map(all.map((record) => [record.key, record]));
@@ -528,7 +571,7 @@
 
     function renderMealTabs() {
       els.mealTabs.forEach((button) => {
-        const active = button.dataset.meal === state.meal;
+        const active = button.dataset.meal === state.calendarMode;
         button.classList.toggle('is-active', active);
         button.setAttribute('aria-pressed', String(active));
       });
@@ -545,10 +588,17 @@
       els.nextMonth.disabled = state.viewedMonth >= startOfMonth(state.today);
     }
 
+    function openRecord(dateKey, meal) {
+      state.selectedDate = dateKey;
+      state.meal = meal;
+      openDetailPage();
+    }
+
     function renderCalendarGrid() {
       cleanupCalendarObjectUrls();
       els.calendarGrid.innerHTML = '';
-
+      const mode = state.calendarMode;
+      els.calendarGrid.classList.toggle('is-all', mode === 'all');
       const year = state.viewedMonth.getFullYear();
       const month = state.viewedMonth.getMonth();
       const firstDay = new Date(year, month, 1);
@@ -559,58 +609,52 @@
         blank.setAttribute('aria-hidden', 'true');
         els.calendarGrid.appendChild(blank);
       }
-
       for (let day = 1; day <= dayCount; day += 1) {
         const date = new Date(year, month, day);
         const dateKey = toDateKey(date);
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'day-cell';
-        button.setAttribute('role', 'gridcell');
-        button.setAttribute('aria-label', `${month + 1}月${day}日を表示`);
-        if (dateKey === state.selectedDate) button.classList.add('is-selected');
-        if (dateKey === toDateKey(state.today)) button.classList.add('is-today');
-
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+        cell.setAttribute('role', 'gridcell');
+        if (dateKey === toDateKey(state.today)) cell.classList.add('is-today');
         const number = document.createElement('span');
         number.className = 'day-number';
         number.textContent = String(day);
-
-        const thumbGrid = document.createElement('div');
-        thumbGrid.className = 'thumb-grid';
-
-        const record = state.records.get(recordKey(dateKey, state.meal));
-        const thumb = document.createElement('div');
-        thumb.className = 'thumb-box';
-
-        if (record?.thumbBlob) {
-          thumb.classList.add('has-photo');
-          const img = document.createElement('img');
-          const url = URL.createObjectURL(record.thumbBlob);
-          state.calendarObjectUrls.add(url);
-          img.dataset.calendarUrl = '1';
-          img.src = url;
-          img.alt = `${month + 1}月${day}日・${APP.shortMealNames[state.meal]}の写真`;
-          img.addEventListener('click', (event) => {
-            event.stopPropagation();
-            state.selectedDate = dateKey;
-            openDetailPage();
-          });
-          thumb.appendChild(img);
+        cell.appendChild(number);
+        if (mode === 'all') {
+          const slots = document.createElement('div');
+          slots.className = 'all-meals';
+          for (const meal of ['breakfast','lunch','dinner','snack']) {
+            const record = state.records.get(recordKey(dateKey, meal));
+            const slot = document.createElement('button');
+            slot.type = 'button';
+            slot.className = `meal-slot ${meal}`;
+            slot.disabled = !record?.fullBlob;
+            slot.setAttribute('aria-label', `${month + 1}月${day}日・${APP.mealNames[meal]}${record?.fullBlob ? 'の詳細を開く' : 'は未記録'}`);
+            slot.innerHTML = `<span>${APP.shortMealNames[meal]}</span><span class="record-mark" aria-hidden="true"></span>`;
+            if (record?.fullBlob) {
+              slot.classList.add('has-record');
+              slot.addEventListener('click', () => openRecord(dateKey, meal));
+            }
+            slots.appendChild(slot);
+          }
+          cell.appendChild(slots);
         } else {
-          const empty = document.createElement('span');
-          empty.className = 'thumb-empty';
-          empty.setAttribute('aria-hidden', 'true');
-          thumb.appendChild(empty);
+          const record = state.records.get(recordKey(dateKey, mode));
+          const thumb = document.createElement(record?.thumbBlob ? 'button' : 'div');
+          thumb.className = `thumb-box ${state.meal}${record?.thumbBlob ? ' has-photo' : ''}`;
+          if (record?.thumbBlob) {
+            thumb.type = 'button';
+            const img = document.createElement('img');
+            const url = URL.createObjectURL(record.thumbBlob);
+            state.calendarObjectUrls.add(url);
+            img.src = url;
+            img.alt = `${month + 1}月${day}日・${APP.shortMealNames[mode]}の写真`;
+            thumb.appendChild(img);
+            thumb.addEventListener('click', () => openRecord(dateKey, mode));
+          }
+          cell.appendChild(thumb);
         }
-        thumbGrid.appendChild(thumb);
-
-        button.append(number, thumbGrid);
-        button.addEventListener('click', () => {
-          if (!record?.fullBlob) return;
-          state.selectedDate = dateKey;
-          openDetailPage();
-        });
-        els.calendarGrid.appendChild(button);
+        els.calendarGrid.appendChild(cell);
       }
     }
 
@@ -629,7 +673,7 @@
         return;
       }
       const date = parseDateKey(state.selectedDate);
-      els.detailTitle.textContent = `${date.getMonth() + 1}月${date.getDate()}日・${APP.shortMealNames[state.meal]}`;
+      els.detailTitle.textContent = `${date.getMonth() + 1}月${date.getDate()}日・${APP.shortMealNames[mode]}`;
       cleanupDetailObjectUrl();
       state.detailObjectUrl = URL.createObjectURL(record.fullBlob);
       els.detailImage.src = state.detailObjectUrl;
@@ -873,7 +917,7 @@
       const key = recordKey(state.selectedDate, state.meal);
       const record = state.records.get(key);
       if (!record) return;
-      const ok = window.confirm(`${formatDate(state.selectedDate)}・${APP.shortMealNames[state.meal]}の写真を削除しますか？`);
+      const ok = window.confirm(`${formatDate(state.selectedDate)}・${APP.shortMealNames[mode]}の写真を削除しますか？`);
       if (!ok) return;
       await deleteRecord(key);
       await refreshRecords();
