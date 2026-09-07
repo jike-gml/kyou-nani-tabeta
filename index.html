@@ -323,6 +323,7 @@
         await refreshRecords();
         renderHome();
         renderCalendar();
+        history.replaceState({ foodlogView: 'home' }, '', location.href);
         showView('home');
         setHomeStatus('写真は端末内に保存され、当月＋前月の2か月だけ保持します。');
         scheduleMidnightRefresh();
@@ -383,10 +384,16 @@
         state.viewedMonth = startOfMonth(state.today);
         state.selectedDate = toDateKey(state.today);
         renderCalendar();
+        history.pushState({ foodlogView: 'calendar' }, '', location.href);
         showView('calendar');
       });
 
       els.backHome.addEventListener('click', () => {
+        goHomeFromCalendar();
+      });
+
+      window.addEventListener('popstate', () => {
+        if (state.currentView !== 'calendar') return;
         renderHome();
         showView('home');
       });
@@ -480,6 +487,15 @@
     function retentionEndDate() {
       const firstNextMonth = new Date(state.today.getFullYear(), state.today.getMonth() + 1, 1);
       return new Date(firstNextMonth.getTime() - 1);
+    }
+
+    function goHomeFromCalendar() {
+      if (history.state?.foodlogView === 'calendar') {
+        history.back();
+        return;
+      }
+      renderHome();
+      showView('home');
     }
 
     function showView(name) {
