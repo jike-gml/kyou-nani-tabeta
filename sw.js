@@ -1,4 +1,4 @@
-const CACHE = 'foodlog-v12';
+const CACHE = 'foodlog-v13';
 const ASSETS = [
   './',
   './index.html',
@@ -14,7 +14,10 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith('foodlog-') && key !== CACHE).map((key) => caches.delete(key))))
+    caches.keys().then((keys) => Promise.all(
+      keys.filter((key) => key.startsWith('foodlog-') && key !== CACHE)
+        .map((key) => caches.delete(key))
+    ))
   );
   self.clients.claim();
 });
