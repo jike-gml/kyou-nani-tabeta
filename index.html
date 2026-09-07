@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#fff7e8" />
   <meta name="description" content="朝食・昼食・夕食・間食を写真で2か月だけ残す食ログアプリ" />
-  <title>今日何食べた？</title>
+  <title>今日はなに食べた？</title>
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon-192.png" />
   <style>
@@ -40,1020 +40,114 @@
     [hidden]{display:none!important}
 
     .app-shell{width:min(100%,760px);margin:0 auto;padding:14px 12px 34px}
-    .hero{
-      padding:18px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:linear-gradient(135deg,var(--warm),var(--blue));
-      box-shadow:var(--shadow);
-    }
+    .hero{padding:18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,var(--warm),var(--blue));box-shadow:var(--shadow)}
     .hero h1{margin:0;font-size:clamp(1.45rem,6vw,2rem);letter-spacing:.01em}
     .hero p{margin:6px 0 0;color:var(--muted);font-size:.9rem}
-    .today-line{margin:18px 2px 10px}
-    .today-line strong{font-size:1.18rem}
-    .today-line span{display:block;margin-top:2px;color:var(--muted);font-size:.84rem}
-
+    .today-line{margin:18px 2px 10px}.today-line strong{font-size:1.18rem}.today-line span{display:block;margin-top:2px;color:var(--muted);font-size:.84rem}
     .meal-home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    .home-meal{
-      min-height:92px;
-      border:1px solid #e6c676;
-      border-radius:18px;
-      background:linear-gradient(180deg,#fff9eb,var(--accent-soft));
-      color:var(--text);
-      font-size:1.14rem;
-      font-weight:800;
-      box-shadow:0 5px 16px rgba(92,74,49,.06);
-    }
+    .home-meal{min-height:92px;border:1px solid #e6c676;border-radius:18px;background:linear-gradient(180deg,#fff9eb,var(--accent-soft));color:var(--text);font-size:1.14rem;font-weight:800;box-shadow:0 5px 16px rgba(92,74,49,.06)}
     .home-meal small{display:block;margin-top:5px;font-size:.72rem;font-weight:600;color:var(--muted)}
-    .home-meal:disabled{
-      border-color:#d7d2cc;
-      background:var(--disabled);
-      color:var(--disabled-text);
-      box-shadow:none;
-      cursor:not-allowed;
-    }
-    .home-meal:disabled small{color:var(--disabled-text)}
-
-    .calendar-open{
-      width:100%;
-      min-height:54px;
-      margin-top:14px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:var(--surface);
-      color:var(--text);
-      font-weight:800;
-      font-size:1rem;
-    }
+    .home-meal:disabled{border-color:#d7d2cc;background:var(--disabled);color:var(--disabled-text);box-shadow:none;cursor:not-allowed}.home-meal:disabled small{color:var(--disabled-text)}
+    .calendar-open{width:100%;min-height:54px;margin-top:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-weight:800;font-size:1rem}
     .status{min-height:1.2em;margin:12px 3px 0;color:var(--muted);font-size:.82rem}
-
     .view-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-    .back-button,.icon-button,.secondary-button,.primary-button,.danger-button{
-      min-height:46px;border-radius:13px;padding:0 14px;font-weight:750
-    }
-    .back-button,.icon-button,.secondary-button{border:1px solid var(--line);background:var(--surface);color:var(--text)}
-    .back-button{min-width:76px}
-    .view-title{min-width:0}
-    .view-title h2{margin:0;font-size:1.13rem}
-    .view-title p{margin:3px 0 0;color:var(--muted);font-size:.8rem}
-
-    .confirm-card,.calendar-card,.detail-card{
-      border:1px solid var(--line);
-      border-radius:19px;
-      background:var(--surface);
-      box-shadow:var(--shadow);
-    }
-    .confirm-card{padding:14px}
-    .confirm-photo{
-      width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:15px;background:#111;
-      border:1px solid var(--line)
-    }
-    .confirm-photo img{display:block;width:100%;height:100%;object-fit:contain}
-    .confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
-    .primary-button{border:1px solid #e0bf6b;background:var(--accent-soft);color:var(--text)}
-    .secondary-button{background:#fff}
-    .danger-button{border:1px solid #e7baba;background:#fff4f4;color:var(--danger)}
-    .confirm-cancel{grid-column:1/-1}
-
-    .meal-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:8px 0 12px}
-    .meal-tab{
-      min-height:46px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);
-      font-weight:800;font-size:1rem
-    }
-    .meal-tab.is-active{border-color:#e1bc68;background:var(--accent-soft)}
-
-    .calendar-toolbar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:8px;margin:8px 0 10px}
-    .icon-button{width:48px;padding:0;font-size:1.45rem}
-    .icon-button:disabled{opacity:.35}
-    .month-center{text-align:center}
-    .month-center strong{display:block;font-size:1.08rem}
-    .month-center span{display:block;margin-top:2px;color:var(--muted);font-size:.76rem}
-
-    .calendar-card{overflow:hidden}
-    .weekday-row,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
-    .weekday-row{border-bottom:1px solid var(--line);background:var(--warm-2)}
-    .weekday-row span{padding:8px 1px;text-align:center;font-size:.76rem;font-weight:800}
-    .day-cell,.day-blank{min-width:0;min-height:88px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-    .day-cell{padding:4px;background:#fff;color:var(--text);text-align:left}
-    .day-cell:nth-child(7n),.day-blank:nth-child(7n){border-right:0}
-    .day-cell.is-selected{background:#fff7df}
-    .day-cell.is-today .day-number{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:999px;background:var(--accent-soft)}
-    .day-number{display:block;margin:0 0 3px 1px;font-size:.7rem;font-weight:850}
-    .thumb-grid{display:block;width:100%}
-    .thumb-box{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px dashed var(--line);border-radius:6px;background:#fffaf2}
-    .thumb-box.has-photo{border-style:solid}
-    .thumb-box img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
-    .thumb-empty{display:block;width:100%;height:100%}
-
-    .record-page{margin-top:8px}
-    .record-photo{display:grid;place-items:center;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#111}
-    .record-photo img{display:block;width:100%;height:100%;object-fit:contain}
-    .caption-block{margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fffaf2;color:var(--text);line-height:1.6;white-space:pre-wrap}
-    .memo-editor{margin-top:14px}
-    .memo-editor label{display:block;margin-bottom:6px;font-size:.84rem;font-weight:800}
-    .memo-editor textarea{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#fff;font:inherit;color:var(--text)}
-    .memo-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
-    .memo-hint{color:var(--muted);font-size:.74rem}
-    .photo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-
-
-    .meal-tabs{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
-    .meal-tab{min-height:44px;font-size:.78rem}
-    .meal-tab[data-meal="all"]{background:#faf8f3;border-color:#ded8cd}
-    .meal-tab[data-meal="breakfast"]{background:#fff6cf;border-color:#efda83}
-    .meal-tab[data-meal="lunch"]{background:#eaf6ff;border-color:#a9d7ee}
-    .meal-tab[data-meal="dinner"]{background:#ffede5;border-color:#f1b597}
-    .meal-tab[data-meal="snack"]{background:#ecf8e9;border-color:#abd4a7}
-    .meal-tab.is-active{box-shadow:inset 0 0 0 2px rgba(61,54,47,.2);filter:saturate(1.14) brightness(.96)}
-    .day-cell{min-height:88px}
-    .calendar-grid.is-all .day-cell{min-height:142px;padding:3px}
-    .all-meals{display:grid;gap:2px}
-    .meal-slot{display:flex;align-items:center;justify-content:space-between;min-height:22px;width:100%;padding:2px 4px;border:1px solid transparent;border-radius:4px;font:inherit;font-size:.62rem;font-weight:800;text-align:left}
-    .meal-slot:disabled{opacity:1;color:var(--text);cursor:default}
-    .meal-slot .record-mark{display:none;width:10px;height:10px;border-radius:50%;background:currentColor}
-    .meal-slot.has-record{cursor:pointer}
-    .meal-slot.has-record .record-mark{display:block}
-    .meal-slot.breakfast{background:#fff7d8;color:#ae7c00;border-color:#f3df9a}
-    .meal-slot.lunch{background:#edf8ff;color:#28799f;border-color:#b8dff0}
-    .meal-slot.dinner{background:#fff0ea;color:#bf633d;border-color:#f3c1aa}
-    .meal-slot.snack{background:#eff9ec;color:#4f8e4a;border-color:#badeb5}
-    .thumb-box.breakfast{border-color:#e8cf69}.thumb-box.lunch{border-color:#8bc9e9}.thumb-box.dinner{border-color:#e99a76}.thumb-box.snack{border-color:#90c78a}
-    @media(max-width:430px){.meal-tab{font-size:.67rem;padding:0 3px}.calendar-grid.is-all .day-cell{min-height:130px}.meal-slot{font-size:.56rem;min-height:20px}}
-
-    @media(max-width:430px){
-      .app-shell{padding-inline:10px}
-      .home-meal{min-height:86px}
-      .day-cell,.day-blank{min-height:84px}
-      .day-cell{padding:3px}
-      .thumb-empty{font-size:.5rem}
-    }
+    .back-button,.icon-button,.secondary-button,.primary-button,.danger-button{min-height:46px;border-radius:13px;padding:0 14px;font-weight:750}
+    .back-button,.icon-button,.secondary-button{border:1px solid var(--line);background:var(--surface);color:var(--text)}.back-button{min-width:76px}
+    .view-title{min-width:0}.view-title h2{margin:0;font-size:1.13rem}.view-title p{margin:3px 0 0;color:var(--muted);font-size:.8rem}
+    .calendar-card,.detail-card{border:1px solid var(--line);border-radius:19px;background:var(--surface);box-shadow:var(--shadow)}
+    .primary-button{border:1px solid #e0bf6b;background:var(--accent-soft);color:var(--text)}.secondary-button{background:#fff}.danger-button{border:1px solid #e7baba;background:#fff4f4;color:var(--danger)}
+    .meal-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:8px 0 12px}
+    .meal-tab{min-height:46px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);font-weight:800;font-size:.9rem}
+    .meal-tab-all{background:#f5f2ed}.meal-tab-breakfast{background:#fff6c9;border-color:#ead987}.meal-tab-lunch{background:#eaf5ff;border-color:#b9d9ee}.meal-tab-dinner{background:#ffe9d7;border-color:#efc19d}.meal-tab-snack{background:#eaf8e7;border-color:#bcd9b6}
+    .meal-tab.is-active{box-shadow:inset 0 0 0 2px rgba(61,54,47,.28);transform:translateY(-1px)}.meal-tab-all.is-active{background:#e9e4dc}.meal-tab-breakfast.is-active{background:#f6df73}.meal-tab-lunch.is-active{background:#bfe0f5}.meal-tab-dinner.is-active{background:#f4bb8b}.meal-tab-snack.is-active{background:#bfe3b8}
+    .calendar-toolbar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:8px;margin:8px 0 10px}.icon-button{width:48px;padding:0;font-size:1.45rem}.icon-button:disabled{opacity:.35}.month-center{text-align:center}.month-center strong{display:block;font-size:1.08rem}.month-center span{display:block;margin-top:2px;color:var(--muted);font-size:.76rem}
+    .calendar-card{overflow:hidden}.weekday-row,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.weekday-row{border-bottom:1px solid var(--line);background:var(--warm-2)}.weekday-row span{padding:8px 1px;text-align:center;font-size:.76rem;font-weight:800}
+    .day-cell,.day-blank{min-width:0;min-height:88px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.day-cell{padding:4px;background:#fff;color:var(--text);text-align:left}.day-cell:nth-child(7n),.day-blank:nth-child(7n){border-right:0}.day-cell.is-today .day-number{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:999px;background:var(--accent-soft)}.day-number{display:block;margin:0 0 3px 1px;font-size:.7rem;font-weight:850}
+    .thumb-box{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px dashed var(--line);border-radius:6px;background:#fffaf2}.thumb-box.has-photo{border-style:solid}.thumb-box img{width:100%;height:100%;object-fit:cover;display:block}.all-meal-list{display:grid;grid-template-rows:repeat(4,1fr);gap:2px;width:100%;min-height:58px}.all-meal-row{display:grid;grid-template-columns:18px 1fr;align-items:center;gap:2px;min-height:13px;padding:1px 3px;border:0;border-radius:4px;color:var(--text);font-size:.58rem;font-weight:850;text-align:left}.all-meal-row:disabled{opacity:1;cursor:default}.all-meal-row.breakfast{background:#fff6c9}.all-meal-row.lunch{background:#eaf5ff}.all-meal-row.dinner{background:#ffe9d7}.all-meal-row.snack{background:#eaf8e7}.meal-mark{display:inline-grid;place-items:center;width:10px;height:10px;border-radius:999px;font-size:.48rem;line-height:1;color:#fff}.breakfast .meal-mark{background:#d1a400}.lunch .meal-mark{background:#4b97c5}.dinner .meal-mark{background:#dc7f32}.snack .meal-mark{background:#57994b}.meal-mark.is-empty{background:transparent}
+    .record-page{margin-top:8px}.record-photo{display:grid;place-items:center;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#111}.record-photo img{display:block;width:100%;height:100%;object-fit:contain}.caption-block{margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fffaf2;color:var(--text);line-height:1.6;white-space:pre-wrap}.memo-editor{margin-top:14px}.memo-editor label{display:block;margin-bottom:6px;font-size:.84rem;font-weight:800}.memo-editor textarea{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#fff;font:inherit;color:var(--text)}.memo-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.memo-hint{color:var(--muted);font-size:.74rem}.photo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    @media(max-width:430px){.app-shell{padding-inline:10px}.home-meal{min-height:86px}.day-cell,.day-blank{min-height:84px}.day-cell{padding:3px}.meal-tab{font-size:.76rem;padding:0 3px}.all-meal-row{font-size:.5rem;grid-template-columns:15px 1fr;padding-inline:2px}}
   </style>
 </head>
 <body>
   <main class="app-shell">
     <section id="homeView">
-      <header class="hero">
-        <h1>今日何食べた？</h1>
-        <p>今日の食事を、写真でさっと記録。</p>
-      </header>
-
-      <div class="today-line">
-        <strong id="todayLabel"></strong>
-        <span>記録する食事を選んでください</span>
-      </div>
-
+      <header class="hero"><h1>今日はなに食べた？</h1><p>今日の食事を、写真でさっと記録。</p></header>
+      <div class="today-line"><strong id="todayLabel"></strong><span>記録する食事を選んでください</span></div>
       <div class="meal-home-grid" aria-label="今日の食事を記録">
         <button class="home-meal" data-home-meal="breakfast" type="button">朝食<small>写真を撮る</small></button>
         <button class="home-meal" data-home-meal="lunch" type="button">昼食<small>写真を撮る</small></button>
         <button class="home-meal" data-home-meal="dinner" type="button">夕食<small>写真を撮る</small></button>
         <button class="home-meal" data-home-meal="snack" type="button">間食<small>写真を撮る</small></button>
       </div>
-
       <button id="openCalendar" class="calendar-open" type="button">カレンダーを見る</button>
       <p id="homeStatus" class="status" role="status" aria-live="polite"></p>
     </section>
 
     <section id="calendarView" hidden>
-      <div class="view-header">
-        <button id="backHome" class="back-button" type="button">ホーム</button>
-        <div class="view-title">
-          <h2>カレンダー</h2>
-          <p>直近2か月の食事写真</p>
-        </div>
-      </div>
-
+      <div class="view-header"><button id="backHome" class="back-button" type="button">ホーム</button><div class="view-title"><h2>カレンダー</h2><p>直近2か月の食事写真</p></div></div>
       <nav class="meal-tabs" aria-label="食事の切り替え">
-        <button class="meal-tab is-active" data-meal="all" type="button">全食</button>
-        <button class="meal-tab" data-meal="breakfast" type="button">朝食</button>
-        <button class="meal-tab" data-meal="lunch" type="button">昼食</button>
-        <button class="meal-tab" data-meal="dinner" type="button">夕食</button>
-        <button class="meal-tab" data-meal="snack" type="button">間食</button>
+        <button class="meal-tab meal-tab-all is-active" data-meal="all" type="button">全食</button>
+        <button class="meal-tab meal-tab-breakfast" data-meal="breakfast" type="button">朝食</button>
+        <button class="meal-tab meal-tab-lunch" data-meal="lunch" type="button">昼食</button>
+        <button class="meal-tab meal-tab-dinner" data-meal="dinner" type="button">夕食</button>
+        <button class="meal-tab meal-tab-snack" data-meal="snack" type="button">間食</button>
       </nav>
-
-      <section class="calendar-toolbar" aria-label="月の切り替え">
-        <button id="prevMonth" class="icon-button" type="button" aria-label="前の月">‹</button>
-        <div class="month-center">
-          <strong id="monthLabel"></strong>
-          <span id="retentionLabel"></span>
-        </div>
-        <button id="nextMonth" class="icon-button" type="button" aria-label="次の月">›</button>
-      </section>
-
-      <section class="calendar-card">
-        <div class="weekday-row" aria-hidden="true">
-          <span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span>
-        </div>
-        <div id="calendarGrid" class="calendar-grid" role="grid" aria-label="食事写真カレンダー"></div>
-      </section>
-
+      <section class="calendar-toolbar" aria-label="月の切り替え"><button id="prevMonth" class="icon-button" type="button" aria-label="前の月">‹</button><div class="month-center"><strong id="monthLabel"></strong><span id="retentionLabel"></span></div><button id="nextMonth" class="icon-button" type="button" aria-label="次の月">›</button></section>
+      <section class="calendar-card"><div class="weekday-row" aria-hidden="true"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div><div id="calendarGrid" class="calendar-grid" role="grid" aria-label="食事写真カレンダー"></div></section>
       <p id="calendarStatus" class="status" role="status" aria-live="polite"></p>
     </section>
 
     <section id="detailView" hidden>
-      <div class="view-header">
-        <button id="backCalendar" class="back-button" type="button">戻る</button>
-        <div class="view-title">
-          <h2 id="detailTitle"></h2>
-          <p>食事の記録</p>
-        </div>
-      </div>
-
-      <section class="record-page" aria-labelledby="detailTitle">
-        <div class="record-photo"><img id="detailImage" alt="選択した食事の写真" /></div>
+      <div class="view-header"><button id="backCalendar" class="back-button" type="button">戻る</button><div class="view-title"><h2 id="detailTitle">食事の記録</h2><p>写真とメモ</p></div></div>
+      <section class="detail-card record-page" style="padding:14px">
+        <div class="record-photo"><img id="detailImage" alt="食事の写真" /></div>
         <div id="captionBlock" class="caption-block" hidden></div>
-        <div class="memo-editor">
-          <label for="detailMemo">メモ</label>
-          <textarea id="detailMemo" maxlength="200" placeholder="この食事のメモを入力"></textarea>
-          <div class="memo-row">
-            <span class="memo-hint">保存したメモは写真下のキャプションになります</span>
-            <button id="saveMemo" class="primary-button" type="button">保存</button>
-          </div>
-        </div>
-        <div class="photo-actions">
-          <button id="replaceButton" class="secondary-button" type="button">撮り直す</button>
-          <button id="deleteButton" class="danger-button" type="button">削除</button>
-        </div>
-        <p id="detailStatus" class="status" role="status" aria-live="polite"></p>
+        <div class="memo-editor"><label for="detailMemo">メモ</label><textarea id="detailMemo" maxlength="200" placeholder="食べたものや感想をメモ"></textarea><div class="memo-row"><span class="memo-hint">200文字まで</span><button id="saveMemo" class="primary-button" type="button">メモを保存</button></div></div>
+        <div class="photo-actions"><button id="replaceButton" class="secondary-button" type="button">写真を撮り直す</button><button id="deleteButton" class="danger-button" type="button">写真を削除</button></div>
       </section>
+      <p id="detailStatus" class="status" role="status" aria-live="polite"></p>
     </section>
-
-    <dialog id="cameraDialog" style="width:min(94vw,640px);border:1px solid #eadfce;border-radius:18px;padding:16px;background:#fffdf8" aria-labelledby="cameraTitle">
-      <h2 id="cameraTitle">食事を撮影</h2>
-      <video id="cameraVideo" autoplay muted playsinline style="display:block;width:100%;max-height:65vh;background:#222;border-radius:12px;object-fit:contain"></video>
-      <p id="cameraStatus" role="status">カメラを起動しています…</p>
-      <div style="display:flex;gap:12px">
-        <button id="cameraShutter" type="button" disabled style="padding:14px 24px">撮影する</button>
-        <button id="cameraCancel" type="button" style="padding:14px 24px">キャンセル</button>
-      </div>
-    </dialog>
     <input id="photoInput" type="file" accept="image/*" capture="environment" hidden />
   </main>
-
-  <script>
-    'use strict';
-
-    const APP = {
-      dbName: 'today-what-ate-db',
-      dbVersion: 1,
-      storeName: 'entries',
-      fullWidth: 960,
-      fullHeight: 720,
-      fullQuality: 0.68,
-      thumbWidth: 240,
-      thumbHeight: 180,
-      thumbQuality: 0.58,
-      mealNames: {
-        breakfast: '朝食',
-        lunch: '昼食',
-        dinner: '夕食',
-        snack: '間食'
-      },
-      shortMealNames: {
-        breakfast: '朝',
-        lunch: '昼',
-        dinner: '夕',
-        snack: '間'
-      }
-    };
-
-    const state = {
-      db: null,
-      meal: 'breakfast',
-      calendarMode: 'all',
-      today: startOfDay(new Date()),
-      viewedMonth: startOfMonth(new Date()),
-      selectedDate: toDateKey(new Date()),
-      records: new Map(),
-      calendarObjectUrls: new Set(),
-      detailObjectUrl: null,
-      midnightTimer: null,
-      pending: null,
-      captureContext: null,
-      currentView: 'home'
-    };
-
-    const els = {};
-
-    window.addEventListener('DOMContentLoaded', init);
-    window.addEventListener('beforeunload', cleanupAllObjectUrls);
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) refreshTodayIfNeeded();
-    });
-
-    async function init() {
-      bindElements();
-      bindEvents();
-      try {
-        state.db = await openDatabase();
-        await migrateLegacyDinnerRecords();
-        await purgeExpiredRecords();
-        await refreshRecords();
-        renderHome();
-        renderCalendar();
-        history.replaceState({ foodlogView: 'home' }, '', location.href);
-        showView('home');
-        setHomeStatus('写真は端末内に保存され、当月＋前月の2か月だけ保持します。');
-        scheduleMidnightRefresh();
-      } catch (error) {
-        console.error(error);
-        setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。');
-      }
-
-      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      }
-    }
-
-    function bindElements() {
-      els.homeView = document.getElementById('homeView');
-      els.calendarView = document.getElementById('calendarView');
-      els.todayLabel = document.getElementById('todayLabel');
-      els.homeMealButtons = [...document.querySelectorAll('[data-home-meal]')];
-      els.openCalendar = document.getElementById('openCalendar');
-      els.homeStatus = document.getElementById('homeStatus');
-
-
-      els.backHome = document.getElementById('backHome');
-      els.mealTabs = [...document.querySelectorAll('.meal-tab')];
-      els.prevMonth = document.getElementById('prevMonth');
-      els.nextMonth = document.getElementById('nextMonth');
-      els.monthLabel = document.getElementById('monthLabel');
-      els.retentionLabel = document.getElementById('retentionLabel');
-      els.calendarGrid = document.getElementById('calendarGrid');
-      els.calendarStatus = document.getElementById('calendarStatus');
-      els.detailView = document.getElementById('detailView');
-      els.backCalendar = document.getElementById('backCalendar');
-      els.detailTitle = document.getElementById('detailTitle');
-      els.detailImage = document.getElementById('detailImage');
-      els.captionBlock = document.getElementById('captionBlock');
-      els.detailMemo = document.getElementById('detailMemo');
-      els.saveMemo = document.getElementById('saveMemo');
-      els.replaceButton = document.getElementById('replaceButton');
-      els.deleteButton = document.getElementById('deleteButton');
-      els.detailStatus = document.getElementById('detailStatus');
-      els.photoInput = document.getElementById('photoInput');
-    }
-
-    function bindEvents() {
-      els.homeMealButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-          const meal = button.dataset.homeMeal;
-          startCapture({
-            date: toDateKey(state.today),
-            meal,
-            returnView: 'home',
-            mode: 'new'
-          });
-        });
-      });
-
-      els.openCalendar.addEventListener('click', () => {
-        state.viewedMonth = startOfMonth(state.today);
-        state.selectedDate = toDateKey(state.today);
-        state.calendarMode = 'all';
-        renderCalendar();
-        history.pushState({ foodlogView: 'calendar' }, '', location.href);
-        showView('calendar');
-      });
-
-      els.backHome.addEventListener('click', () => {
-        goHomeFromCalendar();
-      });
-
-      window.addEventListener('popstate', () => {
-        if (state.currentView !== 'calendar') return;
-        renderHome();
-        showView('home');
-      });
-
-      els.mealTabs.forEach((button) => {
-        button.addEventListener('click', () => {
-          state.calendarMode = button.dataset.meal;
-          if (state.calendarMode !== 'all') state.meal = state.calendarMode;
-          renderCalendar();
-        });
-      });
-
-      els.prevMonth.addEventListener('click', () => changeMonth(-1));
-      els.nextMonth.addEventListener('click', () => changeMonth(1));
-      els.backCalendar.addEventListener('click', () => {
-        cleanupDetailObjectUrl();
-        renderCalendar();
-        showView('calendar');
-      });
-      els.replaceButton.addEventListener('click', () => {
-        startCapture({
-          date: state.selectedDate,
-          meal: state.meal,
-          returnView: 'detail',
-          mode: 'replace'
-        });
-      });
-      els.deleteButton.addEventListener('click', deleteSelectedRecord);
-      els.saveMemo.addEventListener('click', saveDetailMemo);
-      els.photoInput.addEventListener('change', handlePhotoSelection);
-    }
-
-    function openDatabase() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(APP.dbName, APP.dbVersion);
-        request.onupgradeneeded = () => {
-          const db = request.result;
-          if (!db.objectStoreNames.contains(APP.storeName)) {
-            const store = db.createObjectStore(APP.storeName, { keyPath: 'key' });
-            store.createIndex('date', 'date', { unique: false });
-          }
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
-    }
-
-    function getAllRecords() {
-      return new Promise((resolve, reject) => {
-        const tx = state.db.transaction(APP.storeName, 'readonly');
-        const request = tx.objectStore(APP.storeName).getAll();
-        request.onsuccess = () => resolve(request.result || []);
-        request.onerror = () => reject(request.error);
-      });
-    }
-
-    function putRecord(record) {
-      return new Promise((resolve, reject) => {
-        const tx = state.db.transaction(APP.storeName, 'readwrite');
-        tx.objectStore(APP.storeName).put(record);
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-    }
-
-    function deleteRecord(key) {
-      return new Promise((resolve, reject) => {
-        const tx = state.db.transaction(APP.storeName, 'readwrite');
-        tx.objectStore(APP.storeName).delete(key);
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-    }
-
-    async function migrateLegacyDinnerRecords() {
-      const all = await getAllRecords();
-      const existing = new Set(all.map(record => record.key));
-      for (const record of all) {
-        if (record.meal !== '夜' && record.meal !== '夜食') continue;
-        const key = recordKey(record.date, 'dinner');
-        if (!existing.has(key)) {
-          await putRecord({ ...record, key, meal: 'dinner' });
-          existing.add(key);
-        }
-        await deleteRecord(record.key);
-      }
-    }
-
-    async function refreshRecords() {
-      const all = await getAllRecords();
-      state.records = new Map(all.map((record) => [record.key, record]));
-    }
-
-    async function purgeExpiredRecords() {
-      const cutoff = retentionStartDate();
-      const all = await getAllRecords();
-      const expired = all.filter((record) => parseDateKey(record.date) < cutoff);
-      for (const record of expired) await deleteRecord(record.key);
-    }
-
-    function retentionStartDate() {
-      const firstThisMonth = startOfMonth(state.today);
-      return new Date(firstThisMonth.getFullYear(), firstThisMonth.getMonth() - 1, 1);
-    }
-
-    function retentionEndDate() {
-      const firstNextMonth = new Date(state.today.getFullYear(), state.today.getMonth() + 1, 1);
-      return new Date(firstNextMonth.getTime() - 1);
-    }
-
-    function goHomeFromCalendar() {
-      if (history.state?.foodlogView === 'calendar') {
-        history.back();
-        return;
-      }
-      renderHome();
-      showView('home');
-    }
-
-    function showView(name) {
-      state.currentView = name;
-      els.homeView.hidden = name !== 'home';
-      els.calendarView.hidden = name !== 'calendar';
-      els.detailView.hidden = name !== 'detail';
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }
-
-    function renderHome() {
-      const todayKey = toDateKey(state.today);
-      els.todayLabel.textContent = formatDateWithWeekday(state.today);
-
-      els.homeMealButtons.forEach((button) => {
-        const meal = button.dataset.homeMeal;
-        const recorded = state.records.has(recordKey(todayKey, meal));
-        button.disabled = recorded;
-        button.innerHTML = recorded
-          ? `✓ ${APP.mealNames[meal]}<small>記録済</small>`
-          : `${APP.mealNames[meal]}<small>写真を撮る</small>`;
-      });
-    }
-
-    function renderCalendar() {
-      renderMealTabs();
-      renderMonthHeader();
-      renderCalendarGrid();
-    }
-
-    function renderMealTabs() {
-      els.mealTabs.forEach((button) => {
-        const active = button.dataset.meal === state.calendarMode;
-        button.classList.toggle('is-active', active);
-        button.setAttribute('aria-pressed', String(active));
-      });
-    }
-
-    function renderMonthHeader() {
-      const y = state.viewedMonth.getFullYear();
-      const m = state.viewedMonth.getMonth() + 1;
-      els.monthLabel.textContent = `${y}年 ${m}月`;
-      const start = retentionStartDate();
-      const end = retentionEndDate();
-      els.retentionLabel.textContent = `${start.getMonth() + 1}月1日〜${end.getMonth() + 1}月末を保持`;
-      els.prevMonth.disabled = state.viewedMonth <= startOfMonth(start);
-      els.nextMonth.disabled = state.viewedMonth >= startOfMonth(state.today);
-    }
-
-    function openRecord(dateKey, meal) {
-      state.selectedDate = dateKey;
-      state.meal = meal;
-      openDetailPage();
-    }
-
-    function renderCalendarGrid() {
-      cleanupCalendarObjectUrls();
-      els.calendarGrid.innerHTML = '';
-      const mode = state.calendarMode;
-      els.calendarGrid.classList.toggle('is-all', mode === 'all');
-      const year = state.viewedMonth.getFullYear();
-      const month = state.viewedMonth.getMonth();
-      const firstDay = new Date(year, month, 1);
-      const dayCount = new Date(year, month + 1, 0).getDate();
-      for (let i = 0; i < firstDay.getDay(); i += 1) {
-        const blank = document.createElement('div');
-        blank.className = 'day-blank';
-        blank.setAttribute('aria-hidden', 'true');
-        els.calendarGrid.appendChild(blank);
-      }
-      for (let day = 1; day <= dayCount; day += 1) {
-        const date = new Date(year, month, day);
-        const dateKey = toDateKey(date);
-        const cell = document.createElement('div');
-        cell.className = 'day-cell';
-        cell.setAttribute('role', 'gridcell');
-        if (dateKey === toDateKey(state.today)) cell.classList.add('is-today');
-        const number = document.createElement('span');
-        number.className = 'day-number';
-        number.textContent = String(day);
-        cell.appendChild(number);
-        if (mode === 'all') {
-          const slots = document.createElement('div');
-          slots.className = 'all-meals';
-          for (const meal of ['breakfast','lunch','dinner','snack']) {
-            const record = state.records.get(recordKey(dateKey, meal));
-            const slot = document.createElement('button');
-            slot.type = 'button';
-            slot.className = `meal-slot ${meal}`;
-            slot.disabled = !record?.fullBlob;
-            slot.setAttribute('aria-label', `${month + 1}月${day}日・${APP.mealNames[meal]}${record?.fullBlob ? 'の詳細を開く' : 'は未記録'}`);
-            slot.innerHTML = `<span>${APP.shortMealNames[meal]}</span><span class="record-mark" aria-hidden="true"></span>`;
-            if (record?.fullBlob) {
-              slot.classList.add('has-record');
-              slot.addEventListener('click', () => openRecord(dateKey, meal));
-            }
-            slots.appendChild(slot);
-          }
-          cell.appendChild(slots);
-        } else {
-          const record = state.records.get(recordKey(dateKey, mode));
-          const thumb = document.createElement(record?.thumbBlob ? 'button' : 'div');
-          thumb.className = `thumb-box ${state.meal}${record?.thumbBlob ? ' has-photo' : ''}`;
-          if (record?.thumbBlob) {
-            thumb.type = 'button';
-            const img = document.createElement('img');
-            const url = URL.createObjectURL(record.thumbBlob);
-            state.calendarObjectUrls.add(url);
-            img.src = url;
-            img.alt = `${month + 1}月${day}日・${APP.shortMealNames[mode]}の写真`;
-            thumb.appendChild(img);
-            thumb.addEventListener('click', () => openRecord(dateKey, mode));
-          }
-          cell.appendChild(thumb);
-        }
-        els.calendarGrid.appendChild(cell);
-      }
-    }
-
-    function openDetailPage() {
-      const record = state.records.get(recordKey(state.selectedDate, state.meal));
-      if (!record?.fullBlob) return;
-      renderDetailPage();
-      showView('detail');
-    }
-
-    function renderDetailPage() {
-      const record = state.records.get(recordKey(state.selectedDate, state.meal));
-      if (!record?.fullBlob) {
-        renderCalendar();
-        showView('calendar');
-        return;
-      }
-      const date = parseDateKey(state.selectedDate);
-      els.detailTitle.textContent = `${date.getMonth() + 1}月${date.getDate()}日・${APP.shortMealNames[mode]}`;
-      cleanupDetailObjectUrl();
-      state.detailObjectUrl = URL.createObjectURL(record.fullBlob);
-      els.detailImage.src = state.detailObjectUrl;
-      els.detailMemo.value = record.memo || '';
-      renderCaption(record.memo || '');
-      els.detailStatus.textContent = '';
-      els.replaceButton.disabled = date > state.today;
-    }
-
-    function renderCaption(memo) {
-      const text = (memo || '').trim();
-      els.captionBlock.textContent = text;
-      els.captionBlock.hidden = !text;
-    }
-
-    async function saveDetailMemo() {
-      const key = recordKey(state.selectedDate, state.meal);
-      const record = state.records.get(key);
-      if (!record) return;
-      const memo = els.detailMemo.value.trim();
-      els.saveMemo.disabled = true;
-      els.detailStatus.textContent = '保存しています…';
-      try {
-        await putRecord({ ...record, memo, updatedAt: new Date().toISOString() });
-        await refreshRecords();
-        renderCaption(memo);
-        els.detailStatus.textContent = 'メモを保存しました。';
-      } catch (error) {
-        console.error(error);
-        els.detailStatus.textContent = 'メモを保存できませんでした。';
-      } finally {
-        els.saveMemo.disabled = false;
-      }
-    }
-
-    function changeMonth(delta) {
-      const candidate = new Date(state.viewedMonth.getFullYear(), state.viewedMonth.getMonth() + delta, 1);
-      const min = startOfMonth(retentionStartDate());
-      const max = startOfMonth(state.today);
-      if (candidate < min || candidate > max) return;
-      state.viewedMonth = candidate;
-      state.selectedDate = toDateKey(candidate);
-      renderCalendar();
-    }
-
-    function startCapture(context) {
-      const selected = parseDateKey(context.date);
-      if (selected > state.today) {
-        setCalendarStatus('未来の日付には写真を記録できません。');
-        return;
-      }
-      state.captureContext = { ...context };
-      openPhotoPicker();
-    }
-
-    let cameraStream = null;
-    let cameraRequest = 0;
-    let cameraTimer = null;
-
-    function stopCamera() {
-      cameraRequest++;
-      clearTimeout(cameraTimer);
-      cameraTimer = null;
-      if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
-      cameraStream = null;
-      document.getElementById('cameraVideo').srcObject = null;
-      const dialog = document.getElementById('cameraDialog');
-      if (dialog.open) dialog.close();
-    }
-
-    async function openPhotoPicker() {
-      stopCamera();
-      const request = cameraRequest;
-      const dialog = document.getElementById('cameraDialog');
-      const video = document.getElementById('cameraVideo');
-      const shutter = document.getElementById('cameraShutter');
-      const status = document.getElementById('cameraStatus');
-      const cancel = () => {
-        stopCamera();
-        setCaptureStatus('撮影をキャンセルしました。');
-        state.captureContext = null;
-      };
-      document.getElementById('cameraTitle').textContent = APP.mealNames[state.captureContext.meal] + 'を撮影';
-      shutter.disabled = true;
-      status.textContent = 'カメラを起動しています。許可を求められたら「許可」を選んでください。';
-      document.getElementById('cameraCancel').onclick = cancel;
-      dialog.oncancel = event => { event.preventDefault(); cancel(); };
-      dialog.showModal();
-      cameraTimer = setTimeout(() => {
-        if (request !== cameraRequest) return;
-        cameraRequest++;
-        if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
-        cameraStream = null;
-        video.srcObject = null;
-        shutter.disabled = true;
-        status.textContent = 'カメラの起動を確認できませんでした。カメラの許可を確認し、キャンセルしてからもう一度お試しください。';
-      }, 20000);
-      shutter.onclick = async () => {
-        if (!cameraStream || !video.videoWidth || shutter.disabled) return;
-        shutter.disabled = true;
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          canvas.getContext('2d').drawImage(video, 0, 0);
-          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
-          if (request !== cameraRequest) return;
-          if (!blob) throw new Error('Capture failed');
-          stopCamera();
-          await handlePhotoSelection({ target: { files: [blob] } });
-        } catch (error) {
-          if (request !== cameraRequest) return;
-          status.textContent = '撮影できませんでした。もう一度お試しください。';
-          shutter.disabled = false;
-        }
-      };
-      try {
-        if (!navigator.mediaDevices?.getUserMedia) throw new Error('CameraUnsupported');
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } },
-          audio: false
-        });
-        if (request !== cameraRequest) {
-          stream.getTracks().forEach(track => track.stop());
-          return;
-        }
-        cameraStream = stream;
-        video.srcObject = stream;
-        await video.play();
-        if (request !== cameraRequest) return;
-        clearTimeout(cameraTimer);
-        shutter.disabled = false;
-        status.textContent = '料理を画面に収めて「撮影する」を押してください。';
-      } catch (error) {
-        if (request !== cameraRequest) return;
-        clearTimeout(cameraTimer);
-        if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
-        cameraStream = null;
-        video.srcObject = null;
-        status.textContent = error.name === 'NotAllowedError'
-          ? 'カメラの利用が許可されていません。ブラウザーのサイト設定でカメラを許可し、再度お試しください。'
-          : error.name === 'NotFoundError'
-          ? '利用できるカメラが見つかりません。カメラのある端末で開いてください。'
-          : 'カメラを起動できません。ほかのカメラアプリを閉じるか、Safari・ChromeでこのURLを直接開いてください。';
-      }
-    }
-
-    window.addEventListener('pagehide', stopCamera);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden && document.getElementById('cameraDialog').open) {
-        stopCamera();
-        setCaptureStatus('撮影を中断しました。食事ボタンからもう一度撮影してください。');
-        state.captureContext = null;
-      }
-    });
-
-    async function handlePhotoSelection(event) {
-      const file = event.target.files?.[0];
-      if (!file || !state.captureContext) return;
-      if (!file.type.startsWith('image/')) {
-        setCaptureStatus('画像ファイルを選択してください。');
-        return;
-      }
-
-      const ctx = state.captureContext;
-      const ok = window.confirm(`${APP.mealNames[ctx.meal]}として記録しますか？`);
-      if (!ok) {
-        setCaptureStatus('記録をキャンセルしました。');
-        state.captureContext = null;
-        return;
-      }
-
-      setCaptureStatus('写真を処理しています…');
-      try {
-        const bitmap = await loadImage(file);
-        const fullBlob = await renderImageBlob(bitmap, APP.fullWidth, APP.fullHeight, APP.fullQuality);
-        const thumbBlob = await renderImageBlob(bitmap, APP.thumbWidth, APP.thumbHeight, APP.thumbQuality);
-        if (typeof bitmap.close === 'function') bitmap.close();
-
-        state.pending = { fullBlob, thumbBlob };
-        await savePendingPhoto();
-      } catch (error) {
-        console.error(error);
-        setCaptureStatus('写真の処理に失敗しました。別の写真でお試しください。');
-      }
-    }
-
-    async function savePendingPhoto() {
-      if (!state.pending || !state.captureContext) return;
-      const ctx = state.captureContext;
-      setCaptureStatus('保存しています…');
-
-      try {
-        const key = recordKey(ctx.date, ctx.meal);
-        const previous = state.records.get(key);
-        const record = {
-          key,
-          date: ctx.date,
-          meal: ctx.meal,
-          memo: previous?.memo || '',
-          fullBlob: state.pending.fullBlob,
-          thumbBlob: state.pending.thumbBlob,
-          width: APP.fullWidth,
-          height: APP.fullHeight,
-          mimeType: 'image/webp',
-          quality: APP.fullQuality,
-          updatedAt: new Date().toISOString()
-        };
-        await putRecord(record);
-        await purgeExpiredRecords();
-        await refreshRecords();
-        state.pending = null;
-
-        if (ctx.returnView === 'detail') {
-          state.meal = ctx.meal;
-          state.selectedDate = ctx.date;
-          state.viewedMonth = startOfMonth(parseDateKey(ctx.date));
-          renderDetailPage();
-          els.detailStatus.textContent = `${APP.mealNames[ctx.meal]}の写真を更新しました。`;
-          showView('detail');
-        } else if (ctx.returnView === 'calendar') {
-          state.meal = ctx.meal;
-          state.selectedDate = ctx.date;
-          state.viewedMonth = startOfMonth(parseDateKey(ctx.date));
-          renderCalendar();
-          setCalendarStatus(`${APP.mealNames[ctx.meal]}の写真を記録しました。`);
-          showView('calendar');
-        } else {
-          renderHome();
-          setHomeStatus(`${APP.mealNames[ctx.meal]}を記録しました。`);
-          showView('home');
-        }
-        state.captureContext = null;
-      } catch (error) {
-        console.error(error);
-        setCaptureStatus('保存に失敗しました。もう一度お試しください。');
-      }
-    }
-
-    async function deleteSelectedRecord() {
-      const key = recordKey(state.selectedDate, state.meal);
-      const record = state.records.get(key);
-      if (!record) return;
-      const ok = window.confirm(`${formatDate(state.selectedDate)}・${APP.shortMealNames[mode]}の写真を削除しますか？`);
-      if (!ok) return;
-      await deleteRecord(key);
-      await refreshRecords();
-      cleanupDetailObjectUrl();
-      renderCalendar();
-      renderHome();
-      setCalendarStatus('写真を削除しました。');
-      showView('calendar');
-    }
-
-    async function loadImage(file) {
-      if ('createImageBitmap' in window) {
-        try {
-          return await createImageBitmap(file, { imageOrientation: 'from-image' });
-        } catch (_) {
-          return createImageBitmap(file);
-        }
-      }
-      const url = URL.createObjectURL(file);
-      try {
-        const image = new Image();
-        await new Promise((resolve, reject) => {
-          image.onload = resolve;
-          image.onerror = reject;
-          image.src = url;
-        });
-        return image;
-      } finally {
-        URL.revokeObjectURL(url);
-      }
-    }
-
-    function renderImageBlob(source, width, height, quality) {
-      return new Promise((resolve, reject) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d', { alpha: false });
-        if (!ctx) return reject(new Error('Canvas unavailable'));
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, width, height);
-
-        const sw = source.width || source.naturalWidth;
-        const sh = source.height || source.naturalHeight;
-        const targetRatio = width / height;
-        const sourceRatio = sw / sh;
-        let sx = 0, sy = 0, cropW = sw, cropH = sh;
-        if (sourceRatio > targetRatio) {
-          cropW = sh * targetRatio;
-          sx = (sw - cropW) / 2;
-        } else if (sourceRatio < targetRatio) {
-          cropH = sw / targetRatio;
-          sy = (sh - cropH) / 2;
-        }
-        ctx.drawImage(source, sx, sy, cropW, cropH, 0, 0, width, height);
-        canvas.toBlob((blob) => {
-          if (!blob) return reject(new Error('Image conversion failed'));
-          resolve(blob);
-        }, 'image/webp', quality);
-      });
-    }
-
-    function refreshTodayIfNeeded() {
-      const now = startOfDay(new Date());
-      if (toDateKey(now) === toDateKey(state.today)) {
-        scheduleMidnightRefresh();
-        return;
-      }
-      state.today = now;
-      state.viewedMonth = startOfMonth(now);
-      state.selectedDate = toDateKey(now);
-      purgeExpiredRecords()
-        .then(refreshRecords)
-        .then(() => {
-          renderHome();
-          renderCalendar();
-          scheduleMidnightRefresh();
-        })
-        .catch((error) => {
-          console.error(error);
-          scheduleMidnightRefresh();
-        });
-    }
-
-    function scheduleMidnightRefresh() {
-      if (state.midnightTimer) clearTimeout(state.midnightTimer);
-      const now = new Date();
-      const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
-      const delay = Math.max(1000, next.getTime() - now.getTime());
-      state.midnightTimer = setTimeout(refreshTodayIfNeeded, delay);
-    }
-
-    function recordKey(date, meal) { return `${date}_${meal}`; }
-    function startOfDay(date) { return new Date(date.getFullYear(), date.getMonth(), date.getDate()); }
-    function startOfMonth(date) { return new Date(date.getFullYear(), date.getMonth(), 1); }
-    function toDateKey(date) {
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, '0');
-      const d = String(date.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
-    }
-    function parseDateKey(key) {
-      const [y, m, d] = key.split('-').map(Number);
-      return new Date(y, m - 1, d);
-    }
-    function formatDate(key) {
-      const date = parseDateKey(key);
-      return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-    }
-    function formatDateWithWeekday(date) {
-      const weekdays = ['日','月','火','水','木','金','土'];
-      return `${date.getMonth() + 1}月${date.getDate()}日（${weekdays[date.getDay()]}）`;
-    }
-    function setHomeStatus(message) { els.homeStatus.textContent = message; }
-    function setCalendarStatus(message) { els.calendarStatus.textContent = message; }
-    function setCaptureStatus(message) {
-      if (state.captureContext?.returnView === 'detail') els.detailStatus.textContent = message;
-      else if (state.captureContext?.returnView === 'calendar') setCalendarStatus(message);
-      else setHomeStatus(message);
-    }
-
-    function cleanupCalendarObjectUrls() {
-      const urls = [...state.calendarObjectUrls];
-      urls.forEach((url) => URL.revokeObjectURL(url));
-      state.calendarObjectUrls.clear();
-    }
-    function cleanupDetailObjectUrl() {
-      if (!state.detailObjectUrl) return;
-      URL.revokeObjectURL(state.detailObjectUrl);
-      state.detailObjectUrl = null;
-    }
-    function cleanupAllObjectUrls() {
-      cleanupCalendarObjectUrls();
-      cleanupDetailObjectUrl();
-      if (state.midnightTimer) clearTimeout(state.midnightTimer);
-    }
-  </script>
+<script>
+const APP={dbName:'foodlog-db',dbVersion:1,storeName:'records',fullWidth:960,fullHeight:720,fullQuality:.68,thumbWidth:240,thumbHeight:180,thumbQuality:.58,mealNames:{breakfast:'朝食',lunch:'昼食',dinner:'夕食',snack:'間食'},shortMealNames:{breakfast:'朝',lunch:'昼',dinner:'夕',snack:'間'}};
+const state={db:null,meal:'breakfast',detailMeal:null,calendarMode:'all',today:startOfDay(new Date()),viewedMonth:startOfMonth(new Date()),selectedDate:toDateKey(new Date()),records:new Map(),calendarObjectUrls:new Set(),detailObjectUrl:null,midnightTimer:null,pending:null,captureContext:null,currentView:'home'};
+const els={};
+window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
+async function init(){bindElements();bindEvents();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋前月の2か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+function bindElements(){for(const id of ['homeView','calendarView','detailView','todayLabel','openCalendar','homeStatus','backHome','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailImage','captionBlock','detailMemo','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
+function bindEvents(){els.homeMealButtons.forEach(button=>button.addEventListener('click',()=>startCapture({date:toDateKey(state.today),meal:button.dataset.homeMeal,returnView:'home',mode:'new'})));els.openCalendar.addEventListener('click',()=>{state.viewedMonth=startOfMonth(state.today);state.selectedDate=toDateKey(state.today);state.calendarMode='all';renderCalendar();history.pushState({foodlogView:'calendar'},'',location.href);showView('calendar')});els.backHome.addEventListener('click',goHomeFromCalendar);window.addEventListener('popstate',()=>{if(state.currentView==='detail'){cleanupDetailObjectUrl();renderCalendar();showView('calendar');return}if(state.currentView==='calendar'){renderHome();showView('home')}});els.mealTabs.forEach(button=>button.addEventListener('click',()=>{state.calendarMode=button.dataset.meal;if(state.calendarMode!=='all')state.meal=state.calendarMode;renderCalendar()}));els.prevMonth.addEventListener('click',()=>changeMonth(-1));els.nextMonth.addEventListener('click',()=>changeMonth(1));els.backCalendar.addEventListener('click',()=>{cleanupDetailObjectUrl();state.detailMeal=null;renderCalendar();showView('calendar')});els.replaceButton.addEventListener('click',()=>{const meal=state.detailMeal||state.meal;startCapture({date:state.selectedDate,meal,returnView:'detail',mode:'replace'})});els.deleteButton.addEventListener('click',deleteSelectedRecord);els.saveMemo.addEventListener('click',saveDetailMemo);els.photoInput.addEventListener('change',handlePhotoSelection)}
+function openDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open(APP.dbName,APP.dbVersion);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(APP.storeName)){const store=db.createObjectStore(APP.storeName,{keyPath:'key'});store.createIndex('date','date',{unique:false})}};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
+function getAllRecords(){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readonly');const request=tx.objectStore(APP.storeName).getAll();request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>reject(request.error)})}
+function putRecord(record){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readwrite');tx.objectStore(APP.storeName).put(record);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+function deleteRecord(key){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readwrite');tx.objectStore(APP.storeName).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+async function migrateLegacyDinnerRecords(){const all=await getAllRecords();const existing=new Set(all.map(r=>r.key));for(const record of all){const normalized=normalizeMeal(record.meal);if(normalized===record.meal&&record.key===recordKey(record.date,normalized))continue;const key=recordKey(record.date,normalized);if(!existing.has(key)){await putRecord({...record,key,meal:normalized});existing.add(key)}if(record.key!==key)await deleteRecord(record.key)}}
+async function refreshRecords(){const all=await getAllRecords();state.records=new Map(all.map(r=>[recordKey(r.date,r.meal),{...r,meal:normalizeMeal(r.meal)}]))}
+async function purgeExpiredRecords(){const cutoff=retentionStartDate();const all=await getAllRecords();for(const record of all.filter(r=>parseDateKey(r.date)<cutoff))await deleteRecord(record.key)}
+function retentionStartDate(){const firstThisMonth=startOfMonth(state.today);return new Date(firstThisMonth.getFullYear(),firstThisMonth.getMonth()-1,1)}function retentionEndDate(){return new Date(state.today.getFullYear(),state.today.getMonth()+1,0,23,59,59)}
+function goHomeFromCalendar(){renderHome();showView('home')}
+function showView(name){state.currentView=name;els.homeView.hidden=name!=='home';els.calendarView.hidden=name!=='calendar';els.detailView.hidden=name!=='detail';window.scrollTo({top:0,behavior:'auto'})}
+function renderHome(){const todayKey=toDateKey(state.today);els.todayLabel.textContent=formatDateWithWeekday(state.today);els.homeMealButtons.forEach(button=>{const meal=button.dataset.homeMeal;const recorded=state.records.has(recordKey(todayKey,meal));button.disabled=recorded;button.innerHTML=recorded?`✓ ${APP.mealNames[meal]}<small>記録済</small>`:`${APP.mealNames[meal]}<small>写真を撮る</small>`})}
+function renderCalendar(){renderMealTabs();renderMonthHeader();renderCalendarGrid()}
+function renderMealTabs(){els.mealTabs.forEach(button=>{const active=button.dataset.meal===state.calendarMode;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active))})}
+function renderMonthHeader(){const y=state.viewedMonth.getFullYear(),m=state.viewedMonth.getMonth()+1;els.monthLabel.textContent=`${y}年 ${m}月`;const start=retentionStartDate(),end=retentionEndDate();els.retentionLabel.textContent=`${start.getMonth()+1}月1日〜${end.getMonth()+1}月末を保持`;els.prevMonth.disabled=state.viewedMonth<=startOfMonth(start);els.nextMonth.disabled=state.viewedMonth>=startOfMonth(state.today)}
+function openRecord(dateKey,meal){state.selectedDate=dateKey;state.meal=meal;state.detailMeal=meal;openDetailPage(meal)}
+function renderCalendarGrid(){cleanupCalendarObjectUrls();els.calendarGrid.innerHTML='';const mode=state.calendarMode,year=state.viewedMonth.getFullYear(),month=state.viewedMonth.getMonth(),firstDay=new Date(year,month,1),dayCount=new Date(year,month+1,0).getDate();for(let i=0;i<firstDay.getDay();i++){const blank=document.createElement('div');blank.className='day-blank';els.calendarGrid.appendChild(blank)}for(let day=1;day<=dayCount;day++){const dateKey=toDateKey(new Date(year,month,day)),cell=document.createElement('div');cell.className='day-cell';if(dateKey===toDateKey(state.today))cell.classList.add('is-today');const number=document.createElement('span');number.className='day-number';number.textContent=String(day);cell.appendChild(number);if(mode==='all'){const list=document.createElement('div');list.className='all-meal-list';for(const meal of ['breakfast','lunch','dinner','snack']){const record=state.records.get(recordKey(dateKey,meal));const row=document.createElement('button');row.type='button';row.className=`all-meal-row ${meal}`;row.disabled=!record?.fullBlob;row.innerHTML=`<span class="meal-mark${record?.fullBlob?'':' is-empty'}">${record?.fullBlob?'✓':''}</span><span>${APP.shortMealNames[meal]}</span>`;if(record?.fullBlob)row.addEventListener('click',()=>openRecord(dateKey,meal));list.appendChild(row)}cell.appendChild(list)}else{const record=state.records.get(recordKey(dateKey,mode)),thumb=document.createElement(record?.thumbBlob?'button':'div');thumb.className=`thumb-box${record?.thumbBlob?' has-photo':''}`;if(record?.thumbBlob){thumb.type='button';const img=document.createElement('img'),url=URL.createObjectURL(record.thumbBlob);state.calendarObjectUrls.add(url);img.src=url;img.alt=`${month+1}月${day}日・${APP.shortMealNames[mode]}の写真`;thumb.appendChild(img);thumb.addEventListener('click',()=>openRecord(dateKey,mode))}cell.appendChild(thumb)}els.calendarGrid.appendChild(cell)}}
+function openDetailPage(meal=state.detailMeal||state.meal){state.detailMeal=meal;const record=state.records.get(recordKey(state.selectedDate,meal));if(!record?.fullBlob)return;renderDetailPage();showView('detail')}
+function renderDetailPage(){const meal=state.detailMeal||state.meal;const record=state.records.get(recordKey(state.selectedDate,meal));if(!record?.fullBlob){renderCalendar();showView('calendar');return}const date=parseDateKey(state.selectedDate);els.detailTitle.textContent=`${date.getMonth()+1}月${date.getDate()}日・${APP.mealNames[meal]}`;cleanupDetailObjectUrl();state.detailObjectUrl=URL.createObjectURL(record.fullBlob);els.detailImage.src=state.detailObjectUrl;els.detailMemo.value=record.memo||'';renderCaption(record.memo||'');els.detailStatus.textContent='';els.replaceButton.disabled=date>state.today}
+function renderCaption(memo){const text=(memo||'').trim();els.captionBlock.textContent=text;els.captionBlock.hidden=!text}
+async function saveDetailMemo(){const meal=state.detailMeal||state.meal,key=recordKey(state.selectedDate,meal),record=state.records.get(key);if(!record)return;const memo=els.detailMemo.value.trim();els.saveMemo.disabled=true;try{await putRecord({...record,memo,updatedAt:new Date().toISOString()});await refreshRecords();renderCaption(memo);els.detailStatus.textContent='メモを保存しました。'}finally{els.saveMemo.disabled=false}}
+function changeMonth(delta){const candidate=new Date(state.viewedMonth.getFullYear(),state.viewedMonth.getMonth()+delta,1),min=startOfMonth(retentionStartDate()),max=startOfMonth(state.today);if(candidate<min||candidate>max)return;state.viewedMonth=candidate;renderCalendar()}
+function startCapture(context){const selected=parseDateKey(context.date);if(selected>state.today)return;state.captureContext={...context};els.photoInput.value='';els.photoInput.click()}
+async function handlePhotoSelection(event){const file=event.target.files?.[0];if(!file||!state.captureContext)return;if(!file.type.startsWith('image/'))return;const ctx=state.captureContext;if(!window.confirm(`${APP.mealNames[ctx.meal]}として記録しますか？`)){state.captureContext=null;return}try{const bitmap=await loadImage(file),fullBlob=await renderImageBlob(bitmap,APP.fullWidth,APP.fullHeight,APP.fullQuality),thumbBlob=await renderImageBlob(bitmap,APP.thumbWidth,APP.thumbHeight,APP.thumbQuality);if(typeof bitmap.close==='function')bitmap.close();state.pending={fullBlob,thumbBlob};await savePendingPhoto()}catch(error){console.error(error)}}
+async function savePendingPhoto(){if(!state.pending||!state.captureContext)return;const ctx=state.captureContext,key=recordKey(ctx.date,ctx.meal),previous=state.records.get(key),record={key,date:ctx.date,meal:ctx.meal,memo:previous?.memo||'',fullBlob:state.pending.fullBlob,thumbBlob:state.pending.thumbBlob,width:APP.fullWidth,height:APP.fullHeight,mimeType:'image/webp',quality:APP.fullQuality,updatedAt:new Date().toISOString()};await putRecord(record);await purgeExpiredRecords();await refreshRecords();state.pending=null;if(ctx.returnView==='detail'){state.detailMeal=ctx.meal;state.selectedDate=ctx.date;renderDetailPage();showView('detail')}else{renderHome();showView('home')}state.captureContext=null}
+async function deleteSelectedRecord(){const meal=state.detailMeal||state.meal,key=recordKey(state.selectedDate,meal),record=state.records.get(key);if(!record)return;if(!window.confirm(`${formatDate(state.selectedDate)}・${APP.mealNames[meal]}の写真を削除しますか？`))return;await deleteRecord(key);await refreshRecords();cleanupDetailObjectUrl();state.detailMeal=null;renderCalendar();renderHome();showView('calendar')}
+async function loadImage(file){if('createImageBitmap'in window){try{return await createImageBitmap(file,{imageOrientation:'from-image'})}catch(_){return createImageBitmap(file)}}const url=URL.createObjectURL(file);try{const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url});return image}finally{URL.revokeObjectURL(url)}}
+function renderImageBlob(source,width,height,quality){return new Promise((resolve,reject)=>{const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const sw=source.width||source.naturalWidth,sh=source.height||source.naturalHeight,targetRatio=width/height,sourceRatio=sw/sh;let sx=0,sy=0,cropW=sw,cropH=sh;if(sourceRatio>targetRatio){cropW=sh*targetRatio;sx=(sw-cropW)/2}else if(sourceRatio<targetRatio){cropH=sw/targetRatio;sy=(sh-cropH)/2}ctx.drawImage(source,sx,sy,cropW,cropH,0,0,width,height);canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Image conversion failed')),'image/webp',quality)})}
+function refreshTodayIfNeeded(){const now=startOfDay(new Date());if(toDateKey(now)===toDateKey(state.today)){scheduleMidnightRefresh();return}state.today=now;state.viewedMonth=startOfMonth(now);state.selectedDate=toDateKey(now);purgeExpiredRecords().then(refreshRecords).then(()=>{renderHome();renderCalendar();scheduleMidnightRefresh()}).catch(()=>scheduleMidnightRefresh())}
+function scheduleMidnightRefresh(){if(state.midnightTimer)clearTimeout(state.midnightTimer);const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,2);state.midnightTimer=setTimeout(refreshTodayIfNeeded,Math.max(1000,next-now))}
+function normalizeMeal(meal){if(meal==='夜'||meal==='夜食'||meal==='夕'||meal==='夕食')return'dinner';if(meal==='朝'||meal==='朝食')return'breakfast';if(meal==='昼'||meal==='昼食')return'lunch';if(meal==='間'||meal==='間食')return'snack';return meal}function recordKey(date,meal){return`${date}_${normalizeMeal(meal)}`}function startOfDay(date){return new Date(date.getFullYear(),date.getMonth(),date.getDate())}function startOfMonth(date){return new Date(date.getFullYear(),date.getMonth(),1)}function toDateKey(date){return`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`}function parseDateKey(key){const[y,m,d]=key.split('-').map(Number);return new Date(y,m-1,d)}function formatDate(key){const d=parseDateKey(key);return`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`}function formatDateWithWeekday(date){return`${date.getMonth()+1}月${date.getDate()}日（${['日','月','火','水','木','金','土'][date.getDay()]}）`}
+function cleanupCalendarObjectUrls(){for(const url of state.calendarObjectUrls)URL.revokeObjectURL(url);state.calendarObjectUrls.clear()}function cleanupDetailObjectUrl(){if(state.detailObjectUrl){URL.revokeObjectURL(state.detailObjectUrl);state.detailObjectUrl=null}}function cleanupAllObjectUrls(){cleanupCalendarObjectUrls();cleanupDetailObjectUrl();if(state.midnightTimer)clearTimeout(state.midnightTimer)}
+</script>
 </body>
 </html>
