@@ -1,7 +1,7 @@
 {
-  "name": "今日何食べた？",
-  "short_name": "今日何食べた？",
-  "description": "朝・昼・夜・間の食事写真を直近2か月だけ記録する食ログアプリ",
+  "name": "今日はなに食べた？",
+  "short_name": "なに食べた？",
+  "description": "朝・昼・夕・間の食事写真を直近2か月だけ記録する食ログアプリ",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
