@@ -671,9 +671,12 @@
 
     let cameraStream = null;
     let cameraRequest = 0;
+    let cameraTimer = null;
 
     function stopCamera() {
       cameraRequest++;
+      clearTimeout(cameraTimer);
+      cameraTimer = null;
       if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
       cameraStream = null;
       document.getElementById('cameraVideo').srcObject = null;
@@ -690,8 +693,8 @@
       const status = document.getElementById('cameraStatus');
       const cancel = () => {
         stopCamera();
-        state.captureContext = null;
         setCaptureStatus('撮影をキャンセルしました。');
+        state.captureContext = null;
       };
       document.getElementById('cameraTitle').textContent = APP.mealNames[state.captureContext.meal] + 'を撮影';
       shutter.disabled = true;
@@ -699,6 +702,15 @@
       document.getElementById('cameraCancel').onclick = cancel;
       dialog.oncancel = event => { event.preventDefault(); cancel(); };
       dialog.showModal();
+      cameraTimer = setTimeout(() => {
+        if (request !== cameraRequest) return;
+        cameraRequest++;
+        if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+        video.srcObject = null;
+        shutter.disabled = true;
+        status.textContent = 'カメラの起動を確認できませんでした。カメラの許可を確認し、キャンセルしてからもう一度お試しください。';
+      }, 20000);
       shutter.onclick = async () => {
         if (!cameraStream || !video.videoWidth || shutter.disabled) return;
         shutter.disabled = true;
@@ -732,10 +744,12 @@
         video.srcObject = stream;
         await video.play();
         if (request !== cameraRequest) return;
+        clearTimeout(cameraTimer);
         shutter.disabled = false;
         status.textContent = '料理を画面に収めて「撮影する」を押してください。';
       } catch (error) {
         if (request !== cameraRequest) return;
+        clearTimeout(cameraTimer);
         if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
         cameraStream = null;
         video.srcObject = null;
@@ -751,8 +765,8 @@
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && document.getElementById('cameraDialog').open) {
         stopCamera();
-        state.captureContext = null;
         setCaptureStatus('撮影を中断しました。食事ボタンからもう一度撮影してください。');
+        state.captureContext = null;
       }
     });
 
