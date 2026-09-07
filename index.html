@@ -252,6 +252,15 @@
       </section>
     </section>
 
+    <dialog id="cameraDialog" style="width:min(94vw,640px);border:1px solid #eadfce;border-radius:18px;padding:16px;background:#fffdf8" aria-labelledby="cameraTitle">
+      <h2 id="cameraTitle">食事を撮影</h2>
+      <video id="cameraVideo" autoplay muted playsinline style="display:block;width:100%;max-height:65vh;background:#222;border-radius:12px;object-fit:contain"></video>
+      <p id="cameraStatus" role="status">カメラを起動しています…</p>
+      <div style="display:flex;gap:12px">
+        <button id="cameraShutter" type="button" disabled style="padding:14px 24px">撮影する</button>
+        <button id="cameraCancel" type="button" style="padding:14px 24px">キャンセル</button>
+      </div>
+    </dialog>
     <input id="photoInput" type="file" accept="image/*" capture="environment" hidden />
   </main>
 
@@ -660,10 +669,92 @@
       openPhotoPicker();
     }
 
-    function openPhotoPicker() {
-      els.photoInput.value = '';
-      els.photoInput.click();
+    let cameraStream = null;
+    let cameraRequest = 0;
+
+    function stopCamera() {
+      cameraRequest++;
+      if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream = null;
+      document.getElementById('cameraVideo').srcObject = null;
+      const dialog = document.getElementById('cameraDialog');
+      if (dialog.open) dialog.close();
     }
+
+    async function openPhotoPicker() {
+      stopCamera();
+      const request = cameraRequest;
+      const dialog = document.getElementById('cameraDialog');
+      const video = document.getElementById('cameraVideo');
+      const shutter = document.getElementById('cameraShutter');
+      const status = document.getElementById('cameraStatus');
+      const cancel = () => {
+        stopCamera();
+        state.captureContext = null;
+        setCaptureStatus('撮影をキャンセルしました。');
+      };
+      document.getElementById('cameraTitle').textContent = APP.mealNames[state.captureContext.meal] + 'を撮影';
+      shutter.disabled = true;
+      status.textContent = 'カメラを起動しています。許可を求められたら「許可」を選んでください。';
+      document.getElementById('cameraCancel').onclick = cancel;
+      dialog.oncancel = event => { event.preventDefault(); cancel(); };
+      dialog.showModal();
+      shutter.onclick = async () => {
+        if (!cameraStream || !video.videoWidth || shutter.disabled) return;
+        shutter.disabled = true;
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas.getContext('2d').drawImage(video, 0, 0);
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+          if (request !== cameraRequest) return;
+          if (!blob) throw new Error('Capture failed');
+          stopCamera();
+          await handlePhotoSelection({ target: { files: [blob] } });
+        } catch (error) {
+          if (request !== cameraRequest) return;
+          status.textContent = '撮影できませんでした。もう一度お試しください。';
+          shutter.disabled = false;
+        }
+      };
+      try {
+        if (!navigator.mediaDevices?.getUserMedia) throw new Error('CameraUnsupported');
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false
+        });
+        if (request !== cameraRequest) {
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
+        cameraStream = stream;
+        video.srcObject = stream;
+        await video.play();
+        if (request !== cameraRequest) return;
+        shutter.disabled = false;
+        status.textContent = '料理を画面に収めて「撮影する」を押してください。';
+      } catch (error) {
+        if (request !== cameraRequest) return;
+        if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+        video.srcObject = null;
+        status.textContent = error.name === 'NotAllowedError'
+          ? 'カメラの利用が許可されていません。ブラウザーのサイト設定でカメラを許可し、再度お試しください。'
+          : error.name === 'NotFoundError'
+          ? '利用できるカメラが見つかりません。カメラのある端末で開いてください。'
+          : 'カメラを起動できません。ほかのカメラアプリを閉じるか、Safari・ChromeでこのURLを直接開いてください。';
+      }
+    }
+
+    window.addEventListener('pagehide', stopCamera);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && document.getElementById('cameraDialog').open) {
+        stopCamera();
+        state.captureContext = null;
+        setCaptureStatus('撮影を中断しました。食事ボタンからもう一度撮影してください。');
+      }
+    });
 
     async function handlePhotoSelection(event) {
       const file = event.target.files?.[0];
