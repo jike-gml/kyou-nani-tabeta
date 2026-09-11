@@ -1,4 +1,4 @@
-# 今日はなに食べた？
+# 今日なに食べた？
 
 食事の写真とメモを端末内に記録するPWAです。ビルド不要の静的サイトです。
 
@@ -22,4 +22,4 @@
 
 GitHub Pagesでmainブランチのルートを公開します。`index.html`、`manifest.webmanifest`、`sw.js`、`icon-192.png`、`icon-512.png` を同じ階層に置いてください。
 
-Service Workerキャッシュ：`foodlog-v13`
+Service Workerキャッシュ：`foodlog-v16`
