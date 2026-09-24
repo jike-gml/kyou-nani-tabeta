@@ -24,10 +24,10 @@
       --disabled-text:#9b958e;
       --danger:#b64d4d;
       --shadow:0 8px 26px rgba(83,67,46,.08);
-      --meal-breakfast-1:#e66b4f;--meal-breakfast-2:#c94b34;
-      --meal-lunch-1:#e3a52f;--meal-lunch-2:#bd7b12;
-      --meal-dinner-1:#4d9b83;--meal-dinner-2:#2f7967;
-      --meal-snack-1:#4b7fc0;--meal-snack-2:#2f5f9b;
+      --meal-breakfast-1:#eb8972;--meal-breakfast-2:#d46f5d;
+      --meal-lunch-1:#e9b759;--meal-lunch-2:#ca9541;
+      --meal-dinner-1:#71af9c;--meal-dinner-2:#599485;
+      --meal-snack-1:#6f99cd;--meal-snack-2:#597faf;
     }
     *{box-sizing:border-box}
     html{background:var(--bg)}
@@ -86,8 +86,8 @@
     .all-meal-row.breakfast.is-recorded{background:linear-gradient(135deg,var(--meal-breakfast-1),var(--meal-breakfast-2))}.all-meal-row.lunch.is-recorded{background:linear-gradient(135deg,var(--meal-lunch-1),var(--meal-lunch-2))}.all-meal-row.dinner.is-recorded{background:linear-gradient(135deg,var(--meal-dinner-1),var(--meal-dinner-2))}.all-meal-row.snack.is-recorded{background:linear-gradient(135deg,var(--meal-snack-1),var(--meal-snack-2))}
     .meal-mark{display:inline-grid;place-items:center;width:24px;height:24px;font-size:1rem;font-weight:850;line-height:1}.all-meal-row.dinner .meal-mark{font-size:1rem;line-height:1}
     .meal-mark.is-empty{opacity:.62}.meal-mark.has-name{width:auto;min-width:30px;padding:0 2px;font-weight:900;letter-spacing:-.03em}.dish-name-badge{position:absolute;z-index:3;top:6px;right:6px;display:grid;place-items:center;width:24px;height:24px;border:1px solid rgba(61,54,47,.22);border-radius:999px;background:rgba(255,255,255,.92);color:var(--text);font-size:1rem;font-weight:900;line-height:1;box-shadow:0 2px 7px rgba(48,39,28,.18);pointer-events:none}
-    .detail-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:12px max(8px,env(safe-area-inset-right)) max(0px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));background:rgba(49,41,33,.48);backdrop-filter:blur(3px)}
-    .detail-modal-panel{width:min(100%,620px);max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;padding:14px;border:1px solid rgba(234,223,206,.9);border-radius:22px 22px 0 0;background:var(--bg);box-shadow:0 20px 60px rgba(35,29,22,.28)}
+    .detail-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:clamp(48px,8dvh,82px) max(8px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));background:rgba(49,41,33,.48);backdrop-filter:blur(3px)}
+    .detail-modal-panel{width:min(100%,620px);max-height:calc(100dvh - clamp(60px,10dvh,96px));overflow:auto;overscroll-behavior:contain;padding:14px;border:1px solid rgba(234,223,206,.9);border-radius:22px;background:var(--bg);box-shadow:0 20px 60px rgba(35,29,22,.28)}
     .detail-modal-panel>.view-header{position:sticky;top:-14px;z-index:3;margin:0 -2px 10px;padding:14px 2px 10px;background:var(--bg)}
     .record-page{margin-top:0}.record-photo{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#111;touch-action:none}.record-photo img{display:block;width:100%;height:100%;object-fit:contain}.detail-meal-badge{position:absolute;z-index:4;top:10px;left:10px;padding:6px 11px;border-radius:999px;color:#fff;font-size:.78rem;font-weight:900;line-height:1;box-shadow:0 3px 10px rgba(0,0,0,.24);pointer-events:none}.detail-meal-badge.breakfast{background:linear-gradient(135deg,var(--meal-breakfast-1),var(--meal-breakfast-2))}.detail-meal-badge.lunch{background:linear-gradient(135deg,var(--meal-lunch-1),var(--meal-lunch-2))}.detail-meal-badge.dinner{background:linear-gradient(135deg,var(--meal-dinner-1),var(--meal-dinner-2))}.detail-meal-badge.snack{background:linear-gradient(135deg,var(--meal-snack-1),var(--meal-snack-2))}.caption-block{margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fffaf2;color:var(--text);font-weight:800;line-height:1.6;white-space:pre-wrap}.dish-name-actions{display:flex;gap:8px;margin-top:8px}.dish-name-actions button{flex:1}.memo-editor{margin-top:14px}.memo-editor label{display:block;margin-bottom:6px;font-size:.84rem;font-weight:800}.memo-editor textarea{width:100%;min-height:72px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#fff;font:inherit;color:var(--text)}.memo-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.memo-hint{color:var(--muted);font-size:.74rem}.photo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
@@ -112,7 +112,7 @@
     @keyframes statusIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
 
-    @media(min-width:600px){.detail-overlay{align-items:center;padding:24px}.detail-modal-panel{max-height:calc(100dvh - 48px);border-radius:22px}}
+    @media(min-width:600px){.detail-overlay{align-items:flex-start;padding-top:clamp(52px,8dvh,88px)}.detail-modal-panel{max-height:calc(100dvh - clamp(76px,12dvh,112px));border-radius:22px}}
     @media(max-width:430px){.app-shell{padding-left:max(4px,env(safe-area-inset-left));padding-right:max(4px,env(safe-area-inset-right))}.home-meal{min-height:86px}.day-cell,.day-blank{min-height:clamp(106px,29vw,124px)}.calendar-grid.is-all .day-cell{padding:4px}.calendar-grid.is-all .day-cell,.calendar-grid.is-all .day-blank{min-height:150px}.meal-tab{font-size:.72rem;padding:0 2px}.all-meal-row{min-height:26px;padding-inline:3px}.meal-mark{width:22px;height:22px;font-size:.92rem}.all-meal-row.dinner .meal-mark{font-size:1.02rem}.past-menu-panel{padding:12px}.past-menu-text{font-size:.92rem}.detail-overlay{padding-left:4px;padding-right:4px}.detail-modal-panel{padding:12px}.detail-modal-panel>.view-header{top:-12px;padding-top:12px}}
   </style>
 </head>
