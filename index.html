@@ -126,10 +126,10 @@
       --line:#e4eaf2;--text:#202b3e;--muted:#738095;--accent:#407cff;--accent-soft:#e9f0ff;
       --disabled:#eef4ff;--disabled-text:#6383bb;--danger:#d84e63;
       --shadow:0 10px 30px rgba(39,65,107,.075);
-      --meal-breakfast-1:#f4a99a;--meal-breakfast-2:#e98d83;
-      --meal-lunch-1:#eebc66;--meal-lunch-2:#dda04b;
-      --meal-dinner-1:#7fcbb9;--meal-dinner-2:#55ad9b;
-      --meal-snack-1:#a1b7e4;--meal-snack-2:#809cd7;
+      --meal-breakfast-1:#f3a89a;--meal-breakfast-2:#e58f84;
+      --meal-lunch-1:#e8be6f;--meal-lunch-2:#d8a653;
+      --meal-dinner-1:#7fc8b7;--meal-dinner-2:#5caf9f;
+      --meal-snack-1:#9fb4de;--meal-snack-2:#7f99cf;
     }
     html{color-scheme:light}
     body{min-height:100dvh;background:radial-gradient(circle at top left,#eaf1ff 0,transparent 390px),var(--bg);letter-spacing:-.012em;-webkit-font-smoothing:antialiased}
@@ -182,9 +182,19 @@
     .primary-button{border-color:#407cff;background:#407cff;color:#fff}
     .danger-button{border-color:#ffdae1;background:#fff0f3;color:var(--danger)}
     .calendar-fixed{background:var(--bg)}
-    .meal-tabs{gap:3px;padding:4px;border-radius:17px;background:#e8edf5}
-    .meal-tab,.meal-tab-all,.meal-tab-breakfast,.meal-tab-lunch,.meal-tab-dinner,.meal-tab-snack{min-height:41px;padding:0 2px;border:0;border-radius:13px;background:transparent;color:#73839b;font-weight:750;font-size:.82rem}
-    .meal-tab.is-active,.meal-tab-all.is-active{transform:none;background:#fff;color:#3269cf;box-shadow:0 2px 8px rgba(35,58,99,.1)}
+    .meal-tabs{gap:4px;padding:4px;border-radius:17px;background:#e9eef6}
+    .meal-tab,.meal-tab-all,.meal-tab-breakfast,.meal-tab-lunch,.meal-tab-dinner,.meal-tab-snack{min-height:41px;padding:0 2px;border:1px solid transparent;border-radius:13px;font-weight:800;font-size:.82rem;box-shadow:none}
+    .meal-tab-all{background:#f7f9fc;color:#667791}
+    .meal-tab-breakfast{background:#fff0ec;color:#b85f56}
+    .meal-tab-lunch{background:#fff4dd;color:#9b6b1b}
+    .meal-tab-dinner{background:#e9f7f3;color:#347c6d}
+    .meal-tab-snack{background:#eef1fb;color:#5b6fa7}
+    .meal-tab.is-active,.meal-tab-all.is-active{transform:none;box-shadow:0 2px 8px rgba(35,58,99,.1)}
+    .meal-tab-all.is-active{background:#fff;color:#3269cf;border-color:#dce6f7}
+    .meal-tab-breakfast.is-active{background:#ffe3dc;color:#9e493f;border-color:#f6c9bf}
+    .meal-tab-lunch.is-active{background:#ffedc8;color:#85570d;border-color:#efd9a7}
+    .meal-tab-dinner.is-active{background:#dff2ec;color:#266b5d;border-color:#badfd5}
+    .meal-tab-snack.is-active{background:#e3e9f8;color:#4c6096;border-color:#cbd5ee}
     .calendar-toolbar{margin:10px 0 12px}
     .icon-button{width:45px;min-height:45px;border-radius:15px;color:#4779d8}
     .month-center strong{font-size:1.13rem;font-weight:850}
@@ -197,6 +207,7 @@
     .day-cell.is-today .day-number,.calendar-grid:not(.is-all) .day-cell.is-today .day-number{background:#437eff;color:#fff}
     .all-meal-row{border-color:#edf1f6;border-radius:6px;background:#f7f9fc;color:#a7b0bd}
     .all-meal-row.is-recorded{color:#fff}
+    .all-meal-row.is-recorded .meal-mark.has-name{color:#1f2937;text-shadow:0 1px 0 rgba(255,255,255,.24)}
     .thumb-box{border-color:#e5eaf1;background:#f6f8fc}
     .detail-overlay{background:rgba(24,38,60,.43);backdrop-filter:blur(8px)}
     .detail-modal-panel{border-color:#fff;border-radius:28px;background:var(--bg);box-shadow:0 24px 70px rgba(22,41,73,.25)}
