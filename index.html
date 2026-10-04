@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#fff7e8" />
+  <meta name="theme-color" content="#f5f7fb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="description" content="朝食・昼食・夕食・間食を写真で2か月だけ残す食ログアプリ" />
   <title>今日なに食べた？</title>
   <link rel="manifest" href="./manifest.webmanifest" />
@@ -117,13 +119,126 @@
 
     @media(min-width:600px){.detail-overlay{align-items:flex-start;padding-top:20px}.detail-modal-panel{max-height:calc(100dvh - 40px);border-radius:22px}}
     @media(max-width:430px){.app-shell{padding-left:max(4px,env(safe-area-inset-left));padding-right:max(4px,env(safe-area-inset-right))}#calendarView:not([hidden]){height:calc(100dvh - 18px)}.home-meal{min-height:86px}.day-cell,.day-blank{min-height:clamp(106px,29vw,124px)}.calendar-grid.is-all .day-cell{padding:4px}.calendar-grid.is-all .day-cell,.calendar-grid.is-all .day-blank{min-height:150px}.meal-tab{font-size:.72rem;padding:0 2px}.all-meal-row{min-height:26px;padding-inline:3px}.meal-mark{width:22px;height:22px;font-size:.92rem}.all-meal-row.dinner .meal-mark{font-size:1.02rem}.past-menu-panel{padding:12px}.past-menu-text{font-size:.92rem}.detail-overlay{padding-left:4px;padding-right:4px}.detail-modal-panel{padding:12px}.detail-modal-panel>.view-header{top:-12px;padding-top:12px}}
+
+    /* iOS-inspired visual refresh: native system type, grouped cards, safe-area and segmented navigation. */
+    :root{
+      --bg:#f5f7fb;--surface:#fff;--warm:#edf3ff;--warm-2:#f9fbff;--blue:#eef5ff;
+      --line:#e4eaf2;--text:#202b3e;--muted:#738095;--accent:#407cff;--accent-soft:#e9f0ff;
+      --disabled:#eef4ff;--disabled-text:#6383bb;--danger:#d84e63;
+      --shadow:0 10px 30px rgba(39,65,107,.075);
+      --meal-breakfast-1:#f4a99a;--meal-breakfast-2:#e98d83;
+      --meal-lunch-1:#eebc66;--meal-lunch-2:#dda04b;
+      --meal-dinner-1:#7fcbb9;--meal-dinner-2:#55ad9b;
+      --meal-snack-1:#a1b7e4;--meal-snack-2:#809cd7;
+    }
+    html{color-scheme:light}
+    body{min-height:100dvh;background:radial-gradient(circle at top left,#eaf1ff 0,transparent 390px),var(--bg);letter-spacing:-.012em;-webkit-font-smoothing:antialiased}
+    button:focus-visible{outline:3px solid rgba(64,124,255,.35)}
+    .app-shell{width:min(100%,760px);padding:max(18px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) calc(34px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+    .hero{position:relative;overflow:hidden;padding:27px 24px 26px;border:1px solid #fff;border-radius:28px;background:linear-gradient(135deg,#eaf2ff 0%,#fff 62%,#fff0eb 100%);box-shadow:var(--shadow)}
+    .hero::after{content:"✦";position:absolute;right:23px;top:14px;color:#9ebaff;font-size:2.65rem;opacity:.68}
+    .hero-eyebrow{margin-bottom:12px;color:#5785cf;font-size:.66rem;font-weight:850;letter-spacing:.19em}
+    .hero h1{font-size:clamp(1.65rem,6.4vw,2.18rem);font-weight:850;letter-spacing:-.055em;line-height:1.25}
+    .hero p{margin-top:10px;font-size:.89rem;line-height:1.6;color:#6d7b91}
+    .today-line{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:23px 4px 12px}
+    .today-kicker{display:block;margin-bottom:3px;color:#8592a7;font-size:.62rem;font-weight:800;letter-spacing:.17em}
+    .today-line strong{display:block;font-size:1.24rem;letter-spacing:-.035em}
+    .today-line>span{display:inline-block;margin:0;padding:6px 10px;border-radius:999px;background:#fff;color:var(--muted);font-size:.72rem;font-weight:750;white-space:nowrap}
+    .daily-progress{padding:19px 18px 16px;border:1px solid #fff;border-radius:24px;background:#fff;box-shadow:var(--shadow)}
+    .progress-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.94rem}
+    .progress-top strong:last-child{color:var(--accent);font-size:1.07rem;font-variant-numeric:tabular-nums}
+    .progress-track{height:9px;overflow:hidden;margin-top:14px;border-radius:99px;background:#eaf0fa}
+    .progress-fill{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#76a5ff,#4e84ff,#7aa7fb);transition:width .45s cubic-bezier(.2,.75,.2,1)}
+    .progress-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}
+    .progress-steps span{display:grid;place-items:center;min-height:29px;border-radius:9px;background:#f2f5fa;color:#9aa5b6;font-size:.73rem;font-weight:800}
+    .progress-steps span.is-done{background:#e7f0ff;color:#3668c5}
+    .progress-message{margin:12px 0 0;color:var(--muted);font-size:.76rem;line-height:1.5}
+    .daily-progress.is-complete{background:linear-gradient(135deg,#fff,#edf6ff)}
+    .daily-progress.is-complete .progress-fill{background:linear-gradient(90deg,#75c7b3,#4e9ed8,#5388ed)}
+    .meal-home-grid{gap:12px;margin-top:15px}
+    .home-meal{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:5px;min-height:134px;padding:18px;text-align:left;border:1px solid #fff;border-radius:24px;background:#fff;color:var(--text);font-size:1.08rem;box-shadow:var(--shadow)}
+    .home-meal-icon{display:grid;place-items:center;width:39px;height:39px;margin-bottom:4px;border-radius:13px;background:#f1f4fa;font-size:1.35rem;line-height:1}
+    .home-meal[data-home-meal="breakfast"] .home-meal-icon{background:#fff0ec}
+    .home-meal[data-home-meal="lunch"] .home-meal-icon{background:#fff4df}
+    .home-meal[data-home-meal="dinner"] .home-meal-icon{background:#e6f6f1}
+    .home-meal[data-home-meal="snack"] .home-meal-icon{background:#ecf0fc}
+    .home-meal-label{font-weight:850;letter-spacing:-.025em}
+    .home-meal small{margin:0;color:#8a97ab;font-size:.73rem;font-weight:700}
+    .home-meal:disabled{border-color:#dbe7fb;background:#eef4ff;color:#446fba;box-shadow:none;cursor:default}
+    .home-meal:disabled small{color:#6383bb}
+    .home-meal.is-recorded::after{content:"✓";position:absolute;right:14px;top:14px;display:grid;place-items:center;width:23px;height:23px;border-radius:999px;background:#5a91eb;color:#fff;font-size:.79rem;font-weight:800}
+    .calendar-open,.past-menu-open{min-height:55px;border:1px solid #fff;border-radius:18px;background:#fff;font-size:.95rem;font-weight:800;box-shadow:var(--shadow)}
+    .calendar-open{margin-top:17px;color:#356fd8}
+    .calendar-open::before{content:"▦";margin-right:9px;font-size:1.3rem;vertical-align:-1px}
+    .past-menu-open::before{content:"☰";margin-right:10px;font-size:1rem;color:#7a8eae}
+    .past-menu-panel,.calendar-card,.detail-card{border-color:#edf1f7;border-radius:22px;background:#fff;box-shadow:var(--shadow)}
+    .past-menu-panel{padding:17px}
+    .view-header{margin-bottom:15px}
+    .view-title h2{font-size:1.33rem;font-weight:850;letter-spacing:-.045em}
+    .view-title p{color:var(--muted)}
+    .back-button,.icon-button,.secondary-button,.primary-button,.danger-button{min-height:46px;border-radius:14px}
+    .back-button,.icon-button,.secondary-button{border-color:#e1e8f3;background:#fff}
+    .back-button{color:#366ed2}
+    .primary-button{border-color:#407cff;background:#407cff;color:#fff}
+    .danger-button{border-color:#ffdae1;background:#fff0f3;color:var(--danger)}
+    .calendar-fixed{background:var(--bg)}
+    .meal-tabs{gap:3px;padding:4px;border-radius:17px;background:#e8edf5}
+    .meal-tab,.meal-tab-all,.meal-tab-breakfast,.meal-tab-lunch,.meal-tab-dinner,.meal-tab-snack{min-height:41px;padding:0 2px;border:0;border-radius:13px;background:transparent;color:#73839b;font-weight:750;font-size:.82rem}
+    .meal-tab.is-active,.meal-tab-all.is-active{transform:none;background:#fff;color:#3269cf;box-shadow:0 2px 8px rgba(35,58,99,.1)}
+    .calendar-toolbar{margin:10px 0 12px}
+    .icon-button{width:45px;min-height:45px;border-radius:15px;color:#4779d8}
+    .month-center strong{font-size:1.13rem;font-weight:850}
+    #calendarView:not([hidden]){height:calc(100dvh - max(18px,env(safe-area-inset-top)) - 18px - env(safe-area-inset-bottom))}
+    .weekday-row{border-color:#e3eaf3;background:#fff}
+    .weekday-row span{padding:11px 1px;color:#667791;font-weight:800}
+    .calendar-card{border-color:#e3eaf3;border-radius:0 0 20px 20px}
+    .day-cell,.day-blank{border-color:#e5ebf3}
+    .day-number{color:#384961;font-weight:800}
+    .day-cell.is-today .day-number,.calendar-grid:not(.is-all) .day-cell.is-today .day-number{background:#437eff;color:#fff}
+    .all-meal-row{border-color:#edf1f6;border-radius:6px;background:#f7f9fc;color:#a7b0bd}
+    .all-meal-row.is-recorded{color:#fff}
+    .thumb-box{border-color:#e5eaf1;background:#f6f8fc}
+    .detail-overlay{background:rgba(24,38,60,.43);backdrop-filter:blur(8px)}
+    .detail-modal-panel{border-color:#fff;border-radius:28px;background:var(--bg);box-shadow:0 24px 70px rgba(22,41,73,.25)}
+    .caption-block{border-color:#e3e9f2;border-radius:15px;background:#fff}
+    .memo-editor textarea{border-color:#dfe6f0;border-radius:14px}
+    .celebration-layer{position:fixed;z-index:3000;inset:0;overflow:hidden;pointer-events:none;display:grid;place-items:center}
+    .celebration-message{position:absolute;top:41%;left:50%;display:flex;flex-direction:column;align-items:center;gap:6px;width:max-content;max-width:calc(100vw - 34px);padding:20px 25px;border:1px solid rgba(255,255,255,.94);border-radius:25px;background:rgba(255,255,255,.93);box-shadow:0 16px 52px rgba(36,65,104,.2);backdrop-filter:blur(14px);color:#254677;text-align:center;animation:celebrationPop 2.1s ease-out both}
+    .celebration-message>span{color:#f2b14a;font-size:1.45rem;letter-spacing:.2em}
+    .celebration-message strong{font-size:1.43rem;font-weight:900;letter-spacing:-.04em}
+    .celebration-message small{color:#6a7e9d;font-size:.79rem;font-weight:750}
+    .celebration-particle{position:absolute;top:41%;left:50%;width:11px;height:11px;opacity:0;background:var(--particle-color);transform:translate(-50%,-50%) scale(.3);animation:particleBurst 1.55s cubic-bezier(.15,.7,.25,1) var(--delay) both}
+    .celebration-particle.is-dot{width:7px;height:7px;border-radius:50%}
+    .celebration-particle.is-star{clip-path:polygon(50% 0,62% 34%,98% 35%,69% 57%,79% 92%,50% 72%,21% 92%,31% 57%,2% 35%,38% 34%)}
+    @keyframes particleBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}15%{opacity:1}65%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot)) scale(.2)}}
+    @keyframes celebrationPop{0%{opacity:0;transform:translate(-50%,-48%) scale(.85)}12%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-55%) scale(.98)}}
+    @media(max-width:430px){
+      .app-shell{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+      .hero{padding:24px 20px}
+      .home-meal{min-height:126px;padding:15px}
+      .meal-tab,.meal-tab-all,.meal-tab-breakfast,.meal-tab-lunch,.meal-tab-dinner,.meal-tab-snack{font-size:.75rem}
+      #calendarView:not([hidden]){height:calc(100dvh - max(18px,env(safe-area-inset-top)) - 12px - env(safe-area-inset-bottom))}
+      .detail-modal-panel{padding:13px}
+    }
+    @media(max-width:360px){.hero h1{font-size:1.55rem}.today-line>span{font-size:.67rem}.daily-progress{padding:15px}.home-meal{padding:12px}}
+    @media(prefers-reduced-motion:reduce){.celebration-particle{display:none}.celebration-message{animation:none}.progress-fill{transition:none}}
   </style>
 </head>
 <body>
   <main class="app-shell">
     <section id="homeView">
-      <header class="hero"><h1>今日なに食べた？</h1><p>今日の食事を、写真でさっと記録。</p></header>
-      <div class="today-line"><strong id="todayLabel"></strong><span>記録する食事を選んでください</span></div>
+      <header class="hero">
+        <div class="hero-eyebrow">DAILY MEAL JOURNAL</div>
+        <h1>今日なに食べた？</h1>
+        <p>日々の食事を、写真で心地よく記録。</p>
+      </header>
+      <div class="today-line"><div><span class="today-kicker">TODAY</span><strong id="todayLabel"></strong></div><span>きょうの食事</span></div>
+      <section id="dailyProgress" class="daily-progress" aria-labelledby="progressTitle">
+        <div class="progress-top"><strong id="progressTitle">3食チャレンジ</strong><strong id="progressCount" aria-live="polite">0 / 3</strong></div>
+        <div id="progressTrack" class="progress-track" role="progressbar" aria-label="朝・昼・夕の記録数" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div id="progressFill" class="progress-fill"></div></div>
+        <div class="progress-steps" aria-hidden="true"><span data-progress-meal="breakfast">朝食</span><span data-progress-meal="lunch">昼食</span><span data-progress-meal="dinner">夕食</span></div>
+        <p id="progressMessage" class="progress-message">朝・昼・夕を記録して、1日を完成させよう。</p>
+      </section>
       <div class="meal-home-grid" aria-label="今日の食事を記録">
         <button class="home-meal" data-home-meal="breakfast" type="button">朝食<small>写真を撮る</small></button>
         <button class="home-meal" data-home-meal="lunch" type="button">昼食<small>写真を撮る</small></button>
@@ -173,12 +288,12 @@
     <input id="photoInput" type="file" accept="image/*" capture="environment" hidden />
   </main>
 <script>
-const APP={dbName:'foodlog-db',dbVersion:1,storeName:'records',fullWidth:960,fullHeight:720,fullQuality:.68,thumbWidth:240,thumbHeight:180,thumbQuality:.58,mealNames:{breakfast:'朝食',lunch:'昼食',dinner:'夕食',snack:'間食'},shortMealNames:{breakfast:'朝',lunch:'昼',dinner:'夜',snack:'間'},mealMarks:{breakfast:'朝',lunch:'昼',dinner:'夕',snack:'間'}};
+const APP={dbName:'foodlog-db',dbVersion:1,storeName:'records',fullWidth:960,fullHeight:720,fullQuality:.68,thumbWidth:240,thumbHeight:180,thumbQuality:.58,mealNames:{breakfast:'朝食',lunch:'昼食',dinner:'夕食',snack:'間食'},shortMealNames:{breakfast:'朝',lunch:'昼',dinner:'夜',snack:'間'},mealMarks:{breakfast:'朝',lunch:'昼',dinner:'夕',snack:'間'},mealIcons:{breakfast:'☀️',lunch:'🍱',dinner:'🍽️',snack:'🍪'}};
 const state={db:null,meal:'breakfast',detailMeal:null,calendarMode:'all',today:startOfDay(new Date()),viewedMonth:startOfMonth(new Date()),selectedDate:toDateKey(new Date()),records:new Map(),calendarObjectUrls:new Set(),detailObjectUrl:null,midnightTimer:null,pending:null,captureContext:null,currentView:'home',detailTouchStartX:null,detailTouchStartY:null};
 const els={};
 window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
 async function init(){bindElements();bindEvents();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋前月の2か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
-function bindElements(){for(const id of ['homeView','calendarView','detailView','todayLabel','openCalendar','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
+function bindElements(){for(const id of ['homeView','calendarView','detailView','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
 function bindEvents(){els.homeMealButtons.forEach(button=>button.addEventListener('click',()=>startCapture({date:toDateKey(state.today),meal:button.dataset.homeMeal,returnView:'home',mode:'new'})));els.openCalendar.addEventListener('click',()=>{state.viewedMonth=startOfMonth(state.today);state.selectedDate=toDateKey(state.today);state.calendarMode='all';renderCalendar();history.pushState({foodlogView:'calendar'},'',location.href);showView('calendar')});els.openPastMenus.addEventListener('click',togglePastMenus);els.copyPastMenus.addEventListener('click',copyPastMenusText);els.backHome.addEventListener('click',goHomeFromCalendar);window.addEventListener('popstate',()=>{if(state.currentView==='detail'){closeDetailModalNow();return}if(state.currentView==='calendar'){renderHome();showView('home')}});els.mealTabs.forEach(button=>button.addEventListener('click',()=>{state.calendarMode=button.dataset.meal;if(state.calendarMode!=='all')state.meal=state.calendarMode;renderCalendar()}));els.prevMonth.addEventListener('click',()=>changeMonth(-1));els.nextMonth.addEventListener('click',()=>changeMonth(1));els.backCalendar.addEventListener('click',requestCloseDetailModal);els.detailView.addEventListener('click',event=>{if(event.target===els.detailView)requestCloseDetailModal()});els.detailSwipeArea.addEventListener('touchstart',handleDetailTouchStart,{passive:true});els.detailSwipeArea.addEventListener('touchend',handleDetailTouchEnd,{passive:true});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.currentView==='detail')requestCloseDetailModal()});els.editDishName.addEventListener('click',startDishNameEdit);els.deleteDishName.addEventListener('click',deleteDishNameValue);els.replaceButton.addEventListener('click',()=>{const meal=state.detailMeal||state.meal;startCapture({date:state.selectedDate,meal,returnView:'detail',mode:'replace'})});els.deleteButton.addEventListener('click',deleteSelectedRecord);els.saveMemo.addEventListener('click',saveDetailMemo);els.photoInput.addEventListener('change',handlePhotoSelection)}
 function openDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open(APP.dbName,APP.dbVersion);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(APP.storeName)){const store=db.createObjectStore(APP.storeName,{keyPath:'key'});store.createIndex('date','date',{unique:false})}};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
 function getAllRecords(){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readonly');const request=tx.objectStore(APP.storeName).getAll();request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>reject(request.error)})}
@@ -190,7 +305,9 @@ async function purgeExpiredRecords(){const cutoff=retentionStartDate();const all
 function retentionStartDate(){const firstThisMonth=startOfMonth(state.today);return new Date(firstThisMonth.getFullYear(),firstThisMonth.getMonth()-1,1)}function retentionEndDate(){return new Date(state.today.getFullYear(),state.today.getMonth()+1,0,23,59,59)}
 function goHomeFromCalendar(){renderHome();showView('home')}
 function showView(name){state.currentView=name;const isDetail=name==='detail';els.homeView.hidden=name!=='home';els.calendarView.hidden=!(name==='calendar'||isDetail);els.detailView.hidden=!isDetail;document.body.classList.toggle('modal-open',isDetail);if(!isDetail)window.scrollTo({top:0,behavior:'auto'})}
-function renderHome(){const todayKey=toDateKey(state.today);els.todayLabel.textContent=formatDateWithWeekday(state.today);els.homeMealButtons.forEach(button=>{const meal=button.dataset.homeMeal;const recorded=state.records.has(recordKey(todayKey,meal));button.disabled=recorded;button.innerHTML=recorded?`✓ ${APP.mealNames[meal]}<small>記録済</small>`:`${APP.mealNames[meal]}<small>写真を撮る</small>`});renderPastMenus()}
+function mainMealCount(dateKey){return ['breakfast','lunch','dinner'].filter(meal=>state.records.has(recordKey(dateKey,meal))).length}
+function renderDailyProgress(){const dateKey=toDateKey(state.today),count=mainMealCount(dateKey);els.progressCount.textContent=`${count} / 3`;els.progressTrack.setAttribute('aria-valuenow',String(count));els.progressFill.style.width=`${count/3*100}%`;els.progressSteps.forEach(step=>{const recorded=state.records.has(recordKey(dateKey,step.dataset.progressMeal));step.classList.toggle('is-done',recorded);step.textContent=`${recorded?'✓ ':''}${APP.mealNames[step.dataset.progressMeal]}`});els.progressMessage.textContent=count===3?'3食コンプリート！ 今日の記録がそろいました。':count===2?'あと1食でコンプリート！':count===1?'いいスタート！ あと2食で達成。':'朝・昼・夕を記録して、1日を完成させよう。';els.dailyProgress?.classList.toggle('is-complete',count===3)}
+function renderHome(){const todayKey=toDateKey(state.today);els.todayLabel.textContent=formatDateWithWeekday(state.today);els.homeMealButtons.forEach(button=>{const meal=button.dataset.homeMeal,recorded=state.records.has(recordKey(todayKey,meal));button.disabled=recorded;button.classList.toggle('is-recorded',recorded);button.innerHTML=`<span class="home-meal-icon" aria-hidden="true">${APP.mealIcons[meal]}</span><span class="home-meal-label">${APP.mealNames[meal]}</span><small>${recorded?'✓ 記録済み':'＋ 写真を記録'}</small>`});renderDailyProgress();renderPastMenus()}
 function buildPastMenusText(){const lines=['過去１０日間のメニューは以下です。',''];for(let offset=0;offset<10;offset++){const date=new Date(state.today);date.setDate(date.getDate()-offset);const record=state.records.get(recordKey(toDateKey(date),'dinner'));const memo=String(record?.memo||'').trim();if(memo)lines.push(`・${memo}`)}return lines.join('\n')}
 function renderPastMenus(){els.pastMenusText.textContent=buildPastMenusText();els.pastMenusStatus.textContent=''}
 function togglePastMenus(){const willShow=els.pastMenusPanel.hidden;if(willShow)renderPastMenus();els.pastMenusPanel.hidden=!willShow;els.openPastMenus.setAttribute('aria-expanded',String(willShow))}
@@ -217,13 +334,14 @@ async function saveDetailMemo(){const meal=state.detailMeal||state.meal,key=reco
 function changeMonth(delta){const candidate=new Date(state.viewedMonth.getFullYear(),state.viewedMonth.getMonth()+delta,1),min=startOfMonth(retentionStartDate()),max=startOfMonth(state.today);if(candidate<min||candidate>max)return;state.viewedMonth=candidate;renderCalendar()}
 function startCapture(context){const selected=parseDateKey(context.date);if(selected>state.today)return;state.captureContext={...context};els.photoInput.value='';els.photoInput.click()}
 async function handlePhotoSelection(event){const file=event.target.files?.[0];if(!file||!state.captureContext)return;if(!file.type.startsWith('image/'))return;try{const bitmap=await loadImage(file),fullBlob=await renderImageBlob(bitmap,APP.fullWidth,APP.fullHeight,APP.fullQuality),thumbBlob=await renderImageBlob(bitmap,APP.thumbWidth,APP.thumbHeight,APP.thumbQuality);if(typeof bitmap.close==='function')bitmap.close();state.pending={fullBlob,thumbBlob};await savePendingPhoto()}catch(error){console.error(error);state.captureContext=null}}
-async function savePendingPhoto(){if(!state.pending||!state.captureContext)return;const ctx=state.captureContext,key=recordKey(ctx.date,ctx.meal),previous=state.records.get(key),record={key,date:ctx.date,meal:ctx.meal,memo:previous?.memo||'',fullBlob:state.pending.fullBlob,thumbBlob:state.pending.thumbBlob,width:APP.fullWidth,height:APP.fullHeight,mimeType:'image/webp',quality:APP.fullQuality,updatedAt:new Date().toISOString()};await putRecord(record);await purgeExpiredRecords();await refreshRecords();state.pending=null;if(ctx.returnView==='detail'){state.detailMeal=ctx.meal;state.selectedDate=ctx.date;renderDetailPage();showView('detail')}else{renderHome();showView('home')}state.captureContext=null}
+async function savePendingPhoto(){if(!state.pending||!state.captureContext)return;const ctx=state.captureContext,key=recordKey(ctx.date,ctx.meal),previous=state.records.get(key),beforeCount=mainMealCount(ctx.date),record={key,date:ctx.date,meal:ctx.meal,memo:previous?.memo||'',fullBlob:state.pending.fullBlob,thumbBlob:state.pending.thumbBlob,width:APP.fullWidth,height:APP.fullHeight,mimeType:'image/webp',quality:APP.fullQuality,updatedAt:new Date().toISOString()};await putRecord(record);await purgeExpiredRecords();await refreshRecords();const afterCount=mainMealCount(ctx.date);state.pending=null;if(ctx.returnView==='detail'){state.detailMeal=ctx.meal;state.selectedDate=ctx.date;renderDetailPage();showView('detail')}else{renderHome();showView('home')}state.captureContext=null;if(beforeCount===2&&afterCount===3)showMealCelebration()}
 async function deleteSelectedRecord(){const meal=state.detailMeal||state.meal,key=recordKey(state.selectedDate,meal),record=state.records.get(key);if(!record)return;if(!window.confirm(`${formatDate(state.selectedDate)}・${APP.mealNames[meal]}の写真を削除しますか？`))return;await deleteRecord(key);await refreshRecords();renderHome();requestCloseDetailModal()}
 async function loadImage(file){if('createImageBitmap'in window){try{return await createImageBitmap(file,{imageOrientation:'from-image'})}catch(_){return createImageBitmap(file)}}const url=URL.createObjectURL(file);try{const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url});return image}finally{URL.revokeObjectURL(url)}}
 function renderImageBlob(source,width,height,quality){return new Promise((resolve,reject)=>{const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const sw=source.width||source.naturalWidth,sh=source.height||source.naturalHeight,targetRatio=width/height,sourceRatio=sw/sh;let sx=0,sy=0,cropW=sw,cropH=sh;if(sourceRatio>targetRatio){cropW=sh*targetRatio;sx=(sw-cropW)/2}else if(sourceRatio<targetRatio){cropH=sw/targetRatio;sy=(sh-cropH)/2}ctx.drawImage(source,sx,sy,cropW,cropH,0,0,width,height);canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Image conversion failed')),'image/webp',quality)})}
 function refreshTodayIfNeeded(){const now=startOfDay(new Date());if(toDateKey(now)===toDateKey(state.today)){scheduleMidnightRefresh();return}state.today=now;state.viewedMonth=startOfMonth(now);state.selectedDate=toDateKey(now);purgeExpiredRecords().then(refreshRecords).then(()=>{renderHome();renderCalendar();scheduleMidnightRefresh()}).catch(()=>scheduleMidnightRefresh())}
 function scheduleMidnightRefresh(){if(state.midnightTimer)clearTimeout(state.midnightTimer);const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,2);state.midnightTimer=setTimeout(refreshTodayIfNeeded,Math.max(1000,next-now))}
 function normalizeMeal(meal){if(meal==='夜'||meal==='夜食'||meal==='夕'||meal==='夕食')return'dinner';if(meal==='朝'||meal==='朝食')return'breakfast';if(meal==='昼'||meal==='昼食')return'lunch';if(meal==='間'||meal==='間食')return'snack';return meal}function recordKey(date,meal){return`${date}_${normalizeMeal(meal)}`}function startOfDay(date){return new Date(date.getFullYear(),date.getMonth(),date.getDate())}function startOfMonth(date){return new Date(date.getFullYear(),date.getMonth(),1)}function toDateKey(date){return`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`}function parseDateKey(key){const[y,m,d]=key.split('-').map(Number);return new Date(y,m-1,d)}function formatDate(key){const d=parseDateKey(key);return`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`}function formatDateWithWeekday(date){return`${date.getMonth()+1}月${date.getDate()}日（${['日','月','火','水','木','金','土'][date.getDay()]}）`}
+function showMealCelebration(){document.querySelector('.celebration-layer')?.remove();const layer=document.createElement('div');layer.className='celebration-layer';const message=document.createElement('div');message.className='celebration-message';message.setAttribute('role','status');message.innerHTML='<span aria-hidden="true">✦ ✨ ✦</span><strong>3食コンプリート！</strong><small>今日もおいしく記録できました</small>';layer.appendChild(message);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){const colors=['#5b8bff','#ffba60','#ff8e99','#70cbb5','#b19af6'];for(let i=0;i<40;i++){const particle=document.createElement('i'),angle=(i/40)*Math.PI*2,radius=85+Math.random()*Math.min(155,window.innerWidth*.35);particle.className='celebration-particle '+(i%3===0?'is-dot':'is-star');particle.style.setProperty('--dx',Math.cos(angle)*radius+'px');particle.style.setProperty('--dy',Math.sin(angle)*radius+'px');particle.style.setProperty('--rot',(Math.random()*540-270)+'deg');particle.style.setProperty('--delay',(i%7*24)+'ms');particle.style.setProperty('--particle-color',colors[i%colors.length]);layer.appendChild(particle)}}document.body.appendChild(layer);window.setTimeout(()=>layer.remove(),2300)}
 function setHomeStatus(message){els.homeStatus.textContent=message}function setCalendarStatus(message){els.calendarStatus.textContent=message}
 function cleanupCalendarObjectUrls(){for(const url of state.calendarObjectUrls)URL.revokeObjectURL(url);state.calendarObjectUrls.clear()}function cleanupDetailObjectUrl(){if(state.detailObjectUrl){URL.revokeObjectURL(state.detailObjectUrl);state.detailObjectUrl=null}}function cleanupAllObjectUrls(){cleanupCalendarObjectUrls();cleanupDetailObjectUrl();if(state.midnightTimer)clearTimeout(state.midnightTimer)}
 </script>
