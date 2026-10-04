@@ -206,8 +206,12 @@
     .day-number{color:#384961;font-weight:800}
     .day-cell.is-today .day-number,.calendar-grid:not(.is-all) .day-cell.is-today .day-number{background:#437eff;color:#fff}
     .all-meal-row{border-color:#edf1f6;border-radius:6px;background:#f7f9fc;color:#a7b0bd}
-    .all-meal-row.is-recorded{color:#fff}
-    .all-meal-row.is-recorded .meal-mark.has-name{color:#1f2937;text-shadow:0 1px 0 rgba(255,255,255,.24)}
+    .all-meal-row.is-recorded{box-shadow:none}
+    .all-meal-row.breakfast.is-recorded{background:#fff0ec;border-color:#f6d6cf;color:#b85f56}
+    .all-meal-row.lunch.is-recorded{background:#fff4dd;border-color:#efdfbd;color:#9b6b1b}
+    .all-meal-row.dinner.is-recorded{background:#e9f7f3;border-color:#cce8e0;color:#347c6d}
+    .all-meal-row.snack.is-recorded{background:#eef1fb;border-color:#d8def0;color:#5b6fa7}
+    .all-meal-row.is-recorded .meal-mark.has-name{color:#1f2937;text-shadow:none}
     .thumb-box{border-color:#e5eaf1;background:#f6f8fc}
     .detail-overlay{background:rgba(24,38,60,.43);backdrop-filter:blur(8px)}
     .detail-modal-panel{border-color:#fff;border-radius:28px;background:var(--bg);box-shadow:0 24px 70px rgba(22,41,73,.25)}
