@@ -339,7 +339,7 @@
     <input id="photoInput" type="file" accept="image/*" capture="environment" hidden />
   </main>
 <script>
-const APP={dbName:'foodlog-db',dbVersion:1,storeName:'records',fullWidth:960,fullHeight:720,fullQuality:.68,thumbWidth:240,thumbHeight:180,thumbQuality:.58,mealNames:{breakfast:'朝食',lunch:'昼食',dinner:'夕食',snack:'間食'},shortMealNames:{breakfast:'朝',lunch:'昼',dinner:'夜',snack:'間'},mealMarks:{breakfast:'朝',lunch:'昼',dinner:'夕',snack:'間'},mealIcons:{breakfast:'☀️',lunch:'🍱',dinner:'🍽️',snack:'🍪'}};
+const APP={dbName:'foodlog-db',dbVersion:1,storeName:'records',fullWidth:960,fullHeight:720,fullQuality:.68,thumbWidth:240,thumbHeight:180,thumbQuality:.58,mealNames:{breakfast:'朝食',lunch:'昼食',dinner:'夕食',snack:'間食'},shortMealNames:{breakfast:'朝',lunch:'昼',dinner:'夜',snack:'間'},mealMarks:{breakfast:'朝',lunch:'昼',dinner:'夕',snack:'間'},mealIcons:{breakfast:'☀️',lunch:'🍱',dinner:'🥘',snack:'🍪'}};
 const state={db:null,meal:'breakfast',detailMeal:null,calendarMode:'all',today:startOfDay(new Date()),viewedMonth:startOfMonth(new Date()),selectedDate:toDateKey(new Date()),records:new Map(),calendarObjectUrls:new Set(),detailObjectUrl:null,midnightTimer:null,pending:null,captureContext:null,currentView:'home',detailTouchStartX:null,detailTouchStartY:null};
 const els={};
 window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
