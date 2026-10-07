@@ -237,6 +237,30 @@
     }
     @media(max-width:360px){.hero h1{font-size:1.55rem}.today-line>span{font-size:.67rem}.daily-progress{padding:15px}.home-meal{padding:12px}}
 
+    /* Motion polish: subtle, performance-friendly home interactions. */
+    #homeView:not([hidden]) .hero{animation:homeRise .42s cubic-bezier(.2,.78,.28,1) both}
+    #homeView:not([hidden]) .today-line{animation:homeRise .42s .06s cubic-bezier(.2,.78,.28,1) both}
+    #homeView:not([hidden]) .daily-progress{animation:homeRise .44s .11s cubic-bezier(.2,.78,.28,1) both}
+    #homeView:not([hidden]) .home-meal{animation:mealCardIn .48s cubic-bezier(.16,.82,.3,1) both}
+    #homeView:not([hidden]) .home-meal:nth-child(1){animation-delay:.16s}
+    #homeView:not([hidden]) .home-meal:nth-child(2){animation-delay:.21s}
+    #homeView:not([hidden]) .home-meal:nth-child(3){animation-delay:.26s}
+    #homeView:not([hidden]) .home-meal:nth-child(4){animation-delay:.31s}
+    #homeView:not([hidden]) .calendar-open{animation:homeRise .4s .34s ease both}
+    #homeView:not([hidden]) .past-menu-open{animation:homeRise .4s .38s ease both}
+    #homeView .hero::after{transform-origin:50% 50%;animation:heroTwinkle 3.8s ease-in-out infinite}
+    #homeView .home-meal-icon{transition:transform .24s cubic-bezier(.2,.8,.3,1),box-shadow .24s ease}
+    #homeView .home-meal:not(:disabled):active .home-meal-icon{transform:scale(.9) rotate(-4deg)}
+    #homeView .progress-fill{position:relative;overflow:hidden}
+    #homeView .progress-fill::after{content:"";position:absolute;inset:0;width:38%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.62),transparent);transform:translateX(-180%);animation:progressSheen 3.6s 1.1s ease-in-out infinite}
+    @media(hover:hover){
+      #homeView .home-meal:not(:disabled):hover .home-meal-icon{transform:translateY(-3px) scale(1.04);box-shadow:0 7px 16px rgba(65,91,132,.12)}
+    }
+    @keyframes homeRise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+    @keyframes mealCardIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+    @keyframes heroTwinkle{0%,100%{opacity:.52;transform:scale(.92) rotate(-4deg)}50%{opacity:.82;transform:scale(1.06) rotate(4deg)}}
+    @keyframes progressSheen{0%,58%{transform:translateX(-180%)}78%,100%{transform:translateX(360%)}}
+
     /* Compact iPhone home layout: position the four record buttons around the screen centre. */
     @media(max-width:599px){
       .app-shell{padding-top:max(10px,env(safe-area-inset-top))}
