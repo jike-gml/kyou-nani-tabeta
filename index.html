@@ -9,7 +9,8 @@
   <meta name="description" content="朝食・昼食・夕食・間食を写真で2か月だけ残す食ログアプリ" />
   <title>今日なに食べた？</title>
   <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" href="./icon-192.png" />
+  <link rel="icon" href="./icon-192.png?v=2" />
+  <link rel="apple-touch-icon" href="./icon-192.png?v=2" />
   <style>
     :root {
       --bg:#fffdf8;
@@ -299,6 +300,27 @@
     }
     @media(prefers-reduced-motion:reduce){.celebration-particle{display:none}.celebration-message{animation:none}.progress-fill{transition:none}}
     #homeView{touch-action:pan-y}
+    /* Illustrated home meal buttons: artwork kept separate from accessible text */
+    #homeView .meal-home-grid{gap:10px}
+    #homeView .home-meal{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;overflow:hidden;min-width:0;min-height:0;padding:0;gap:0;border-radius:19px;background:#fff;border:1px solid #e8edf6;box-shadow:0 5px 17px rgba(65,75,95,.11);text-align:center}
+    #homeView .home-meal-art{position:relative;display:block;width:100%;aspect-ratio:256/195;background-image:url('./meal-illustrations-v1.jpg');background-size:200% 200%;background-repeat:no-repeat}
+    #homeView .home-meal[data-home-meal="breakfast"] .home-meal-art{background-position:left top}
+    #homeView .home-meal[data-home-meal="lunch"] .home-meal-art{background-position:right top}
+    #homeView .home-meal[data-home-meal="dinner"] .home-meal-art{background-position:left bottom}
+    #homeView .home-meal[data-home-meal="snack"] .home-meal-art{background-position:right bottom}
+    #homeView .home-meal-footer{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:46px;padding:5px 3px 7px;background:#fff9ee}
+    #homeView .home-meal[data-home-meal="lunch"] .home-meal-footer{background:#f0faed}
+    #homeView .home-meal[data-home-meal="dinner"] .home-meal-footer{background:#f1f1ff}
+    #homeView .home-meal[data-home-meal="snack"] .home-meal-footer{background:#fff0f3}
+    #homeView .home-meal-label{font-size:1rem;line-height:1.15;color:#3c4050;font-weight:850}
+    #homeView .home-meal small{font-size:.65rem;line-height:1.25;color:#737d90}
+    #homeView .home-meal:disabled{background:#fff;border-color:#d5deea;box-shadow:0 2px 9px rgba(65,75,95,.07);opacity:1}
+    #homeView .home-meal:disabled .home-meal-art{filter:grayscale(.55);opacity:.48}
+    #homeView .home-meal:disabled .home-meal-footer{background:#f0f3f8}
+    #homeView .home-meal:disabled .home-meal-label{color:#6880a3}
+    #homeView .home-meal:disabled small{color:#6880a3}
+    #homeView .home-meal.is-recorded::after{top:8px;right:8px;z-index:2}
+    @media(max-width:360px){#homeView .home-meal-footer{min-height:43px}#homeView .home-meal-label{font-size:.92rem}}
   </style>
 </head>
 <body>
@@ -387,7 +409,7 @@ function goHomeFromCalendar(){renderHome();showView('home')}
 function showView(name){state.currentView=name;const isDetail=name==='detail';els.homeView.hidden=name!=='home';els.calendarView.hidden=!(name==='calendar'||isDetail);els.detailView.hidden=!isDetail;document.body.classList.toggle('modal-open',isDetail);if(!isDetail)window.scrollTo({top:0,behavior:'auto'})}
 function mainMealCount(dateKey){return ['breakfast','lunch','dinner'].filter(meal=>state.records.has(recordKey(dateKey,meal))).length}
 function renderDailyProgress(){const dateKey=toDateKey(state.today),count=mainMealCount(dateKey);els.progressCount.textContent=`${count} / 3`;els.progressTrack.setAttribute('aria-valuenow',String(count));els.progressFill.style.width=`${count/3*100}%`;els.progressSteps.forEach(step=>{const recorded=state.records.has(recordKey(dateKey,step.dataset.progressMeal));step.classList.toggle('is-done',recorded);step.textContent=`${recorded?'✓ ':''}${APP.mealNames[step.dataset.progressMeal]}`});els.progressMessage.textContent=count===3?'3食コンプリート！ 今日の記録がそろいました。':count===2?'あと1食でコンプリート！':count===1?'いいスタート！ あと2食で達成。':'朝・昼・夕を記録して、1日を完成させよう。';els.dailyProgress?.classList.toggle('is-complete',count===3)}
-function renderHome(){const todayKey=toDateKey(state.today);els.todayLabel.textContent=formatDateWithWeekday(state.today);els.homeMealButtons.forEach(button=>{const meal=button.dataset.homeMeal,recorded=state.records.has(recordKey(todayKey,meal));button.disabled=recorded;button.classList.toggle('is-recorded',recorded);button.innerHTML=`<span class="home-meal-icon" aria-hidden="true">${APP.mealIcons[meal]}</span><span class="home-meal-label">${APP.mealNames[meal]}</span><small>${recorded?'✓ 記録済み':'＋ 写真を記録'}</small>`});renderDailyProgress();renderPastMenus()}
+function renderHome(){const todayKey=toDateKey(state.today);els.todayLabel.textContent=formatDateWithWeekday(state.today);els.homeMealButtons.forEach(button=>{const meal=button.dataset.homeMeal,recorded=state.records.has(recordKey(todayKey,meal));button.disabled=recorded;button.classList.toggle('is-recorded',recorded);button.innerHTML=`<span class="home-meal-art" aria-hidden="true"></span><span class="home-meal-footer"><span class="home-meal-label">${APP.mealNames[meal]}</span><small>${recorded?'✓ 記録済み':'＋ 写真を記録'}</small></span>`});renderDailyProgress();renderPastMenus()}
 function buildPastMenusText(){const lines=['過去１０日間のメニューは以下です。',''];for(let offset=0;offset<10;offset++){const date=new Date(state.today);date.setDate(date.getDate()-offset);const record=state.records.get(recordKey(toDateKey(date),'dinner'));const memo=String(record?.memo||'').trim();if(memo)lines.push(`・${memo}`)}return lines.join('\n')}
 function renderPastMenus(){els.pastMenusText.textContent=buildPastMenusText();els.pastMenusStatus.textContent=''}
 function togglePastMenus(){const willShow=els.pastMenusPanel.hidden;if(willShow)renderPastMenus();els.pastMenusPanel.hidden=!willShow;els.openPastMenus.setAttribute('aria-expanded',String(willShow))}
