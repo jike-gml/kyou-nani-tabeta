@@ -2,6 +2,7 @@ const CACHE = 'foodlog-v43';
 const ASSETS = [
   './',
   './index.html',
+  './themes.css',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png'
