@@ -69,22 +69,22 @@ html[data-theme="pop"] .favorite-entry-name,html[data-theme="pop"] .favorites-em
 html[data-theme="pop"] .detail-modal-panel{background:#fff2fa;border-color:#ffcee2}
 html[data-theme="pop"] .caption-block,html[data-theme="pop"] .memo-editor textarea{background:#fffdfb;border-color:#f9bfd4;color:#462748}
 
-/* COOL: deep navy, angular panels, restrained neon cyan. */
+/* COOL: dusk-to-night palette, with sunset bronze, twilight violet and midnight navy. */
 html[data-theme="cool"]{
-  --bg:#0b1422;--surface:#15263a;--warm:#1b2d42;--warm-2:#182a40;--blue:#192d42;
-  --line:#39536c;--text:#edf5ff;--muted:#b4c8db;--accent:#35dbea;--accent-soft:#193e52;
-  --disabled:#26394d;--disabled-text:#bbcad9;--danger:#ff7388;
-  --shadow:0 10px 26px #0005;
-  --meal-breakfast-1:#9d607b;--meal-breakfast-2:#814b6b;
-  --meal-lunch-1:#a0814d;--meal-lunch-2:#776038;
-  --meal-dinner-1:#338d93;--meal-dinner-2:#246f78;
-  --meal-snack-1:#576fa6;--meal-snack-2:#3e5180;
+  --bg:#171b2d;--surface:#23263b;--warm:#393047;--warm-2:#302a40;--blue:#232c46;
+  --line:#4b4963;--text:#f9f0f2;--muted:#cbbfcf;--accent:#f3b58b;--accent-soft:#493447;
+  --disabled:#303348;--disabled-text:#c9c0ce;--danger:#ff8697;
+  --shadow:0 10px 26px rgba(9,11,27,.35);
+  --meal-breakfast-1:#a0698a;--meal-breakfast-2:#784967;
+  --meal-lunch-1:#aa815c;--meal-lunch-2:#806146;
+  --meal-dinner-1:#488991;--meal-dinner-2:#32646e;
+  --meal-snack-1:#6974a3;--meal-snack-2:#4d578a;
   background:var(--bg);
 }
-html[data-theme="cool"] body{background:radial-gradient(circle at top right,#173449,transparent 350px),linear-gradient(175deg,#0a1220,#111e2e 70%,#0b1422);color:var(--text);letter-spacing:0;font-family:Arial,"Hiragino Kaku Gothic ProN",-apple-system,BlinkMacSystemFont,sans-serif}
-html[data-theme="cool"] #homeView .hero{border:1px solid #3f6e80;border-left:5px solid #36d9ed;border-radius:12px;background:linear-gradient(120deg,#0e1c2f,#1b3148 70%,#224051);box-shadow:0 11px 29px #0006}
+html[data-theme="cool"] body{background:radial-gradient(ellipse at 92% 0%,rgba(233,140,105,.25),transparent 44%),radial-gradient(ellipse at 5% 28%,rgba(135,91,158,.22),transparent 44%),linear-gradient(165deg,#34243c 0%,#2b2540 31%,#1e223b 64%,#121a2d 100%);color:var(--text);letter-spacing:0;font-family:Arial,"Hiragino Kaku Gothic ProN",-apple-system,BlinkMacSystemFont,sans-serif}
+html[data-theme="cool"] #homeView .hero{border:1px solid #855c71;border-left:5px solid #e9a47d;border-radius:14px;background:linear-gradient(125deg,#59384d 0%,#46334d 35%,#2c2c45 70%,#1c2a3c 100%);box-shadow:0 11px 29px rgba(10,11,27,.4)}
 html[data-theme="cool"] #homeView .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 94%,#5cd9ee19 95%) 0 0/22px 100%}
-html[data-theme="cool"] #homeView .hero::after{content:"//";font-size:2rem;font-weight:900;color:#43deec;right:19px;top:11px}
+html[data-theme="cool"] #homeView .hero::after{content:"☾";font-size:2.3rem;font-weight:700;color:#f8bf97;right:20px;top:10px;opacity:.9;text-shadow:0 0 16px rgba(238,157,126,.28)}
 html[data-theme="cool"] #homeView .hero-eyebrow,html[data-theme="cool"] #homeView .hero h1,html[data-theme="cool"] #homeView .hero p{position:relative;z-index:1}
 html[data-theme="cool"] #homeView .hero-eyebrow{color:#65e3ef;letter-spacing:.16em}
 html[data-theme="cool"] #homeView .hero h1{color:#f4faff;letter-spacing:-.05em;font-weight:900;text-shadow:0 0 17px #4ce1f526}
@@ -150,3 +150,84 @@ html[data-theme="cool"] .status{color:#c4d3e2}
   html[data-theme="pop"] body,html[data-theme="cool"] body{transition:background .25s ease,color .25s ease}
   html[data-theme="pop"] #homeView .hero,html[data-theme="cool"] #homeView .hero{transition:background .25s ease,border-color .25s ease}
 }
+
+/* Twilight finishing details and weekend cascade fix.
+   The original calendar has higher-specificity :nth-child rules for Sundays/Saturdays;
+   override them in both all-meals and single-meal views, including leading blank days. */
+html[data-theme="cool"] #homeView .hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 83% 36%,rgba(248,184,148,.11),transparent 20%),linear-gradient(90deg,transparent 96%,rgba(246,185,143,.065) 97%) 0 0/23px 100%;
+}
+html[data-theme="cool"] #homeView .hero-eyebrow{color:#f3bfa4}
+html[data-theme="cool"] #homeView .hero h1{color:#fff3ee;text-shadow:0 0 18px rgba(239,174,154,.13)}
+html[data-theme="cool"] #homeView .hero p{color:#ebd7df}
+html[data-theme="cool"] .theme-indicator{border-color:#a57a8c;background:#4a334b;color:#ffe0c8}
+html[data-theme="cool"] #homeView .today-kicker{color:#f0ae94}
+html[data-theme="cool"] #homeView .today-line>span{border-color:#816075;background:#42344e;color:#f5d4c7}
+html[data-theme="cool"] #homeView .daily-progress,
+html[data-theme="cool"] #homeView .daily-progress.is-complete{border-color:#63536c;background:#28283d;color:#f8edf3}
+html[data-theme="cool"] #homeView .progress-track{background:#40394e}
+html[data-theme="cool"] #homeView .progress-fill,
+html[data-theme="cool"] #homeView .daily-progress.is-complete .progress-fill{background:linear-gradient(90deg,#ec9b81,#b98cae,#7983bb)}
+html[data-theme="cool"] #homeView .progress-steps span{border-color:#575066;background:#37334b;color:#e4d2dd}
+html[data-theme="cool"] #homeView .progress-steps span.is-done{border-color:#ad7e97;background:#56425a;color:#ffe6dd}
+html[data-theme="cool"] #homeView .progress-message{color:#d9c8d5}
+html[data-theme="cool"] #homeView .home-meal{border-color:#57546b;background:#27283e}
+html[data-theme="cool"] #homeView .home-meal[data-home-meal="breakfast"]{border-color:#9c6586}
+html[data-theme="cool"] #homeView .home-meal[data-home-meal="lunch"]{border-color:#a98a6a}
+html[data-theme="cool"] #homeView .home-meal[data-home-meal="dinner"]{border-color:#578892}
+html[data-theme="cool"] #homeView .home-meal[data-home-meal="snack"]{border-color:#777da7}
+html[data-theme="cool"] #homeView .home-nav-row .calendar-open,
+html[data-theme="cool"] #homeView .past-menu-open{border-color:#9e7689;background:#392f47;color:#f6d6c6;box-shadow:inset 0 1px 0 #81627a}
+html[data-theme="cool"] #homeView .home-nav-row .favorite-home-open{border-color:#a66d91;background:#452c45;color:#ffd2e7}
+html[data-theme="cool"] .calendar-fixed{background:var(--bg)}
+html[data-theme="cool"] .view-title h2,
+html[data-theme="cool"] .month-center strong{color:#fff1ed}
+html[data-theme="cool"] .view-title p,
+html[data-theme="cool"] .month-center span{color:#d3c3d1}
+html[data-theme="cool"] .back-button,
+html[data-theme="cool"] .icon-button,
+html[data-theme="cool"] .secondary-button{border-color:#756077;background:#39324a;color:#ffe3d1}
+html[data-theme="cool"] .primary-button{border-color:#eaae8d;background:#db987c;color:#291e33}
+html[data-theme="cool"] .past-menu-panel,
+html[data-theme="cool"] .calendar-card,
+html[data-theme="cool"] .detail-card,
+html[data-theme="cool"] .favorite-entry{border-color:#514b67;background:#24263c;color:#fff0f3}
+html[data-theme="cool"] .meal-tabs{background:#24253b;border:1px solid #514963}
+html[data-theme="cool"] .meal-tab{border-color:#5e546c}
+html[data-theme="cool"] .meal-tab-all{background:#39334b;color:#f7e9f4}
+html[data-theme="cool"] .meal-tab.is-active{box-shadow:inset 0 0 0 2px #e7a98f}
+html[data-theme="cool"] .weekday-row{background:#26293e;border-color:#514962}
+html[data-theme="cool"] .weekday-row span{background:#26293e;color:#e6ddeb}
+html[data-theme="cool"] .weekday-row span:first-child{background:#3b2a3c;color:#ffc2cc}
+html[data-theme="cool"] .weekday-row span:last-child{background:#29314a;color:#cbd3ff}
+html[data-theme="cool"] .calendar-grid>.day-cell,
+html[data-theme="cool"] .calendar-grid>.day-blank{background:#24283c;border-color:#4b455c;color:#f7ecf4}
+html[data-theme="cool"] .calendar-grid>.day-cell:nth-child(7n+1),
+html[data-theme="cool"] .calendar-grid>.day-blank:nth-child(7n+1){background:#372737;border-color:#564354;color:#ffe1e4}
+html[data-theme="cool"] .calendar-grid>.day-cell:nth-child(7n),
+html[data-theme="cool"] .calendar-grid>.day-blank:nth-child(7n){background:#283149;border-color:#4b5069;color:#e3e6ff}
+html[data-theme="cool"] .calendar-grid>.day-cell:nth-child(7n+1) .day-number{color:#f7c0c7}
+html[data-theme="cool"] .calendar-grid>.day-cell:nth-child(7n) .day-number{color:#c7d3fa}
+html[data-theme="cool"] .calendar-grid:not(.is-all) .day-number{background:#343247;color:#fff2eb;box-shadow:0 1px 6px rgba(0,0,0,.3)}
+html[data-theme="cool"] .day-cell.is-today .day-number,
+html[data-theme="cool"] .calendar-grid:not(.is-all) .day-cell.is-today .day-number{background:#e9a88a;color:#241f31}
+html[data-theme="cool"] .calendar-grid>.day-cell:nth-child(7n+1).is-today .day-number,
+html[data-theme="cool"] .calendar-grid>.day-cell:nth-child(7n).is-today .day-number{color:#241f31}
+html[data-theme="cool"] .calendar-grid.is-all .thumb-box{background:#2e2b40;border-color:#67576e}
+html[data-theme="cool"] .calendar-grid:not(.is-all) .thumb-box:not(.has-photo){background:transparent}
+html[data-theme="cool"] .all-meal-row{background:#343145;border-color:#554c62;color:#decddd}
+html[data-theme="cool"] .all-meal-row.breakfast.is-recorded{background:#53394f;border-color:#84627c;color:#f7d9e8}
+html[data-theme="cool"] .all-meal-row.lunch.is-recorded{background:#504235;border-color:#a28966;color:#f8dfb8}
+html[data-theme="cool"] .all-meal-row.dinner.is-recorded{background:#2c454d;border-color:#54818a;color:#d9f5f3}
+html[data-theme="cool"] .all-meal-row.snack.is-recorded{background:#343a59;border-color:#727dad;color:#e0e2ff}
+html[data-theme="cool"] .favorites-open{background:#432b46;border-color:#ac7995;color:#f7c6e1}
+html[data-theme="cool"] .favorites-open.is-active{background:#61334f;border-color:#d789ad;color:#ffacd0}
+html[data-theme="cool"] .favorite-entry-heading{color:#fff2ef}
+html[data-theme="cool"] .favorite-entry-name,
+html[data-theme="cool"] .favorites-empty{color:#d6cad9}
+html[data-theme="cool"] .detail-modal-panel{background:#1c2135;border-color:#574e68;color:#f9eff4}
+html[data-theme="cool"] .caption-block{background:#302b42;border-color:#6b576c;color:#fff0ef}
+html[data-theme="cool"] .memo-editor textarea,
+html[data-theme="cool"] input:not([type="file"]){background:#302b42;border-color:#6b576c;color:#fff0ef}
+html[data-theme="cool"] .status{color:#d9ceda}
