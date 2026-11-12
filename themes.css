@@ -283,7 +283,10 @@ html[data-theme="green"] #homeView .home-meal:not(:disabled) .home-meal-footer{b
 html[data-theme="blue"] #homeView .home-meal{border:2px solid #6c92de;border-radius:8px}
 html[data-theme="blue"] #homeView .home-meal:not(:disabled) .home-meal-footer{background:#fff}
 html:is([data-theme="green"],[data-theme="blue"]) .calendar-grid > :is(.day-cell,.day-blank){background:var(--surface);border-color:var(--line)}
-html:is([data-theme="green"],[data-theme="blue"]) .calendar-grid > :is(.day-cell,.day-blank):is(:nth-child(7n),:nth-child(7n+1)){background:var(--accent-soft)}
+html:is([data-theme="green"],[data-theme="blue"]) .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n+1){background:#fff1f1;color:#a33c3c}
+html:is([data-theme="green"],[data-theme="blue"]) .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n){background:#edf4ff;color:#315c9a}
+html:is([data-theme="green"],[data-theme="blue"]) .weekday-row span:first-child{background:#ffe4e4;color:#a33c3c}
+html:is([data-theme="green"],[data-theme="blue"]) .weekday-row span:last-child{background:#dfebff;color:#315c9a}
 html[data-theme="green"] .weekday-row{background:#e3ebd6}
 html[data-theme="blue"] .weekday-row{background:#dceaff;border-radius:6px 6px 0 0}
 html[data-theme="blue"] .calendar-card{border-radius:0 0 8px 8px}
