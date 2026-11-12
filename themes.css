@@ -268,3 +268,22 @@ html[data-theme="blue"] .meal-tab.is-active{box-shadow:inset 0 0 0 2px #fff,0 3p
 .meal-origin-options label{display:inline-flex;align-items:center;gap:6px;min-height:38px;font-size:.9rem;font-weight:700}
 .meal-origin-options input{width:18px;height:18px;accent-color:var(--accent)}
 html[data-theme="cool"] .meal-origin-options{background:#302b42;color:#fff0ef;border-color:#6b576c}
+
+/* Wooded table and tiled cafe */
+html[data-theme="green"]{--bg:#faf5e8;--surface:#fffcf3;--line:#c7d2b7;--text:#293623;--muted:#52624b;--accent:#43592d;--accent-soft:#dae5c9}
+html[data-theme="blue"]{--bg:#f1f7ff;--surface:#fff;--line:#b7c9e9;--text:#182d53;--muted:#455e83;--accent:#1749ba;--accent-soft:#dceaff}
+html:is([data-theme="green"],[data-theme="blue"]) body{background:var(--bg)}
+html:is([data-theme="green"],[data-theme="blue"]) #homeView .hero{color:#fff;border-color:transparent}
+html[data-theme="green"] #homeView .hero{border-radius:32px 32px 48px 16px;background:radial-gradient(ellipse at 90% 10%,#627848,transparent 70%),#354a2b}
+html[data-theme="blue"] #homeView .hero{border-radius:10px;background:linear-gradient(#ffffff22 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,#ffffff22 1px,transparent 1px) 0 0/24px 24px,#1749ba}
+html:is([data-theme="green"],[data-theme="blue"]) #homeView .hero :is(p,.hero-eyebrow,.theme-indicator),html:is([data-theme="green"],[data-theme="blue"]) #homeView .hero::after{color:#fff}
+html:is([data-theme="green"],[data-theme="blue"]) .theme-indicator{background:#0004;border-color:#ffffff80}
+html[data-theme="green"] #homeView .home-meal{border-radius:26px}
+html[data-theme="green"] #homeView .home-meal:not(:disabled) .home-meal-footer{background:#d5e2c4}
+html[data-theme="blue"] #homeView .home-meal{border:2px solid #6c92de;border-radius:8px}
+html[data-theme="blue"] #homeView .home-meal:not(:disabled) .home-meal-footer{background:#fff}
+html:is([data-theme="green"],[data-theme="blue"]) .calendar-grid > :is(.day-cell,.day-blank){background:var(--surface);border-color:var(--line)}
+html:is([data-theme="green"],[data-theme="blue"]) .calendar-grid > :is(.day-cell,.day-blank):is(:nth-child(7n),:nth-child(7n+1)){background:var(--accent-soft)}
+html[data-theme="green"] .weekday-row{background:#e3ebd6}
+html[data-theme="blue"] .weekday-row{background:#dceaff;border-radius:6px 6px 0 0}
+html[data-theme="blue"] .calendar-card{border-radius:0 0 8px 8px}
