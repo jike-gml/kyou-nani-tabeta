@@ -491,8 +491,8 @@ function handleOriginToggle(origin) {
   const prefix = selected.checked ? (addRestaurant ? '外食・()' : '中食・') : '';
   els.detailMemo.value = prefix + current;
   syncOriginCheckboxes();
-  if (addRestaurant) {
-    const cursor = prefix.length - 1;
+  if (selected.checked) {
+    const cursor = prefix.indexOf('・') + 1;
     els.detailMemo.focus();
     els.detailMemo.setSelectionRange(cursor, cursor);
   }
