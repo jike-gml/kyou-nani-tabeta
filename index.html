@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon-192.png?v=2" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=2" />
-  <link rel="stylesheet" href="./themes.css?v=8" />
+  <link rel="stylesheet" href="./themes.css?v=9" />
   <script>try{const t=localStorage.getItem("foodlog-design-theme-v1");document.documentElement.dataset.theme=["classic","pop","cool","green","blue","christmas","winter"].includes(t)?t:"classic"}catch(_){document.documentElement.dataset.theme="classic"}</script>
   <style>
     :root {
@@ -359,11 +359,35 @@
 <body>
   <main class="app-shell">
     <section id="homeView">
-      <header id="themeSwitcher" class="hero" role="button" tabindex="0" aria-label="デザイン切り替え" title="タップでテーマ変更">
-        <div class="hero-eyebrow">DAILY MEAL JOURNAL <span id="themeIndicator" class="theme-indicator" aria-hidden="true">現行 ↻</span></div>
+      <header id="themeSwitcher" class="hero" role="button" tabindex="0" aria-expanded="false" aria-controls="appearanceMenu" aria-label="デザインメニューを開く" title="背景・食事画像のデザインを選ぶ">
+        <div class="hero-eyebrow">DAILY MEAL JOURNAL <span id="themeIndicator" class="theme-indicator" aria-hidden="true">現行 ▾</span></div>
         <h1>今日なに食べた？</h1>
         <p>日々の食事を、写真で心地よく記録。</p>
       </header>
+      <section id="appearanceMenu" class="appearance-menu" aria-label="デザイン設定" hidden>
+        <div class="appearance-menu-heading"><strong>デザインを選ぶ</strong><span>背景と食事の画像を個別に変更できます</span></div>
+        <div class="appearance-menu-group" role="group" aria-label="背景テーマ">
+          <h2>背景テーマ</h2>
+          <div class="appearance-theme-grid">
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="classic" style="--swatch-a:#f2f6ff;--swatch-b:#407cff"><span class="appearance-swatch" aria-hidden="true"></span>現行</button>
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="pop" style="--swatch-a:#ffb5d5;--swatch-b:#ffd96a"><span class="appearance-swatch" aria-hidden="true"></span>カラフルPOP</button>
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="cool" style="--swatch-a:#2b2540;--swatch-b:#e9a47d"><span class="appearance-swatch" aria-hidden="true"></span>クール</button>
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="green" style="--swatch-a:#354a2b;--swatch-b:#c7dcb4"><span class="appearance-swatch" aria-hidden="true"></span>グリーン</button>
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="blue" style="--swatch-a:#1749ba;--swatch-b:#dceaff"><span class="appearance-swatch" aria-hidden="true"></span>ブルー</button>
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="christmas" style="--swatch-a:#102d25;--swatch-b:#e5c579"><span class="appearance-swatch" aria-hidden="true"></span>クリスマス</button>
+            <button type="button" class="appearance-option appearance-theme-option" data-choose-theme="winter" style="--swatch-a:#184d74;--swatch-b:#bdefff"><span class="appearance-swatch" aria-hidden="true"></span>冬</button>
+          </div>
+        </div>
+        <div class="appearance-menu-group" role="group" aria-label="食事ボタンの画像">
+          <h2>食事ボタンの画像</h2>
+          <div class="appearance-art-grid">
+            <button type="button" class="appearance-option appearance-art-option" data-choose-art="original"><span class="appearance-art-preview is-original" aria-hidden="true"></span>現行イラスト</button>
+            <button type="button" class="appearance-option appearance-art-option" data-choose-art="flat"><span class="appearance-art-preview is-flat" aria-hidden="true"></span>シンプルフラット A</button>
+            <button type="button" class="appearance-option appearance-art-option" data-choose-art="photo"><span class="appearance-art-preview is-photo" aria-hidden="true"></span>カフェ写真 C</button>
+          </div>
+        </div>
+        <p class="appearance-menu-help" id="appearanceSelectionSummary" role="status" aria-live="polite"></p>
+      </section>
       <div class="today-line"><div><span class="today-kicker">TODAY</span><strong id="todayLabel"></strong></div><span>きょうの食事</span></div>
       <section id="dailyProgress" class="daily-progress" aria-labelledby="progressTitle">
         <div class="progress-top"><strong id="progressTitle">3食チャレンジ</strong><strong id="progressCount" aria-live="polite">0 / 3</strong></div>
@@ -430,13 +454,67 @@ const state={db:null,meal:'breakfast',detailMeal:null,calendarMode:'all',today:s
 const els={};
 const DESIGN_THEMES=[{id:'classic',label:'現行'},{id:'pop',label:'カラフルPOP'},{id:'cool',label:'クール'},{id:'green',label:'グリーン'},{id:'blue',label:'ブルー'},{id:'christmas',label:'クリスマス'},{id:'winter',label:'冬'}];
 const DESIGN_THEME_KEY='foodlog-design-theme-v1';
-function initializeDesignTheme(){setDesignTheme(document.documentElement.dataset.theme||'classic',false);window.addEventListener('storage',event=>{if(event.key===DESIGN_THEME_KEY)setDesignTheme(event.newValue||'classic',false)})}
-function setDesignTheme(id,save=true){const theme=DESIGN_THEMES.find(t=>t.id===id)||DESIGN_THEMES[0];document.documentElement.dataset.theme=theme.id;els.themeIndicator.textContent=theme.label+' ↻';const next=DESIGN_THEMES[(DESIGN_THEMES.indexOf(theme)+1)%DESIGN_THEMES.length];const hint='現在 '+theme.label+'。タップで'+next.label+'に切り替え';els.themeSwitcher.setAttribute('aria-label',hint);els.themeSwitcher.title=hint;if(save){try{localStorage.setItem(DESIGN_THEME_KEY,theme.id)}catch(_){}}}
-function cycleDesignTheme(){const i=DESIGN_THEMES.findIndex(t=>t.id===document.documentElement.dataset.theme);setDesignTheme(DESIGN_THEMES[(i+1)%DESIGN_THEMES.length].id)}
+const ART_STYLES=[{id:'original',label:'現行イラスト'},{id:'flat',label:'シンプルフラット A'},{id:'photo',label:'カフェ写真 C'}];
+const ART_STYLE_KEY='foodlog-meal-art-style-v1';
+function initializeDesignTheme(){setDesignTheme(document.documentElement.dataset.theme||'classic',false);window.addEventListener('storage',event=>{if(event.key===DESIGN_THEME_KEY)setDesignTheme(event.newValue||'classic',false);if(event.key===ART_STYLE_KEY)setArtStyle(event.newValue||'original',false)})}
+function setDesignTheme(id,save=true){
+  const theme=DESIGN_THEMES.find(t=>t.id===id)||DESIGN_THEMES[0];
+  document.documentElement.dataset.theme=theme.id;
+  els.themeIndicator.textContent=theme.label+' ▾';
+  els.themeSwitcher.setAttribute('aria-label','デザインメニューを開く（背景 '+theme.label+'）');
+  els.themeSwitcher.title='背景・食事画像のデザインを選ぶ';
+  if(save){try{localStorage.setItem(DESIGN_THEME_KEY,theme.id)}catch(_){}}
+  syncAppearanceSelection();
+}
+function initializeArtStyle(){
+  let id='original';
+  try{id=localStorage.getItem(ART_STYLE_KEY)||'original'}catch(_){}
+  setArtStyle(id,false);
+}
+function setArtStyle(id,save=true){
+  const style=ART_STYLES.find(t=>t.id===id)||ART_STYLES[0];
+  document.documentElement.dataset.artStyle=style.id;
+  if(save){try{localStorage.setItem(ART_STYLE_KEY,style.id)}catch(_){}}
+  syncAppearanceSelection();
+}
+function syncAppearanceSelection(){
+  if(!els.appearanceMenu)return;
+  const themeId=document.documentElement.dataset.theme||'classic';
+  const artId=document.documentElement.dataset.artStyle||'original';
+  els.appearanceMenu.querySelectorAll('[data-choose-theme]').forEach(button=>{
+    const current=button.dataset.chooseTheme===themeId;
+    button.setAttribute('aria-pressed',String(current));
+    button.classList.toggle('is-selected',current);
+  });
+  els.appearanceMenu.querySelectorAll('[data-choose-art]').forEach(button=>{
+    const current=button.dataset.chooseArt===artId;
+    button.setAttribute('aria-pressed',String(current));
+    button.classList.toggle('is-selected',current);
+  });
+  const theme=DESIGN_THEMES.find(t=>t.id===themeId)||DESIGN_THEMES[0];
+  const art=ART_STYLES.find(t=>t.id===artId)||ART_STYLES[0];
+  els.appearanceSelectionSummary.textContent='背景：'+theme.label+' ／ 食事画像：'+art.label+'（選択を保存しました）';
+}
+function setAppearanceMenuOpen(open){
+  els.appearanceMenu.hidden=!open;
+  els.themeSwitcher.setAttribute('aria-expanded',String(open));
+  els.themeIndicator.textContent=(DESIGN_THEMES.find(t=>t.id===document.documentElement.dataset.theme)||DESIGN_THEMES[0]).label+(open?' ▴':' ▾');
+}
+function toggleAppearanceMenu(){setAppearanceMenuOpen(els.appearanceMenu.hidden)}
 window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
-async function init(){bindElements();bindEvents();initializeDesignTheme();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋過去2か月の計3か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
-function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
-function bindEvents(){els.themeSwitcher.addEventListener('click',cycleDesignTheme);els.themeSwitcher.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();cycleDesignTheme()}});els.homeMealButtons.forEach(button=>button.addEventListener('click',()=>startCapture({date:toDateKey(state.today),meal:button.dataset.homeMeal,returnView:'home',mode:'new'})));els.openCalendar.addEventListener('click',openCalendarFromHome);els.openHomeFavorites.addEventListener('click',openFavoritesFromHome);els.homeView.addEventListener('touchstart',handleHomeTouchStart,{passive:true});els.homeView.addEventListener('touchend',handleHomeTouchEnd,{passive:true});els.homeView.addEventListener('touchcancel',()=>{state.homeTouchStart=null},{passive:true});els.homeView.addEventListener('click',event=>{if(Date.now()<state.homeSwipeSuppressUntil||Date.now()<state.calendarSwipeSuppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);els.openPastMenus.addEventListener('click',togglePastMenus);els.copyPastMenus.addEventListener('click',copyPastMenusText);els.backHome.addEventListener('click',goHomeFromCalendar);els.openFavorites.addEventListener('click',toggleFavoritesView);els.detailFavorite.addEventListener('click',()=>toggleFavoriteRecord(state.selectedDate,state.detailMeal||state.meal,els.detailFavorite));els.calendarView.addEventListener('touchstart',handleCalendarTouchStart,{passive:true});els.calendarView.addEventListener('touchend',handleCalendarTouchEnd,{passive:false});els.calendarView.addEventListener('touchcancel',()=>{state.calendarTouchStart=null},{passive:true});window.addEventListener('popstate',()=>{if(state.currentView==='detail'){closeDetailModalNow();return}if(state.currentView==='calendar'){renderHome();showView('home')}});els.mealTabs.forEach(button=>button.addEventListener('click',()=>{state.calendarMode=button.dataset.meal;if(state.calendarMode!=='all')state.meal=state.calendarMode;renderCalendar()}));els.prevMonth.addEventListener('click',()=>changeMonth(-1));els.nextMonth.addEventListener('click',()=>changeMonth(1));els.backCalendar.addEventListener('click',requestCloseDetailModal);els.detailView.addEventListener('click',event=>{if(event.target===els.detailView)requestCloseDetailModal()});els.detailSwipeArea.addEventListener('touchstart',handleDetailTouchStart,{passive:true});els.detailSwipeArea.addEventListener('touchend',handleDetailTouchEnd,{passive:true});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.currentView==='detail')requestCloseDetailModal()});els.editDishName.addEventListener('click',startDishNameEdit);els.deleteDishName.addEventListener('click',deleteDishNameValue);els.replaceButton.addEventListener('click',()=>{const meal=state.detailMeal||state.meal;startCapture({date:state.selectedDate,meal,returnView:'detail',mode:'replace'})});els.deleteButton.addEventListener('click',deleteSelectedRecord);els.originTakeout.addEventListener('change',()=>handleOriginToggle('takeout'));els.originRestaurant.addEventListener('change',()=>handleOriginToggle('restaurant'));els.detailMemo.addEventListener('input',syncOriginCheckboxes);els.saveMemo.addEventListener('click',saveDetailMemo);els.photoInput.addEventListener('change',handlePhotoSelection)}
+async function init(){bindElements();bindEvents();initializeDesignTheme();initializeArtStyle();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋過去2か月の計3か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','appearanceMenu','appearanceSelectionSummary','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
+function bindEvents(){els.themeSwitcher.addEventListener('click',toggleAppearanceMenu);
+els.themeSwitcher.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAppearanceMenu()}});
+els.appearanceMenu.addEventListener('click',event=>{
+  const themeButton=event.target.closest('[data-choose-theme]');
+  const artButton=event.target.closest('[data-choose-art]');
+  if(themeButton)setDesignTheme(themeButton.dataset.chooseTheme);
+  if(artButton)setArtStyle(artButton.dataset.chooseArt);
+});
+document.addEventListener('click',event=>{if(!els.appearanceMenu.hidden&&!els.appearanceMenu.contains(event.target)&&!els.themeSwitcher.contains(event.target))setAppearanceMenuOpen(false)});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!els.appearanceMenu.hidden){setAppearanceMenuOpen(false);els.themeSwitcher.focus()}});
+els.homeMealButtons.forEach(button=>button.addEventListener('click',()=>startCapture({date:toDateKey(state.today),meal:button.dataset.homeMeal,returnView:'home',mode:'new'})));els.openCalendar.addEventListener('click',openCalendarFromHome);els.openHomeFavorites.addEventListener('click',openFavoritesFromHome);els.homeView.addEventListener('touchstart',handleHomeTouchStart,{passive:true});els.homeView.addEventListener('touchend',handleHomeTouchEnd,{passive:true});els.homeView.addEventListener('touchcancel',()=>{state.homeTouchStart=null},{passive:true});els.homeView.addEventListener('click',event=>{if(Date.now()<state.homeSwipeSuppressUntil||Date.now()<state.calendarSwipeSuppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);els.openPastMenus.addEventListener('click',togglePastMenus);els.copyPastMenus.addEventListener('click',copyPastMenusText);els.backHome.addEventListener('click',goHomeFromCalendar);els.openFavorites.addEventListener('click',toggleFavoritesView);els.detailFavorite.addEventListener('click',()=>toggleFavoriteRecord(state.selectedDate,state.detailMeal||state.meal,els.detailFavorite));els.calendarView.addEventListener('touchstart',handleCalendarTouchStart,{passive:true});els.calendarView.addEventListener('touchend',handleCalendarTouchEnd,{passive:false});els.calendarView.addEventListener('touchcancel',()=>{state.calendarTouchStart=null},{passive:true});window.addEventListener('popstate',()=>{if(state.currentView==='detail'){closeDetailModalNow();return}if(state.currentView==='calendar'){renderHome();showView('home')}});els.mealTabs.forEach(button=>button.addEventListener('click',()=>{state.calendarMode=button.dataset.meal;if(state.calendarMode!=='all')state.meal=state.calendarMode;renderCalendar()}));els.prevMonth.addEventListener('click',()=>changeMonth(-1));els.nextMonth.addEventListener('click',()=>changeMonth(1));els.backCalendar.addEventListener('click',requestCloseDetailModal);els.detailView.addEventListener('click',event=>{if(event.target===els.detailView)requestCloseDetailModal()});els.detailSwipeArea.addEventListener('touchstart',handleDetailTouchStart,{passive:true});els.detailSwipeArea.addEventListener('touchend',handleDetailTouchEnd,{passive:true});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.currentView==='detail')requestCloseDetailModal()});els.editDishName.addEventListener('click',startDishNameEdit);els.deleteDishName.addEventListener('click',deleteDishNameValue);els.replaceButton.addEventListener('click',()=>{const meal=state.detailMeal||state.meal;startCapture({date:state.selectedDate,meal,returnView:'detail',mode:'replace'})});els.deleteButton.addEventListener('click',deleteSelectedRecord);els.originTakeout.addEventListener('change',()=>handleOriginToggle('takeout'));els.originRestaurant.addEventListener('change',()=>handleOriginToggle('restaurant'));els.detailMemo.addEventListener('input',syncOriginCheckboxes);els.saveMemo.addEventListener('click',saveDetailMemo);els.photoInput.addEventListener('change',handlePhotoSelection)}
 function openDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open(APP.dbName,APP.dbVersion);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(APP.storeName)){const store=db.createObjectStore(APP.storeName,{keyPath:'key'});store.createIndex('date','date',{unique:false})}};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
 function getAllRecords(){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readonly');const request=tx.objectStore(APP.storeName).getAll();request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>reject(request.error)})}
 function putRecord(record){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readwrite');tx.objectStore(APP.storeName).put(record);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
