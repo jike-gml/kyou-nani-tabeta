@@ -356,8 +356,8 @@
     @media(max-width:360px){#homeView .home-meal-footer{min-height:43px}#homeView .home-meal-label{font-size:.92rem}}
     /* Centered appearance dialog; its own content scrolls on small screens. */
     body.appearance-dialog-open{overflow:hidden}
-    body.appearance-dialog-open::before{content:"";position:fixed;inset:0;z-index:1999;background:rgba(20,25,38,.55);backdrop-filter:blur(3px)}
-    body #appearanceMenu:not([hidden]){position:fixed;z-index:2000;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:min(92vw,480px);max-height:min(85dvh,760px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:0;padding:20px;border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.3);animation:appearanceDialogIn .2s ease both}
+    body.appearance-dialog-open::before{content:"";position:fixed;inset:0;z-index:2147483645;background:rgba(20,25,38,.55)}
+    body #appearanceMenu:not([hidden]){position:fixed;z-index:2147483646;left:50%;top:50%;transform:translate(-50%,-50%);display:block;isolation:isolate;background:#ffffff;color:#263348;border:1px solid #d9e0eb;width:min(92vw,480px);max-height:min(85dvh,760px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:0;padding:20px;border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.3);animation:appearanceDialogIn .2s ease both}
     body .appearance-dialog-close{float:right;display:grid;place-items:center;width:38px;height:38px;margin:-4px -4px 6px 8px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--text);font-size:1.3rem;cursor:pointer}
     @keyframes appearanceDialogIn{from{opacity:0;transform:translate(-50%,-47%) scale(.98)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
     @media(max-width:430px){body #appearanceMenu:not([hidden]){width:calc(100vw - 24px);max-height:calc(100dvh - 40px);padding:15px}}
