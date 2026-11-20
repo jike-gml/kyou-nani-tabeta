@@ -749,3 +749,90 @@ html[data-theme="christmas"] .primary-button{
   from{opacity:.72;text-shadow:0 0 8px #f4bc62,0 0 17px rgba(255,215,136,.4)}
   to{opacity:1;text-shadow:0 0 17px #ffe6a5,0 0 29px rgba(255,220,133,.95)}
 }
+
+
+/* Appearance picker is outside the hero's overflow clipping and operates independently of every theme. */
+#homeView .appearance-menu{
+  margin:10px 0 15px;padding:14px;border:1px solid var(--line);
+  border-radius:18px;background:var(--surface);color:var(--text);
+  box-shadow:var(--shadow);
+}
+#homeView .appearance-menu-heading{display:flex;flex-direction:column;gap:3px;margin-bottom:14px}
+#homeView .appearance-menu-heading strong{font-size:1rem;line-height:1.4}
+#homeView .appearance-menu-heading span{color:var(--muted);font-size:.75rem}
+#homeView .appearance-menu-group + .appearance-menu-group{margin-top:15px}
+#homeView .appearance-menu-group h2{margin:0 0 9px;color:var(--text);font-size:.81rem;line-height:1.4}
+#homeView .appearance-theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#homeView .appearance-option{
+  min-width:0;min-height:49px;padding:8px 10px;
+  border:1.5px solid var(--line);border-radius:12px;
+  background:var(--surface);color:var(--text);
+  font-size:.79rem;font-weight:800;
+  display:flex;align-items:center;justify-content:flex-start;gap:8px;
+  text-align:left;cursor:pointer;
+}
+#homeView .appearance-option.is-selected{
+  border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),0 2px 8px #00000017;
+}
+#homeView .appearance-option.is-selected::after{
+  content:"✓";display:grid;place-items:center;flex:0 0 auto;
+  margin-left:auto;width:18px;height:18px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:.7rem;
+}
+#homeView .appearance-swatch{
+  display:block;flex:0 0 auto;width:27px;height:27px;
+  border:1px solid #0002;border-radius:8px;
+  background:linear-gradient(130deg,var(--swatch-a) 48%,var(--swatch-b) 52%);
+}
+#homeView .appearance-art-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+#homeView .appearance-art-option{
+  flex-direction:column;justify-content:flex-start;gap:6px;
+  padding:6px 4px 8px;min-height:96px;text-align:center;
+  font-size:clamp(.61rem,2.55vw,.77rem);line-height:1.35;
+}
+#homeView .appearance-art-option.is-selected{position:relative}
+#homeView .appearance-art-option.is-selected::after{position:absolute;right:4px;top:4px}
+#homeView .appearance-art-preview{
+  display:block;flex:0 0 auto;
+  width:100%;height:auto;aspect-ratio:256/195;
+  max-height:70px;border-radius:8px;
+  background-repeat:no-repeat;background-size:200% 200%;
+  background-position:left top;background-color:#f4f0e7;
+}
+#homeView .appearance-art-preview.is-original{background-image:url('./meal-illustrations-v1.jpg')}
+#homeView .appearance-art-preview.is-flat{background-image:url('./meal-art-flat.webp')}
+#homeView .appearance-art-preview.is-photo{background-image:url('./meal-art-photo.webp')}
+#homeView .appearance-menu-help{margin:12px 0 0;color:var(--muted);font-size:.72rem;line-height:1.6}
+html[data-art-style="flat"] #homeView .home-meal-art{
+  background-image:url('./meal-art-flat.webp');
+}
+html[data-art-style="photo"] #homeView .home-meal-art{
+  background-image:url('./meal-art-photo.webp');
+}
+html[data-art-style="photo"] #homeView .home-meal-art{filter:none}
+html[data-art-style="photo"] #homeView .home-meal:disabled .home-meal-art{
+  filter:grayscale(.3);opacity:.6;
+}
+html[data-theme="cool"] #homeView .appearance-menu{
+  background:#24263c;border-color:#64566b;color:#fff0ef;
+}
+html[data-theme="cool"] #homeView .appearance-option{
+  background:#302b42;border-color:#665b72;color:#fff0ef;
+}
+html[data-theme="cool"] #homeView .appearance-option.is-selected{border-color:#e9a88a}
+html[data-theme="cool"] #homeView .appearance-menu-group h2{color:#fff0ef}
+html[data-theme="christmas"] #homeView .appearance-menu{
+  background:#173c31;border-color:#d7b571;color:#fff3d6;
+}
+html[data-theme="christmas"] #homeView .appearance-option{
+  background:#244d3e;border-color:#947b4c;color:#fff0cc;
+}
+html[data-theme="christmas"] #homeView .appearance-option.is-selected{border-color:#f0cb7b}
+html[data-theme="christmas"] #homeView .appearance-menu-heading span,
+html[data-theme="christmas"] #homeView .appearance-menu-help{color:#e7d9b6}
+html[data-theme="christmas"] #homeView .appearance-menu-group h2{color:#ffe9b1}
+@media(max-width:360px){
+  #homeView .appearance-menu{padding:11px}
+  #homeView .appearance-option{font-size:.71rem;padding:7px}
+  #homeView .appearance-art-option{font-size:.59rem}
+}
