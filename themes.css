@@ -290,3 +290,215 @@ html:is([data-theme="green"],[data-theme="blue"]) .weekday-row span:last-child{b
 html[data-theme="green"] .weekday-row{background:#e3ebd6}
 html[data-theme="blue"] .weekday-row{background:#dceaff;border-radius:6px 6px 0 0}
 html[data-theme="blue"] .calendar-card{border-radius:0 0 8px 8px}
+
+/* Seasonal themes: warm Christmas celebration and quiet snowy winter.
+   Decorations use CSS only; saved meal photos are never altered. */
+html[data-theme="christmas"]{
+  --bg:#f8f3ee;--surface:#fffdfa;--warm:#f8e8e3;--warm-2:#f7eee8;--blue:#e6eee8;
+  --line:#e1cec3;--text:#352d2c;--muted:#74615e;--accent:#a82836;--accent-soft:#f9e7e2;
+  --disabled:#eee8e3;--disabled-text:#837875;--danger:#b22c40;
+  --shadow:0 10px 28px rgba(87,36,41,.12);
+}
+html[data-theme="christmas"] body{
+  background:radial-gradient(circle at 96% 3%,rgba(205,166,102,.18),transparent 320px),
+    radial-gradient(circle at 0% 55%,rgba(149,37,50,.08),transparent 340px),var(--bg);
+}
+html[data-theme="christmas"] #homeView .hero{
+  border:2px solid #d6ae75;border-radius:27px;
+  background:linear-gradient(122deg,#174737 0%,#164d39 49%,#79232c 100%);
+  box-shadow:0 6px 0 #e6d4b8,0 15px 32px rgba(63,34,32,.2);
+}
+html[data-theme="christmas"] #homeView .hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle,#f4dfab 1.5px,transparent 2px) 3px 5px/29px 29px,
+    radial-gradient(circle,#fff9e0 1px,transparent 2px) 13px 14px/47px 41px;
+  opacity:.32;
+}
+html[data-theme="christmas"] #homeView .hero::after{
+  content:"🎄";right:14px;top:14px;font-size:2.4rem;opacity:.95;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.25));
+}
+html[data-theme="christmas"] #homeView .hero :is(.hero-eyebrow,h1,p){
+  position:relative;z-index:1;color:#fff8e8;
+}
+html[data-theme="christmas"] #homeView .hero h1{text-shadow:0 2px 7px #102b23;letter-spacing:-.04em}
+html[data-theme="christmas"] #homeView .hero p{color:#f4e4d4}
+html[data-theme="christmas"] .theme-indicator{
+  border:1px solid #edd4a2;border-radius:99px;background:#fff3d9;color:#733330;
+  box-shadow:0 2px 7px #152d2844;
+}
+html[data-theme="christmas"] #homeView .today-kicker{color:#a12736}
+html[data-theme="christmas"] #homeView .today-line>span{
+  border:1px solid #dfc9b3;background:#fff4e5;color:#764d3c;
+}
+html[data-theme="christmas"] #homeView .daily-progress,
+html[data-theme="christmas"] #homeView .daily-progress.is-complete{
+  border:2px solid #d7b77f;border-radius:22px;background:#fffdfa;
+  box-shadow:0 5px 0 #efe0c9;
+}
+html[data-theme="christmas"] #homeView .progress-track{background:#f2e1db}
+html[data-theme="christmas"] #homeView .progress-fill,
+html[data-theme="christmas"] #homeView .daily-progress.is-complete .progress-fill{
+  background:linear-gradient(90deg,#a82c3c,#c69c51,#1d6c4f);
+}
+html[data-theme="christmas"] #homeView .progress-steps span{background:#f9eee6;color:#826861}
+html[data-theme="christmas"] #homeView .progress-steps span.is-done{background:#e4efe3;color:#205a3f}
+html[data-theme="christmas"] #homeView .home-meal{
+  border:2px solid #c49a74;border-radius:24px;box-shadow:0 5px 0 #e5d3c2;
+}
+html[data-theme="christmas"] #homeView .home-meal:nth-child(odd){border-color:#b85052}
+html[data-theme="christmas"] #homeView .home-meal:nth-child(even){border-color:#35765b}
+html[data-theme="christmas"] #homeView .home-meal:not(:disabled) .home-meal-footer{background:#fff0e6}
+html[data-theme="christmas"] #homeView .home-meal:nth-child(even):not(:disabled) .home-meal-footer{background:#e7f1e7}
+html[data-theme="christmas"] #homeView .home-meal-label{color:#4b3432}
+html[data-theme="christmas"] #homeView .home-meal.is-recorded::after{background:#1f704d}
+html[data-theme="christmas"] #homeView .home-nav-row .calendar-open,
+html[data-theme="christmas"] #homeView .past-menu-open{
+  border:2px solid #b64950;border-radius:16px;background:#fffaf3;color:#8b2c38;
+  box-shadow:0 3px 0 #edd5c8;
+}
+html[data-theme="christmas"] #homeView .home-nav-row .favorite-home-open{
+  border-color:#2e785c;background:#e8f1e8;color:#22553f;
+}
+html[data-theme="christmas"] .calendar-fixed{background:var(--bg)}
+html[data-theme="christmas"] .past-menu-panel,
+html[data-theme="christmas"] .calendar-card,
+html[data-theme="christmas"] .detail-card,
+html[data-theme="christmas"] .favorite-entry{
+  border:1px solid #d8c5b5;background:#fffdf9;box-shadow:var(--shadow);
+}
+html[data-theme="christmas"] .meal-tabs{background:#f1e7df}
+html[data-theme="christmas"] .meal-tab-all{background:#fff9f0;color:#7a4c48}
+html[data-theme="christmas"] .meal-tab-all.is-active{border-color:#cbac82;color:#8b2b35}
+html[data-theme="christmas"] .weekday-row{background:#e7efe6;border-color:#cfddcf}
+html[data-theme="christmas"] .weekday-row span{color:#315543}
+html[data-theme="christmas"] .weekday-row span:first-child{background:#f9e2e2;color:#ae3140}
+html[data-theme="christmas"] .weekday-row span:last-child{background:#e1ecfa;color:#2d609d}
+html[data-theme="christmas"] .calendar-grid > :is(.day-cell,.day-blank){
+  background:#fffdfa;border-color:#e8dfd3;
+}
+html[data-theme="christmas"] .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n+1){
+  background:#fff0f0;color:#a82e3d;
+}
+html[data-theme="christmas"] .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n){
+  background:#edf4ff;color:#2d5f9a;
+}
+html[data-theme="christmas"] .calendar-grid > .day-cell:nth-child(7n+1) .day-number{color:#a82e3d}
+html[data-theme="christmas"] .calendar-grid > .day-cell:nth-child(7n) .day-number{color:#2d5f9a}
+html[data-theme="christmas"] .day-cell.is-today .day-number,
+html[data-theme="christmas"] .calendar-grid:not(.is-all) .day-cell.is-today .day-number{
+  background:#a82e3d;color:#fff;
+}
+html[data-theme="christmas"] .all-meal-row{background:#faf4ee;border-color:#ead8cb}
+html[data-theme="christmas"] .back-button,
+html[data-theme="christmas"] .icon-button,
+html[data-theme="christmas"] .secondary-button{border-color:#d9c7b8;background:#fff9f2;color:#8b3540}
+html[data-theme="christmas"] .primary-button{border-color:#a82938;background:#a82938;color:#fff}
+html[data-theme="christmas"] .detail-modal-panel{background:#f8f3ee;border-color:#d9c7b8}
+html[data-theme="christmas"] .caption-block,
+html[data-theme="christmas"] .memo-editor textarea{background:#fffdfa;border-color:#d9c7b8;color:#352d2c}
+
+html[data-theme="winter"]{
+  --bg:#e7f1f6;--surface:#fafdff;--warm:#deedf5;--warm-2:#eff8fc;--blue:#e4f4fa;
+  --line:#bad4e2;--text:#1c4055;--muted:#52768d;--accent:#166a91;--accent-soft:#d8f1fa;
+  --disabled:#e1edf2;--disabled-text:#6c8b9d;--danger:#aa4154;
+  --shadow:0 10px 25px rgba(32,90,124,.12);
+}
+html[data-theme="winter"] body{
+  background:radial-gradient(circle at 85% 5%,rgba(246,255,255,.95),transparent 350px),
+    radial-gradient(circle at 10% 42%,rgba(119,188,216,.18),transparent 360px),var(--bg);
+}
+html[data-theme="winter"] #homeView .hero{
+  border:1px solid #a2d8ea;border-radius:17px;
+  background:linear-gradient(132deg,#102e54 0%,#205775 55%,#3898a8 100%);
+  box-shadow:0 5px 0 #b9dfe9,0 15px 33px rgba(32,74,101,.2);
+}
+html[data-theme="winter"] #homeView .hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle,#fff 1.5px,transparent 2px) 0 0/31px 36px,
+    radial-gradient(circle,#d8faff 1px,transparent 2px) 14px 10px/49px 41px;
+  opacity:.4;
+}
+html[data-theme="winter"] #homeView .hero::after{
+  content:"❄";right:18px;top:10px;font-size:3.1rem;color:#e5faff;
+  opacity:.87;text-shadow:0 0 14px rgba(229,250,255,.7);
+}
+html[data-theme="winter"] #homeView .hero :is(.hero-eyebrow,h1,p){
+  position:relative;z-index:1;color:#f5fdff;
+}
+html[data-theme="winter"] #homeView .hero h1{text-shadow:0 2px 9px #102a49}
+html[data-theme="winter"] #homeView .hero p{color:#e4f6ff}
+html[data-theme="winter"] .theme-indicator{
+  border:1px solid #bdefff;border-radius:9px;background:#e9faff;color:#185672;
+  box-shadow:0 2px 8px #113b5a55;
+}
+html[data-theme="winter"] #homeView .today-kicker{color:#1f7199}
+html[data-theme="winter"] #homeView .today-line>span{
+  border:1px solid #bcdae8;background:#f2fbff;color:#396a88;
+}
+html[data-theme="winter"] #homeView .daily-progress,
+html[data-theme="winter"] #homeView .daily-progress.is-complete{
+  border:1px solid #c0dce8;border-radius:19px;background:linear-gradient(135deg,#fff,#eaf7fa);
+  box-shadow:0 8px 20px #2a7a9930;
+}
+html[data-theme="winter"] #homeView .progress-track{background:#d8ebf2}
+html[data-theme="winter"] #homeView .progress-fill,
+html[data-theme="winter"] #homeView .daily-progress.is-complete .progress-fill{
+  background:linear-gradient(90deg,#89dce7,#348aaf,#1c507d);
+}
+html[data-theme="winter"] #homeView .progress-steps span{background:#eaf5f9;color:#64859a}
+html[data-theme="winter"] #homeView .progress-steps span.is-done{background:#ccebf2;color:#165a7a}
+html[data-theme="winter"] #homeView .home-meal{
+  border:1px solid #b3d8e6;border-radius:14px;
+  background:#f7fdff;box-shadow:0 5px 18px rgba(54,112,146,.15);
+}
+html[data-theme="winter"] #homeView .home-meal:not(:disabled) .home-meal-footer{
+  background:linear-gradient(135deg,#e7f6fb,#f5fcff);
+}
+html[data-theme="winter"] #homeView .home-meal-label{color:#1d4e68}
+html[data-theme="winter"] #homeView .home-meal.is-recorded::after{background:#267d9d}
+html[data-theme="winter"] #homeView .home-nav-row .calendar-open,
+html[data-theme="winter"] #homeView .past-menu-open{
+  border:1px solid #9dc9df;border-radius:12px;background:#f5fcff;color:#1c6387;
+  box-shadow:0 3px 0 #c8e8f0;
+}
+html[data-theme="winter"] #homeView .home-nav-row .favorite-home-open{
+  border-color:#bed2eb;background:#eef6ff;color:#386797;
+}
+html[data-theme="winter"] .calendar-fixed{background:var(--bg)}
+html[data-theme="winter"] .past-menu-panel,
+html[data-theme="winter"] .calendar-card,
+html[data-theme="winter"] .detail-card,
+html[data-theme="winter"] .favorite-entry{
+  border:1px solid #b9d6e4;background:#fafdff;box-shadow:var(--shadow);
+}
+html[data-theme="winter"] .meal-tabs{background:#dcecf4}
+html[data-theme="winter"] .meal-tab-all{background:#f3faff;color:#4a7089}
+html[data-theme="winter"] .meal-tab-all.is-active{border-color:#a6cfe0;color:#19597e}
+html[data-theme="winter"] .weekday-row{background:#e5f3f9;border-color:#b7d5e4}
+html[data-theme="winter"] .weekday-row span{color:#376780}
+html[data-theme="winter"] .weekday-row span:first-child{background:#fbeaec;color:#ae4152}
+html[data-theme="winter"] .weekday-row span:last-child{background:#e0eeff;color:#3469a0}
+html[data-theme="winter"] .calendar-grid > :is(.day-cell,.day-blank){
+  background:#fafdff;border-color:#cbdfe9;
+}
+html[data-theme="winter"] .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n+1){
+  background:#fff0f2;color:#a63b4c;
+}
+html[data-theme="winter"] .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n){
+  background:#e9f3ff;color:#30679c;
+}
+html[data-theme="winter"] .calendar-grid > .day-cell:nth-child(7n+1) .day-number{color:#a63b4c}
+html[data-theme="winter"] .calendar-grid > .day-cell:nth-child(7n) .day-number{color:#30679c}
+html[data-theme="winter"] .day-cell.is-today .day-number,
+html[data-theme="winter"] .calendar-grid:not(.is-all) .day-cell.is-today .day-number{
+  background:#186f98;color:#fff;
+}
+html[data-theme="winter"] .all-meal-row{background:#eef7fa;border-color:#d5e7f0}
+html[data-theme="winter"] .back-button,
+html[data-theme="winter"] .icon-button,
+html[data-theme="winter"] .secondary-button{border-color:#a9cede;background:#f5fcff;color:#266989}
+html[data-theme="winter"] .primary-button{border-color:#1f7197;background:#1f7197;color:#fff}
+html[data-theme="winter"] .detail-modal-panel{background:#e7f1f6;border-color:#afcddd}
+html[data-theme="winter"] .caption-block,
+html[data-theme="winter"] .memo-editor textarea{background:#fafdff;border-color:#afcddd;color:#1c4055}
