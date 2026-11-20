@@ -498,7 +498,7 @@ function setDesignTheme(id,save=true){
 function initializeArtStyle(){
   let id='original';
   try{id=localStorage.getItem(ART_STYLE_KEY)||'original'}catch(_){}
-  setArtStyle(id,false);
+  setArtStyle(id,!ART_STYLES.some(t=>t.id===id));
 }
 function setArtStyle(id,save=true){
   const style=ART_STYLES.find(t=>t.id===id)||ART_STYLES[0];
