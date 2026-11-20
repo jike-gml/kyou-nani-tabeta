@@ -801,8 +801,10 @@ body .appearance-art-preview{
 }
 body .appearance-art-preview.is-original{background-image:url('./meal-illustrations-v1.jpg')}
 body .appearance-art-preview.is-flat{background-image:url('./meal-art-flat.webp')}
+body .appearance-art-preview.is-pict{background-image:url('./meal-art-color-pict.webp')}
 body .appearance-art-preview.is-photo{background-image:url('./meal-art-photo.webp')}
 body .appearance-menu-help{margin:12px 0 0;color:var(--muted);font-size:.72rem;line-height:1.6}
+html[data-art-style="pict"] #homeView .home-meal-art{background-image:url("./meal-art-color-pict.webp");background-size:200% 200%;}
 html[data-art-style="flat"] #homeView .home-meal-art{
   background-image:url('./meal-art-flat.webp');
 }
