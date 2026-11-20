@@ -354,6 +354,13 @@
     #homeView .home-meal:disabled small{color:#6880a3}
     #homeView .home-meal.is-recorded::after{top:8px;right:8px;z-index:2}
     @media(max-width:360px){#homeView .home-meal-footer{min-height:43px}#homeView .home-meal-label{font-size:.92rem}}
+    /* Centered appearance dialog; its own content scrolls on small screens. */
+    body.appearance-dialog-open{overflow:hidden}
+    body.appearance-dialog-open::before{content:"";position:fixed;inset:0;z-index:1999;background:rgba(20,25,38,.55);backdrop-filter:blur(3px)}
+    #homeView #appearanceMenu:not([hidden]){position:fixed;z-index:2000;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:min(92vw,480px);max-height:min(85dvh,760px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:0;padding:20px;border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.3);animation:appearanceDialogIn .2s ease both}
+    #homeView .appearance-dialog-close{float:right;display:grid;place-items:center;width:38px;height:38px;margin:-4px -4px 6px 8px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--text);font-size:1.3rem;cursor:pointer}
+    @keyframes appearanceDialogIn{from{opacity:0;transform:translate(-50%,-47%) scale(.98)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+    @media(max-width:430px){#homeView #appearanceMenu:not([hidden]){width:calc(100vw - 24px);max-height:calc(100dvh - 40px);padding:15px}}
   </style>
 </head>
 <body>
@@ -364,8 +371,9 @@
         <h1>今日なに食べた？</h1>
         <p>日々の食事を、写真で心地よく記録。</p>
       </header>
-      <section id="appearanceMenu" class="appearance-menu" aria-label="デザイン設定" hidden>
-        <div class="appearance-menu-heading"><strong>デザインを選ぶ</strong><span>背景と食事の画像を個別に変更できます</span></div>
+      <section id="appearanceMenu" class="appearance-menu" role="dialog" aria-modal="true" aria-labelledby="appearanceDialogTitle" aria-label="デザイン設定" hidden>
+        <button type="button" id="appearanceDialogClose" class="appearance-dialog-close" aria-label="閉じる">×</button>
+        <div class="appearance-menu-heading"><strong id="appearanceDialogTitle">デザインを選ぶ</strong><span>背景と食事の画像を個別に変更できます</span></div>
         <div class="appearance-menu-group" role="group" aria-label="背景テーマ">
           <h2>背景テーマ</h2>
           <div class="appearance-theme-grid">
@@ -497,6 +505,8 @@ function syncAppearanceSelection(){
 }
 function setAppearanceMenuOpen(open){
   els.appearanceMenu.hidden=!open;
+  document.body.classList.toggle('appearance-dialog-open',open);
+  if(open)document.getElementById('appearanceDialogClose').focus();
   els.themeSwitcher.setAttribute('aria-expanded',String(open));
   els.themeIndicator.textContent=(DESIGN_THEMES.find(t=>t.id===document.documentElement.dataset.theme)||DESIGN_THEMES[0]).label+(open?' ▴':' ▾');
 }
@@ -504,7 +514,8 @@ function toggleAppearanceMenu(){setAppearanceMenuOpen(els.appearanceMenu.hidden)
 window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
 async function init(){bindElements();bindEvents();initializeDesignTheme();initializeArtStyle();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋過去2か月の計3か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
 function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','appearanceMenu','appearanceSelectionSummary','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
-function bindEvents(){els.themeSwitcher.addEventListener('click',toggleAppearanceMenu);
+function bindEvents(){document.getElementById('appearanceDialogClose').addEventListener('click',()=>{setAppearanceMenuOpen(false);els.themeSwitcher.focus()});
+els.themeSwitcher.addEventListener('click',toggleAppearanceMenu);
 els.themeSwitcher.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAppearanceMenu()}});
 els.appearanceMenu.addEventListener('click',event=>{
   const themeButton=event.target.closest('[data-choose-theme]');
