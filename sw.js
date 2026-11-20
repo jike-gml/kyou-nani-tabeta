@@ -1,10 +1,11 @@
-const CACHE = 'foodlog-v60';
+const CACHE = 'foodlog-v61';
 const ASSETS = [
   './',
   './index.html',
-  './themes.css?v=13',
+  './themes.css?v=14',
   './meal-illustrations-v1.jpg',
   './meal-art-flat.webp',
+  './meal-art-color-pict.webp',
   './meal-art-photo.webp',
   './manifest.webmanifest',
   './icon-192.png',
