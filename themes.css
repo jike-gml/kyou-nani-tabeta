@@ -836,3 +836,73 @@ html[data-theme="christmas"] body .appearance-menu-group h2{color:#ffe9b1}
   body .appearance-option{font-size:.71rem;padding:7px}
   body .appearance-art-option{font-size:.59rem}
 }
+
+
+/* v58: Winter glass / ice refinement, scoped to the winter theme. */
+html[data-theme="winter"]{
+ --bg:#eaf4f9;--surface:#ffffff;--warm:#e2f1f8;--warm-2:#f5fbff;
+ --line:#c5deec;--text:#183d57;--muted:#53748b;--accent:#317da5;
+ --shadow:0 12px 30px rgba(54,111,148,.12);
+}
+html[data-theme="winter"] body{
+ background:radial-gradient(ellipse at 85% 3%,#ffffff 0%,transparent 45%),
+ radial-gradient(ellipse at 3% 43%,#d4eaf6 0%,transparent 55%),
+ linear-gradient(155deg,#f4fbff,#dcecf5 65%,#f4faff);
+}
+html[data-theme="winter"] #homeView .hero{
+ border:1px solid rgba(255,255,255,.85);border-radius:25px;
+ background:radial-gradient(circle at 83% 12%,rgba(255,255,255,.38),transparent 35%),
+ linear-gradient(125deg,#397a9d,#7ebbd2 53%,#b8dfe9);
+ box-shadow:0 12px 32px rgba(47,105,141,.18),inset 0 1px rgba(255,255,255,.65);
+}
+html[data-theme="winter"] #homeView .hero::before{
+ background:linear-gradient(130deg,rgba(255,255,255,.22),transparent 58%),
+ radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 2px) 0 0/58px 55px;
+ opacity:.55;
+}
+html[data-theme="winter"] #homeView .hero::after{content:"✧";font-size:2.6rem;color:#f7feff;opacity:.8;text-shadow:0 0 18px #fff}
+html[data-theme="winter"] #homeView .hero h1{text-shadow:0 1px 6px rgba(30,85,120,.26)}
+html[data-theme="winter"] #homeView .daily-progress,
+html[data-theme="winter"] #homeView .daily-progress.is-complete{
+ background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);
+ border-radius:22px;box-shadow:0 10px 26px rgba(69,121,153,.12),inset 0 1px rgba(255,255,255,.9);
+}
+html[data-theme="winter"] #homeView .home-meal{
+ border:1px solid rgba(255,255,255,.95);border-radius:21px;
+ background:rgba(255,255,255,.8);overflow:hidden;
+ box-shadow:0 10px 25px rgba(63,112,144,.13),inset 0 1px rgba(255,255,255,.95);
+}
+html[data-theme="winter"] #homeView .home-meal:not(:disabled) .home-meal-footer{
+ background:linear-gradient(125deg,rgba(255,255,255,.94),rgba(221,242,251,.88));
+}
+html[data-theme="winter"] #homeView .home-nav-row .calendar-open,
+html[data-theme="winter"] #homeView .home-nav-row .favorite-home-open,
+html[data-theme="winter"] #homeView .past-menu-open{
+ background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);
+ border-radius:17px;color:#286b90;
+ box-shadow:0 7px 18px rgba(63,115,149,.12),inset 0 1px #fff;
+}
+html[data-theme="winter"] .calendar-card,
+html[data-theme="winter"] .detail-card,
+html[data-theme="winter"] .favorite-entry,
+html[data-theme="winter"] .past-menu-panel{
+ background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.95);
+ border-radius:19px;box-shadow:0 9px 25px rgba(67,119,152,.1);
+}
+html[data-theme="winter"] .calendar-fixed{background:#eaf4f9}
+html[data-theme="winter"] .weekday-row{background:#edf7fc}
+html[data-theme="winter"] .weekday-row span:first-child{background:#fff0f2;color:#ac3c51}
+html[data-theme="winter"] .weekday-row span:last-child{background:#e8f1ff;color:#3569a2}
+html[data-theme="winter"] .theme-indicator{
+ background:rgba(255,255,255,.86);border:1px solid #ffffff;color:#286786;
+ box-shadow:0 2px 9px rgba(41,105,139,.1);
+}
+/* Photo sprite: consistent quarter-cell crop, centered within each meal card. */
+html[data-art-style="photo"] #homeView .home-meal-art{
+ background-size:200% 200%;background-repeat:no-repeat;
+ aspect-ratio:256/195;overflow:hidden;
+}
+html[data-art-style="photo"] #homeView .home-meal[data-home-meal="breakfast"] .home-meal-art{background-position:0% 0%}
+html[data-art-style="photo"] #homeView .home-meal[data-home-meal="lunch"] .home-meal-art{background-position:100% 0%}
+html[data-art-style="photo"] #homeView .home-meal[data-home-meal="dinner"] .home-meal-art{background-position:0% 100%}
+html[data-art-style="photo"] #homeView .home-meal[data-home-meal="snack"] .home-meal-art{background-position:100% 100%}
