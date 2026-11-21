@@ -909,3 +909,9 @@ html[data-art-style="photo"] #homeView .home-meal[data-home-meal="lunch"] .home-
 html[data-art-style="photo"] #homeView .home-meal[data-home-meal="dinner"] .home-meal-art{background-position:0% 100%}
 html[data-art-style="photo"] #homeView .home-meal[data-home-meal="snack"] .home-meal-art{background-position:100% 100%}
 
+
+/* Today's date: ensure contrast even on Sunday/Saturday in seasonal themes. */
+html[data-theme="christmas"] .calendar-grid > .day-cell.is-today .day-number,
+html[data-theme="christmas"] .calendar-grid:not(.is-all) > .day-cell.is-today .day-number{background:#a82e3d;color:#ffffff}
+html[data-theme="winter"] .calendar-grid > .day-cell.is-today .day-number,
+html[data-theme="winter"] .calendar-grid:not(.is-all) > .day-cell.is-today .day-number{background:#186f98;color:#ffffff}
