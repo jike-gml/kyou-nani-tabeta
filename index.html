@@ -383,7 +383,11 @@
     body #appearanceMenu .appearance-art-preview.is-photo{background-image:url('./meal-art-photo.webp')}
     body #appearanceMenu .appearance-menu-help{margin:18px 0 0;padding:10px 12px;border-radius:12px;background:#f2f5fa;color:#52647d;font-size:.75rem;line-height:1.6}
     @media(max-width:360px){body #appearanceMenu .appearance-theme-grid{gap:6px}body #appearanceMenu .appearance-option{padding:6px;font-size:.7rem}}
-  </style>
+  
+    /* Calendar date numbers centered in both all-meals and single-meal views. */
+    .calendar-grid.is-all .day-number{display:grid;margin:0 auto 4px}
+    .calendar-grid:not(.is-all) .day-number{left:50%;transform:translateX(-50%)}
+</style>
 </head>
 <body>
   <main class="app-shell">
