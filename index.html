@@ -421,6 +421,64 @@
     @media(min-width:540px){.photo-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.photo-actions #deleteButton{grid-column:auto}}
 
     @media(max-width:355px){.meal-timeline-entry{grid-template-columns:minmax(0,1fr) 42px 35px}.meal-timeline-open{gap:6px}.meal-timeline-photo{flex-basis:84px;width:84px;height:72px}.meal-timeline-date{font-size:.68rem}.meal-timeline-name{font-size:.8rem}}
+
+    /* A: layered sticky-note tabs; only the selected tab touches the page beneath. */
+    #calendarView{--tab-paper:#f0eee9;--tab-page:#faf9f6;--tab-edge:#c9c6c0;--tab-ink:#353a41}
+    #calendarView[data-active-meal="breakfast"]{--tab-paper:#fff2b8;--tab-page:#fffbef;--tab-edge:#d7b855;--tab-ink:#614914}
+    #calendarView[data-active-meal="lunch"]{--tab-paper:#ffe1ce;--tab-page:#fff8f3;--tab-edge:#dfab89;--tab-ink:#70442d}
+    #calendarView[data-active-meal="dinner"]{--tab-paper:#deebff;--tab-page:#f5f9ff;--tab-edge:#91b2e6;--tab-ink:#2a507f}
+    #calendarView[data-active-meal="snack"]{--tab-paper:#ffe0ed;--tab-page:#fff7fa;--tab-edge:#db9eb7;--tab-ink:#793f59}
+    html[data-theme="cool"] #calendarView{--tab-paper:#40364d;--tab-page:#241f35;--tab-edge:#92789f;--tab-ink:#fff0f8}
+    html[data-theme="cool"] #calendarView[data-active-meal="breakfast"]{--tab-paper:#514633;--tab-page:#2b2731;--tab-edge:#b99b64;--tab-ink:#fff0c7}
+    html[data-theme="cool"] #calendarView[data-active-meal="lunch"]{--tab-paper:#563d3d;--tab-page:#2b2332;--tab-edge:#bb8b83;--tab-ink:#ffe4da}
+    html[data-theme="cool"] #calendarView[data-active-meal="dinner"]{--tab-paper:#30465e;--tab-page:#202a3c;--tab-edge:#7e9fc7;--tab-ink:#e1eeff}
+    html[data-theme="cool"] #calendarView[data-active-meal="snack"]{--tab-paper:#51394f;--tab-page:#292235;--tab-edge:#af83a7;--tab-ink:#ffe4f6}
+    #calendarView #calendarControls .meal-tabs{
+      position:relative;z-index:7;isolation:isolate;display:grid;align-items:end;
+      grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;
+      margin:8px 0 0;padding:0 3px;
+      background:transparent;border:0;border-radius:0;overflow:visible
+    }
+    #calendarView #calendarControls .meal-tabs .meal-tab{
+      position:relative;min-width:0;min-height:41px;padding:4px 1px;
+      border:1px solid var(--line);border-bottom-color:var(--tab-edge);
+      border-radius:12px 12px 0 0;
+      background:var(--surface);color:var(--muted);
+      box-shadow:inset 0 -3px 5px rgba(0,0,0,.04);
+      font-size:clamp(.72rem,3.5vw,.92rem);font-weight:750;
+      opacity:.83;filter:saturate(.7);transform:translateY(-2px)
+    }
+    #calendarView #calendarControls .meal-tabs .meal-tab.is-active{
+      z-index:3;min-height:50px;padding:5px 1px;
+      border:2px solid var(--tab-edge);border-bottom:0;
+      border-radius:12px 12px 0 0;
+      background:var(--tab-paper);color:var(--tab-ink);
+      box-shadow:0 -3px 11px rgba(25,30,45,.13),inset 0 2px 0 rgba(255,255,255,.24);
+      font-weight:900;opacity:1;filter:none;transform:translateY(2px)
+    }
+    #calendarView #calendarControls .meal-tabs .meal-tab.is-active::after{
+      content:"";position:absolute;left:0;right:0;bottom:-5px;height:7px;
+      background:var(--tab-paper);pointer-events:none
+    }
+    #calendarView #calendarControls .meal-tabs .meal-tab:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    #calendarView #calendarControls #monthToolbar{
+      position:relative;z-index:1;margin:0;padding:7px 7px 4px;
+      border:1px solid var(--tab-edge);border-bottom:0;border-radius:13px 13px 0 0;
+      background:var(--tab-paper);color:var(--tab-ink)
+    }
+    #calendarView #calendarControls #monthToolbar .month-center span{color:var(--tab-ink);opacity:.77}
+    #calendarView #calendarControls #weekdayRow{border-top:0;border-radius:0}
+    #calendarView.is-meal-timeline .calendar-card{
+      border-top:1px solid var(--tab-edge);background:var(--tab-page)
+    }
+    #calendarView.is-meal-timeline .meal-timeline{padding-top:12px}
+    @media(max-width:355px){
+      #calendarView #calendarControls .meal-tabs{gap:3px;padding-inline:1px}
+      #calendarView #calendarControls .meal-tabs .meal-tab{font-size:.7rem}
+    }
+    @media(prefers-reduced-motion:reduce){
+      #calendarView #calendarControls .meal-tabs .meal-tab{transition:none}
+    }
 </style>
 </head>
 <body>
@@ -624,6 +682,8 @@ function favoriteRecords(){const order={breakfast:0,lunch:1,dinner:2,snack:3};re
 function renderCalendar(){
   const gallery=state.favoritesMode;
   const timeline=!gallery&&state.calendarMode!=='all';
+  els.calendarView.dataset.activeMeal=gallery?'favorites':state.calendarMode;
+  els.calendarView.classList.toggle('is-meal-timeline',timeline);
   const timelineRecords=timeline?getMealTimelineRecords(state.calendarMode):null;
   els.calendarHeading.textContent=timeline?APP.mealNames[state.calendarMode]+'の記録':'カレンダー';
   els.calendarControls.hidden=gallery;
