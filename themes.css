@@ -915,3 +915,11 @@ html[data-theme="christmas"] .calendar-grid > .day-cell.is-today .day-number,
 html[data-theme="christmas"] .calendar-grid:not(.is-all) > .day-cell.is-today .day-number{background:#a82e3d;color:#ffffff}
 html[data-theme="winter"] .calendar-grid > .day-cell.is-today .day-number,
 html[data-theme="winter"] .calendar-grid:not(.is-all) > .day-cell.is-today .day-number{background:#186f98;color:#ffffff}
+
+/* Christmas: readable rounded date chip on enlarged food photos. */
+html[data-theme="christmas"] #detailView .detail-photo-date{
+  color:#ffffff;
+  background:#174737;
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:999px;
+}
