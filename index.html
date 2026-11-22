@@ -395,6 +395,9 @@
     .calendar-grid.is-all .all-meal-row.dinner{grid-row:3}
     .calendar-grid.is-all .all-meal-row.snack{grid-row:4}
 
+    /* Selected meal stays clearly highlighted across all visual themes. */
+    #calendarView .meal-tabs .meal-tab.is-active{border:2px solid currentColor;font-weight:900}
+
     /* Individual meal tabs display a compact, newest-first history. The all-meals grid is unaffected. */
     #monthToolbar[hidden],#weekdayRow[hidden],#mealTimeline[hidden]{display:none!important}
     .meal-timeline{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:7px;padding:10px 7px 14px}
@@ -481,7 +484,7 @@
 
     <section id="calendarView" hidden>
       <div class="calendar-fixed">
-        <div class="view-header"><button id="backHome" class="back-button" type="button">ホーム</button><div class="view-title calendar-heading"><h2>カレンダー</h2><p id="calendarSubtitle">直近3か月の食事写真</p></div><button id="openFavorites" class="favorites-open" type="button" aria-pressed="false" aria-controls="favoritesList">♡ お気に入り</button></div>
+        <div class="view-header"><button id="backHome" class="back-button" type="button">ホーム</button><div class="view-title calendar-heading"><h2 id="calendarHeading">カレンダー</h2><p id="calendarSubtitle">直近3か月の食事写真</p></div><button id="openFavorites" class="favorites-open" type="button" aria-pressed="false" aria-controls="favoritesList">♡ お気に入り</button></div>
         <div id="calendarControls">
         <nav class="meal-tabs" aria-label="食事の切り替え">
           <button class="meal-tab meal-tab-all is-active" data-meal="all" type="button">全食</button>
@@ -577,7 +580,7 @@ function setAppearanceMenuOpen(open){
 function toggleAppearanceMenu(){setAppearanceMenuOpen(els.appearanceMenu.hidden)}
 window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
 async function init(){bindElements();bindEvents();initializeDesignTheme();initializeArtStyle();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋過去2か月の計3か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
-function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','appearanceMenu','appearanceSelectionSummary','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','monthToolbar','weekdayRow','calendarGrid','mealTimeline','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','choosePhotoButton','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
+function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','appearanceMenu','appearanceSelectionSummary','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarHeading','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','monthToolbar','weekdayRow','calendarGrid','mealTimeline','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','choosePhotoButton','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
 function bindEvents(){document.getElementById('appearanceDialogClose').addEventListener('click',()=>{setAppearanceMenuOpen(false);els.themeSwitcher.focus()});
 els.themeSwitcher.addEventListener('click',toggleAppearanceMenu);
 els.themeSwitcher.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAppearanceMenu()}});
@@ -621,6 +624,8 @@ function favoriteRecords(){const order={breakfast:0,lunch:1,dinner:2,snack:3};re
 function renderCalendar(){
   const gallery=state.favoritesMode;
   const timeline=!gallery&&state.calendarMode!=='all';
+  const timelineRecords=timeline?getMealTimelineRecords(state.calendarMode):null;
+  els.calendarHeading.textContent=timeline?APP.mealNames[state.calendarMode]+'の記録':'カレンダー';
   els.calendarControls.hidden=gallery;
   els.monthToolbar.hidden=gallery||timeline;
   els.weekdayRow.hidden=gallery||timeline;
@@ -631,22 +636,25 @@ function renderCalendar(){
   els.openFavorites.textContent=gallery?'♥ お気に入り':'♡ お気に入り';
   els.openFavorites.title=gallery?'もう一度押すとカレンダーへ戻ります':'お気に入りの一覧を開く';
   els.openFavorites.setAttribute('aria-pressed',String(gallery));
-  els.calendarSubtitle.textContent=gallery?'お気に入りを新しい順に表示':(timeline?'直近3か月の'+APP.mealNames[state.calendarMode]+'・新しい順':'直近3か月の食事写真');
+  els.calendarSubtitle.textContent=gallery?'お気に入りを新しい順に表示':(timeline?'直近3か月・新しい順・'+timelineRecords.length+'件':'直近3か月の食事写真');
   if(gallery){renderFavoritesList();return}
   renderMealTabs();
-  if(timeline){renderMealTimeline();return}
+  if(timeline){renderMealTimeline(timelineRecords);return}
   renderMonthHeader();
   renderCalendarGrid();
 }
-function renderMealTimeline(){
+function getMealTimelineRecords(meal){
+  const startKey=toDateKey(retentionStartDate());
+  const todayKey=toDateKey(state.today);
+  return [...state.records.values()]
+    .filter(record=>record.meal===meal&&record.fullBlob&&record.date>=startKey&&record.date<=todayKey)
+    .sort((a,b)=>b.date.localeCompare(a.date));
+}
+function renderMealTimeline(records){
   cleanupCalendarObjectUrls();
   els.mealTimeline.replaceChildren();
   const meal=state.calendarMode;
-  const startKey=toDateKey(retentionStartDate());
   const todayKey=toDateKey(state.today);
-  const records=[...state.records.values()]
-    .filter(record=>record.meal===meal&&record.fullBlob&&record.date>=startKey&&record.date<=todayKey)
-    .sort((a,b)=>b.date.localeCompare(a.date));
   if(!records.length){
     const empty=document.createElement('p');
     empty.className='meal-timeline-empty';
