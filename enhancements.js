@@ -1,6 +1,6 @@
 /* Enhancements: six-month text retention, history selection and portable backups. */
 'use strict';
-const FOODLOG_VERSION='1.0.0';
+const FOODLOG_VERSION='1.0.1';
 const FOODLOG_RELEASE_DATE='2026.11.22';
 let foodlogPastMode='10',foodlogPastMonth='',foodlogPendingImport=null;
 const foodlogMeals=['breakfast','lunch','dinner','snack'];
@@ -435,7 +435,7 @@ function wireFoodlogUpgrade(){
     '<button id="cancelImport" type="button" class="secondary-button">キャンセル</button>',
     '</div><p id="settingsStatus" class="status" role="status" aria-live="polite"></p>',
     '</section>',
-    '<p class="app-version" aria-label="アプリのバージョン">Version 1.0.0 ｜ 更新日：2026.11.22</p>'
+    '<p class="app-version" aria-label="アプリのバージョン">Version 1.0.1 ｜ 更新日：2026.11.22</p>'
   ].join('');
   foodlogById('homeStatus').after(settings);
   const css=document.createElement('style');
