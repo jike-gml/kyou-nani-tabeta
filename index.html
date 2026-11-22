@@ -394,6 +394,23 @@
     .calendar-grid.is-all .all-meal-row.lunch{grid-row:2}
     .calendar-grid.is-all .all-meal-row.dinner{grid-row:3}
     .calendar-grid.is-all .all-meal-row.snack{grid-row:4}
+
+    /* Individual meal tabs display a compact, newest-first history. The all-meals grid is unaffected. */
+    #monthToolbar[hidden],#weekdayRow[hidden],#mealTimeline[hidden]{display:none!important}
+    .meal-timeline{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:7px;padding:10px 7px 14px}
+    .meal-timeline-entry{display:grid;grid-template-columns:minmax(0,1fr) 45px 38px;align-items:center;gap:2px;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text)}
+    .meal-timeline-open{display:flex;align-items:center;min-width:0;min-height:78px;gap:8px;padding:5px 0 5px 6px;border:0;background:transparent;color:inherit;text-align:left}
+    .meal-timeline-photo{display:block;flex:0 0 80px;width:80px;height:65px;border-radius:8px;object-fit:cover;background:var(--warm-2)}
+    .meal-timeline-meta{display:flex;flex:1 1 auto;flex-direction:column;justify-content:center;gap:5px;min-width:0}
+    .meal-timeline-date{font-size:.73rem;font-weight:820;line-height:1.3;color:var(--muted)}
+    .meal-timeline-name{display:-webkit-box;overflow:hidden;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere;font-size:.87rem;font-weight:760;line-height:1.35;color:var(--text)}
+    .meal-timeline-name.is-empty{font-size:.78rem;font-weight:550;color:var(--muted)}
+    .meal-timeline-edit{min-height:44px;padding:3px 0;border:0;border-radius:8px;background:var(--accent-soft);color:var(--text);font-size:.72rem;font-weight:800}
+    .meal-timeline-favorite{display:grid;place-items:center;width:38px;min-height:44px;padding:0;border:0;background:transparent;color:var(--muted);font-size:1.5rem;line-height:1}
+    .meal-timeline-favorite.is-favorite{color:#e84b88}
+    .meal-timeline-open:focus-visible,.meal-timeline-edit:focus-visible,.meal-timeline-favorite:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+    .meal-timeline-empty{padding:40px 12px;text-align:center;color:var(--muted);font-size:.9rem;line-height:1.6}
+    @media(max-width:355px){.meal-timeline-entry{grid-template-columns:minmax(0,1fr) 42px 35px}.meal-timeline-open{gap:6px}.meal-timeline-photo{flex-basis:69px;width:69px;height:60px}.meal-timeline-date{font-size:.68rem}.meal-timeline-name{font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -466,11 +483,11 @@
           <button class="meal-tab meal-tab-dinner" data-meal="dinner" type="button">夕食</button>
           <button class="meal-tab meal-tab-snack" data-meal="snack" type="button">間食</button>
         </nav>
-        <section class="calendar-toolbar" aria-label="月の切り替え"><button id="prevMonth" class="icon-button" type="button" aria-label="前の月">‹</button><div class="month-center"><strong id="monthLabel"></strong><span id="retentionLabel"></span></div><button id="nextMonth" class="icon-button" type="button" aria-label="次の月">›</button></section>
-        <div class="weekday-row" aria-hidden="true"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+        <section id="monthToolbar" class="calendar-toolbar" aria-label="月の切り替え"><button id="prevMonth" class="icon-button" type="button" aria-label="前の月">‹</button><div class="month-center"><strong id="monthLabel"></strong><span id="retentionLabel"></span></div><button id="nextMonth" class="icon-button" type="button" aria-label="次の月">›</button></section>
+        <div id="weekdayRow" class="weekday-row" aria-hidden="true"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
         </div>
       </div>
-      <section class="calendar-card"><div id="calendarGrid" class="calendar-grid" role="grid" aria-label="食事写真カレンダー"></div><div id="favoritesList" class="favorites-list" role="list" aria-label="お気に入りの食事" hidden></div></section>
+      <section class="calendar-card"><div id="calendarGrid" class="calendar-grid" role="grid" aria-label="食事写真カレンダー"></div><div id="mealTimeline" class="meal-timeline" role="list" aria-label="食事別の記録タイムライン" hidden></div><div id="favoritesList" class="favorites-list" role="list" aria-label="お気に入りの食事" hidden></div></section>
       <p id="calendarStatus" class="status" role="status" aria-live="polite"></p>
     </section>
 
@@ -553,7 +570,7 @@ function setAppearanceMenuOpen(open){
 function toggleAppearanceMenu(){setAppearanceMenuOpen(els.appearanceMenu.hidden)}
 window.addEventListener('DOMContentLoaded',init);window.addEventListener('beforeunload',cleanupAllObjectUrls);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTodayIfNeeded()});
 async function init(){bindElements();bindEvents();initializeDesignTheme();initializeArtStyle();try{state.db=await openDatabase();await migrateLegacyDinnerRecords();await purgeExpiredRecords();await refreshRecords();renderHome();renderCalendar();history.replaceState({foodlogView:'home'},'',location.href);showView('home');setHomeStatus('写真は端末内に保存され、当月＋過去2か月の計3か月だけ保持します。');scheduleMidnightRefresh()}catch(error){console.error(error);setHomeStatus('保存領域を開けませんでした。このブラウザでは利用できない可能性があります。')}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}
-function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','appearanceMenu','appearanceSelectionSummary','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','calendarGrid','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
+function bindElements(){for(const id of ['homeView','calendarView','detailView','themeSwitcher','themeIndicator','appearanceMenu','appearanceSelectionSummary','todayLabel','progressCount','progressTrack','progressFill','progressMessage','dailyProgress','openCalendar','openHomeFavorites','openPastMenus','pastMenusPanel','pastMenusText','copyPastMenus','pastMenusStatus','homeStatus','backHome','calendarControls','calendarSubtitle','openFavorites','favoritesList','prevMonth','nextMonth','monthLabel','retentionLabel','monthToolbar','weekdayRow','calendarGrid','mealTimeline','calendarStatus','backCalendar','detailTitle','detailSwipeArea','detailPhotoDate','detailFavorite','detailMealBadge','detailImage','captionBlock','dishNameActions','editDishName','deleteDishName','dishNameEditor','detailMemo','originTakeout','originRestaurant','saveMemo','replaceButton','deleteButton','detailStatus','photoInput'])els[id]=document.getElementById(id);els.homeMealButtons=[...document.querySelectorAll('[data-home-meal]')];els.progressSteps=[...document.querySelectorAll('[data-progress-meal]')];els.mealTabs=[...document.querySelectorAll('.meal-tab')]}
 function bindEvents(){document.getElementById('appearanceDialogClose').addEventListener('click',()=>{setAppearanceMenuOpen(false);els.themeSwitcher.focus()});
 els.themeSwitcher.addEventListener('click',toggleAppearanceMenu);
 els.themeSwitcher.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleAppearanceMenu()}});
@@ -565,7 +582,7 @@ els.appearanceMenu.addEventListener('click',event=>{
 });
 document.addEventListener('click',event=>{if(!els.appearanceMenu.hidden&&!els.appearanceMenu.contains(event.target)&&!els.themeSwitcher.contains(event.target))setAppearanceMenuOpen(false)});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!els.appearanceMenu.hidden){setAppearanceMenuOpen(false);els.themeSwitcher.focus()}});
-els.homeMealButtons.forEach(button=>button.addEventListener('click',()=>startCapture({date:toDateKey(state.today),meal:button.dataset.homeMeal,returnView:'home',mode:'new'})));els.openCalendar.addEventListener('click',openCalendarFromHome);els.openHomeFavorites.addEventListener('click',openFavoritesFromHome);els.homeView.addEventListener('touchstart',handleHomeTouchStart,{passive:true});els.homeView.addEventListener('touchend',handleHomeTouchEnd,{passive:true});els.homeView.addEventListener('touchcancel',()=>{state.homeTouchStart=null},{passive:true});els.homeView.addEventListener('click',event=>{if(Date.now()<state.homeSwipeSuppressUntil||Date.now()<state.calendarSwipeSuppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);els.openPastMenus.addEventListener('click',togglePastMenus);els.copyPastMenus.addEventListener('click',copyPastMenusText);els.backHome.addEventListener('click',goHomeFromCalendar);els.openFavorites.addEventListener('click',toggleFavoritesView);els.detailFavorite.addEventListener('click',()=>toggleFavoriteRecord(state.selectedDate,state.detailMeal||state.meal,els.detailFavorite));els.calendarView.addEventListener('touchstart',handleCalendarTouchStart,{passive:true});els.calendarView.addEventListener('touchend',handleCalendarTouchEnd,{passive:false});els.calendarView.addEventListener('touchcancel',()=>{state.calendarTouchStart=null},{passive:true});window.addEventListener('popstate',()=>{if(state.currentView==='detail'){closeDetailModalNow();return}if(state.currentView==='calendar'){renderHome();showView('home')}});els.mealTabs.forEach(button=>button.addEventListener('click',()=>{state.calendarMode=button.dataset.meal;if(state.calendarMode!=='all')state.meal=state.calendarMode;renderCalendar()}));els.prevMonth.addEventListener('click',()=>changeMonth(-1));els.nextMonth.addEventListener('click',()=>changeMonth(1));els.backCalendar.addEventListener('click',requestCloseDetailModal);els.detailView.addEventListener('click',event=>{if(event.target===els.detailView)requestCloseDetailModal()});els.detailSwipeArea.addEventListener('touchstart',handleDetailTouchStart,{passive:true});els.detailSwipeArea.addEventListener('touchend',handleDetailTouchEnd,{passive:true});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.currentView==='detail')requestCloseDetailModal()});els.editDishName.addEventListener('click',startDishNameEdit);els.deleteDishName.addEventListener('click',deleteDishNameValue);els.replaceButton.addEventListener('click',()=>{const meal=state.detailMeal||state.meal;startCapture({date:state.selectedDate,meal,returnView:'detail',mode:'replace'})});els.deleteButton.addEventListener('click',deleteSelectedRecord);els.originTakeout.addEventListener('change',()=>handleOriginToggle('takeout'));els.originRestaurant.addEventListener('change',()=>handleOriginToggle('restaurant'));els.detailMemo.addEventListener('input',syncOriginCheckboxes);els.saveMemo.addEventListener('click',saveDetailMemo);els.photoInput.addEventListener('change',handlePhotoSelection)}
+els.homeMealButtons.forEach(button=>button.addEventListener('click',()=>startCapture({date:toDateKey(state.today),meal:button.dataset.homeMeal,returnView:'home',mode:'new'})));els.openCalendar.addEventListener('click',openCalendarFromHome);els.openHomeFavorites.addEventListener('click',openFavoritesFromHome);els.homeView.addEventListener('touchstart',handleHomeTouchStart,{passive:true});els.homeView.addEventListener('touchend',handleHomeTouchEnd,{passive:true});els.homeView.addEventListener('touchcancel',()=>{state.homeTouchStart=null},{passive:true});els.homeView.addEventListener('click',event=>{if(Date.now()<state.homeSwipeSuppressUntil||Date.now()<state.calendarSwipeSuppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);els.openPastMenus.addEventListener('click',togglePastMenus);els.copyPastMenus.addEventListener('click',copyPastMenusText);els.backHome.addEventListener('click',goHomeFromCalendar);els.openFavorites.addEventListener('click',toggleFavoritesView);els.detailFavorite.addEventListener('click',()=>toggleFavoriteRecord(state.selectedDate,state.detailMeal||state.meal,els.detailFavorite));els.calendarView.addEventListener('touchstart',handleCalendarTouchStart,{passive:true});els.calendarView.addEventListener('touchend',handleCalendarTouchEnd,{passive:false});els.calendarView.addEventListener('touchcancel',()=>{state.calendarTouchStart=null},{passive:true});window.addEventListener('popstate',()=>{if(state.currentView==='detail'){closeDetailModalNow();return}if(state.currentView==='calendar'){renderHome();showView('home')}});els.mealTabs.forEach(button=>button.addEventListener('click',()=>{state.calendarMode=button.dataset.meal;if(state.calendarMode!=='all')state.meal=state.calendarMode;els.calendarGrid.parentElement.scrollTop=0;renderCalendar()}));els.prevMonth.addEventListener('click',()=>changeMonth(-1));els.nextMonth.addEventListener('click',()=>changeMonth(1));els.backCalendar.addEventListener('click',requestCloseDetailModal);els.detailView.addEventListener('click',event=>{if(event.target===els.detailView)requestCloseDetailModal()});els.detailSwipeArea.addEventListener('touchstart',handleDetailTouchStart,{passive:true});els.detailSwipeArea.addEventListener('touchend',handleDetailTouchEnd,{passive:true});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.currentView==='detail')requestCloseDetailModal()});els.editDishName.addEventListener('click',startDishNameEdit);els.deleteDishName.addEventListener('click',deleteDishNameValue);els.replaceButton.addEventListener('click',()=>{const meal=state.detailMeal||state.meal;startCapture({date:state.selectedDate,meal,returnView:'detail',mode:'replace'})});els.deleteButton.addEventListener('click',deleteSelectedRecord);els.originTakeout.addEventListener('change',()=>handleOriginToggle('takeout'));els.originRestaurant.addEventListener('change',()=>handleOriginToggle('restaurant'));els.detailMemo.addEventListener('input',syncOriginCheckboxes);els.saveMemo.addEventListener('click',saveDetailMemo);els.photoInput.addEventListener('change',handlePhotoSelection)}
 function openDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open(APP.dbName,APP.dbVersion);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(APP.storeName)){const store=db.createObjectStore(APP.storeName,{keyPath:'key'});store.createIndex('date','date',{unique:false})}};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
 function getAllRecords(){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readonly');const request=tx.objectStore(APP.storeName).getAll();request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>reject(request.error)})}
 function putRecord(record){return new Promise((resolve,reject)=>{const tx=state.db.transaction(APP.storeName,'readwrite');tx.objectStore(APP.storeName).put(record);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
@@ -593,7 +610,90 @@ async function copyPastMenusText(){const text=els.pastMenusText.textContent||bui
 function fallbackCopyText(text){const textarea=document.createElement('textarea');textarea.value=text;textarea.setAttribute('readonly','');textarea.style.position='fixed';textarea.style.opacity='0';textarea.style.pointerEvents='none';document.body.appendChild(textarea);textarea.select();const copied=document.execCommand('copy');textarea.remove();if(!copied)throw new Error('copy failed')}
 function toggleFavoritesView(){state.favoritesMode=!state.favoritesMode;renderCalendar()}
 function favoriteRecords(){const order={breakfast:0,lunch:1,dinner:2,snack:3};return [...state.records.values()].filter(record=>record?.favorite&&record?.fullBlob).sort((a,b)=>b.date.localeCompare(a.date)||(order[b.meal]??0)-(order[a.meal]??0))}
-function renderCalendar(){const gallery=state.favoritesMode;els.calendarControls.hidden=gallery;els.calendarGrid.hidden=gallery;els.favoritesList.hidden=!gallery;els.openFavorites.classList.toggle('is-active',gallery);els.openFavorites.textContent=gallery?'♥ お気に入り':'♡ お気に入り';els.openFavorites.title=gallery?'もう一度押すとカレンダーへ戻ります':'お気に入りの一覧を開く';els.openFavorites.setAttribute('aria-pressed',String(gallery));els.calendarSubtitle.textContent=gallery?'お気に入りを新しい順に表示':'直近3か月の食事写真';if(gallery){renderFavoritesList();return}renderMealTabs();renderMonthHeader();renderCalendarGrid()}
+function renderCalendar(){
+  const gallery=state.favoritesMode;
+  const timeline=!gallery&&state.calendarMode!=='all';
+  els.calendarControls.hidden=gallery;
+  els.monthToolbar.hidden=gallery||timeline;
+  els.weekdayRow.hidden=gallery||timeline;
+  els.calendarGrid.hidden=gallery||timeline;
+  els.mealTimeline.hidden=!timeline;
+  els.favoritesList.hidden=!gallery;
+  els.openFavorites.classList.toggle('is-active',gallery);
+  els.openFavorites.textContent=gallery?'♥ お気に入り':'♡ お気に入り';
+  els.openFavorites.title=gallery?'もう一度押すとカレンダーへ戻ります':'お気に入りの一覧を開く';
+  els.openFavorites.setAttribute('aria-pressed',String(gallery));
+  els.calendarSubtitle.textContent=gallery?'お気に入りを新しい順に表示':(timeline?'直近3か月の'+APP.mealNames[state.calendarMode]+'・新しい順':'直近3か月の食事写真');
+  if(gallery){renderFavoritesList();return}
+  renderMealTabs();
+  if(timeline){renderMealTimeline();return}
+  renderMonthHeader();
+  renderCalendarGrid();
+}
+function renderMealTimeline(){
+  cleanupCalendarObjectUrls();
+  els.mealTimeline.replaceChildren();
+  const meal=state.calendarMode;
+  const startKey=toDateKey(retentionStartDate());
+  const todayKey=toDateKey(state.today);
+  const records=[...state.records.values()]
+    .filter(record=>record.meal===meal&&record.fullBlob&&record.date>=startKey&&record.date<=todayKey)
+    .sort((a,b)=>b.date.localeCompare(a.date));
+  if(!records.length){
+    const empty=document.createElement('p');
+    empty.className='meal-timeline-empty';
+    empty.textContent='この期間の'+APP.mealNames[meal]+'の記録はまだありません。';
+    els.mealTimeline.appendChild(empty);
+    return;
+  }
+  for(const record of records){
+    const item=document.createElement('div');
+    item.className='meal-timeline-entry';
+    item.setAttribute('role','listitem');
+    const open=document.createElement('button');
+    open.type='button';
+    open.className='meal-timeline-open';
+    const memo=String(record.memo||'').trim();
+    open.setAttribute('aria-label',formatDate(record.date)+'・'+APP.mealNames[meal]+'：'+(memo||'料理名未入力')+'の詳細を開く');
+    const photo=document.createElement('img');
+    photo.className='meal-timeline-photo';
+    photo.alt='';
+    photo.loading='lazy';
+    const url=URL.createObjectURL(record.thumbBlob||record.fullBlob);
+    state.calendarObjectUrls.add(url);
+    photo.src=url;
+    const meta=document.createElement('span');
+    meta.className='meal-timeline-meta';
+    const date=document.createElement('span');
+    date.className='meal-timeline-date';
+    const d=parseDateKey(record.date);
+    date.textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+'（'+'日月火水木金土'[d.getDay()]+'）';
+    const name=document.createElement('span');
+    name.className='meal-timeline-name'+(memo?'':' is-empty');
+    name.textContent=memo||'料理名未入力';
+    meta.append(date,name);
+    open.append(photo,meta);
+    open.addEventListener('click',()=>openRecord(record.date,meal));
+    const edit=document.createElement('button');
+    edit.type='button';
+    edit.className='meal-timeline-edit';
+    edit.textContent='編集';
+    edit.setAttribute('aria-label',formatDate(record.date)+'・'+APP.mealNames[meal]+'の料理名を編集');
+    edit.addEventListener('click',()=>{
+      openRecord(record.date,meal);
+      startDishNameEdit();
+    });
+    const favorite=document.createElement('button');
+    favorite.type='button';
+    favorite.className='meal-timeline-favorite'+(record.favorite?' is-favorite':'');
+    favorite.textContent=record.favorite?'♥':'♡';
+    favorite.setAttribute('aria-pressed',String(Boolean(record.favorite)));
+    favorite.setAttribute('aria-label',formatDate(record.date)+'・'+APP.mealNames[meal]+'を'+(record.favorite?'お気に入りから解除':'お気に入りに登録'));
+    favorite.addEventListener('click',()=>toggleFavoriteRecord(record.date,meal,favorite));
+    item.append(open,edit,favorite);
+    els.mealTimeline.appendChild(item);
+  }
+}
 function renderFavoritesList(){cleanupCalendarObjectUrls();els.favoritesList.replaceChildren();const records=favoriteRecords();if(!records.length){const empty=document.createElement('p');empty.className='favorites-empty';empty.textContent='お気に入りはまだありません。写真の♡を押して登録できます。';els.favoritesList.appendChild(empty);return}for(const record of records){const item=document.createElement('button');item.type='button';item.className='favorite-entry';item.setAttribute('role','listitem');const img=document.createElement('img'),blob=record.thumbBlob||record.fullBlob,url=URL.createObjectURL(blob);state.calendarObjectUrls.add(url);img.src=url;img.alt=`${formatDate(record.date)}の${APP.mealNames[record.meal]}の写真`;img.loading='lazy';const meta=document.createElement('span');meta.className='favorite-entry-meta';const heading=document.createElement('span');heading.className='favorite-entry-heading';const label=document.createElement('span');label.textContent=`${formatDate(record.date)}・${APP.mealNames[record.meal]}`;const star=document.createElement('span');star.className='favorite-entry-heart';star.textContent='♥';star.setAttribute('aria-hidden','true');heading.append(label,star);meta.appendChild(heading);const memo=String(record.memo||'').trim();if(memo){const name=document.createElement('span');name.className='favorite-entry-name';name.textContent=memo;meta.appendChild(name)}item.append(img,meta);item.addEventListener('click',()=>openRecord(record.date,record.meal));els.favoritesList.appendChild(item)}}
 function syncDetailFavorite(){const record=state.records.get(recordKey(state.selectedDate,state.detailMeal||state.meal)),favorite=Boolean(record?.favorite);els.detailFavorite.textContent=favorite?'♥':'♡';els.detailFavorite.classList.toggle('is-favorite',favorite);els.detailFavorite.setAttribute('aria-pressed',String(favorite));els.detailFavorite.setAttribute('aria-label',favorite?'お気に入りを解除':'お気に入りに登録');els.detailFavorite.title=favorite?'お気に入りを解除':'お気に入りに登録'}
 async function toggleFavoriteRecord(dateKey,meal,button){const key=recordKey(dateKey,meal),record=state.records.get(key);if(!record?.fullBlob||button?.disabled)return;if(button)button.disabled=true;try{const changed={...record,favorite:!Boolean(record.favorite)};await putRecord(changed);state.records.set(key,changed);renderCalendar();if(state.currentView==='detail')syncDetailFavorite()}catch(error){console.error(error);const message='お気に入りの保存に失敗しました。もう一度お試しください。';if(state.currentView==='detail')els.detailStatus.textContent=message;else setCalendarStatus(message)}finally{if(button)button.disabled=false}}
