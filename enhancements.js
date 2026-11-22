@@ -54,7 +54,7 @@ function buildExtendedPastMenusText(){
   return lines.join('\n');
 }
 function renderExtendedCalendarGrid(){
-  renderCalendarGrid();
+  foodlogOriginalCalendarGrid();
   if(state.calendarMode!=='all')return;
   const cells=[...els.calendarGrid.querySelectorAll('.day-cell')];
   const year=state.viewedMonth.getFullYear(),month=state.viewedMonth.getMonth();
@@ -86,7 +86,7 @@ function showTextOnlyRecord(date,meal){
 }
 function renderExtendedMealTimeline(records){
   const photos=records.filter(r=>Boolean(r.fullBlob));
-  renderMealTimeline(photos);
+  foodlogOriginalMealTimeline(photos);
   const textOnly=records.filter(r=>!r.fullBlob&&String(r.memo||'').trim());
   if(!textOnly.length)return;
   els.mealTimeline.querySelector('.meal-timeline-empty')?.remove();
@@ -397,3 +397,128 @@ function bindEnhancementEvents(){
     setBackupStatus('取り込みを中止しました。現在の記録は変更していません。');
   });
 }
+
+let foodlogOriginalCalendarGrid,foodlogOriginalMealTimeline;
+function wireFoodlogUpgrade(){
+  const controls=document.createElement('div');
+  controls.className='past-period-controls';
+  controls.setAttribute('role','group');
+  controls.setAttribute('aria-label','過去メニューの期間');
+  controls.innerHTML=[
+    '<button type="button" id="pastMenu10" class="secondary-button is-selected">10日分</button>',
+    '<button type="button" id="pastMenuMonthly" class="secondary-button">1ヶ月分</button>',
+    '<label id="pastMenuMonthField" hidden>表示する月 <select id="pastMenuMonth" aria-label="表示する月"></select></label>'
+  ].join('');
+  foodlogById('pastMenusText').before(controls);
+  const settings=document.createElement('div');
+  settings.className='backup-controls';
+  settings.innerHTML=[
+    '<button id="openSettings" class="past-menu-open" type="button" aria-expanded="false" aria-controls="settingsPanel">⚙ 設定・バックアップ</button>',
+    '<section id="settingsPanel" class="past-menu-panel settings-panel" hidden aria-label="設定とバックアップ">',
+    '<strong>データのエクスポート</strong>',
+    '<p>完全バックアップは機種変更・再インストール時の復元に使用します。写真は現在保存中のものだけが含まれます。</p>',
+    '<div class="setting-actions">',
+    '<button id="exportFull" type="button" class="secondary-button">完全データを保存（ZIP）</button>',
+    '<button id="exportCsv" type="button" class="secondary-button">料理名一覧を保存（CSV）</button>',
+    '</div><strong>データのインポート</strong>',
+    '<p>ZIPは記録・写真・設定を丸ごと復元します。CSVは料理名だけを追加・更新します。</p>',
+    '<div class="setting-actions">',
+    '<button id="selectImportZip" type="button" class="secondary-button">ZIPから復元</button>',
+    '<button id="selectImportCsv" type="button" class="secondary-button">CSVを取り込む</button>',
+    '</div>',
+    '<input id="importZipFile" type="file" accept=".zip,application/zip" hidden />',
+    '<input id="importCsvFile" type="file" accept=".csv,text/csv" hidden />',
+    '<p id="importPreview" class="import-preview" role="status"></p>',
+    '<div id="importActions" class="setting-actions" hidden>',
+    '<button id="applyImport" type="button" class="primary-button">復元する</button>',
+    '<button id="cancelImport" type="button" class="secondary-button">キャンセル</button>',
+    '</div><p id="settingsStatus" class="status" role="status" aria-live="polite"></p>',
+    '</section>',
+    '<p class="app-version" aria-label="アプリのバージョン">Version 1.0.0 ｜ 更新日：2026.11.22</p>'
+  ].join('');
+  foodlogById('homeStatus').after(settings);
+  const css=document.createElement('style');
+  css.textContent=[
+    '.past-period-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 10px}',
+    '.past-period-controls>button{min-height:43px}',
+    '.past-period-controls .is-selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}',
+    '#pastMenuMonthField{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:730;font-size:.9rem}',
+    '#pastMenuMonthField select{min-height:44px;max-width:67%;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text)}',
+    '.settings-panel{display:grid;gap:9px}',
+    '.settings-panel strong{font-size:.97rem}',
+    '.settings-panel p{margin:0;color:var(--muted);font-size:.82rem;line-height:1.55}',
+    '.settings-panel .setting-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}',
+    '.settings-panel .setting-actions button{min-height:46px;padding:8px 5px;font-size:.78rem;line-height:1.4}',
+    '.settings-panel .import-preview{padding:9px;border:1px solid var(--line);border-radius:10px;background:var(--warm-2)}',
+    '.settings-panel .import-preview:empty{display:none}',
+    '.settings-panel #settingsStatus[data-error="true"]{color:var(--danger)}',
+    '.app-version{text-align:center;margin:16px 0 3px;color:var(--muted);font-size:.69rem;letter-spacing:.02em}',
+    '.calendar-grid.is-all .all-meal-row.is-text-record{background:var(--warm-2);color:var(--text);border:1px solid var(--line);box-shadow:none}',
+    '.meal-timeline-entry.is-text-only{grid-template-columns:84px minmax(0,1fr);gap:10px;padding:8px}',
+    '.meal-timeline-photo.text-only-photo{display:flex;align-items:center;justify-content:center;width:84px;height:70px;flex:0 0 84px;background:var(--warm-2);border:1px dashed var(--line);color:var(--muted);font-size:.75rem;font-weight:750}',
+    '.text-only-note{color:var(--muted);font-size:.68rem}'
+  ].join('\n');
+  document.head.appendChild(css);
+  bindEnhancementEvents();
+}
+(function installFoodlogUpgrade(){
+  retentionStartDate=function(){
+    return new Date(state.today.getFullYear(),state.today.getMonth()-5,1);
+  };
+  purgeExpiredRecords=async function(){
+    const textCutoff=toDateKey(retentionStartDate());
+    const photoCutoff=toDateKey(photoRetentionStartDate());
+    const all=await getAllRecords();
+    for(const record of all){
+      if(typeof record.date!=='string')continue;
+      if(record.date<textCutoff){await deleteRecord(record.key);continue}
+      if(record.date<photoCutoff&&(record.fullBlob||record.thumbBlob||record.favorite))
+        await putRecord({...record,fullBlob:null,thumbBlob:null,favorite:false});
+    }
+  };
+  buildPastMenusText=buildExtendedPastMenusText;
+  renderPastMenus=function(){
+    updatePastMenuOptions();
+    els.pastMenusText.textContent=buildPastMenusText();
+    els.pastMenusStatus.textContent='';
+  };
+  foodlogOriginalCalendarGrid=renderCalendarGrid;
+  renderCalendarGrid=renderExtendedCalendarGrid;
+  foodlogOriginalMealTimeline=renderMealTimeline;
+  renderMealTimeline=renderExtendedMealTimeline;
+  getMealTimelineRecords=function(meal){
+    const startKey=toDateKey(retentionStartDate()),todayKey=toDateKey(state.today);
+    return [...state.records.values()]
+      .filter(r=>r.meal===meal&&(r.fullBlob||String(r.memo||'').trim())&&r.date>=startKey&&r.date<=todayKey)
+      .sort((a,b)=>b.date.localeCompare(a.date));
+  };
+  const oldHeader=renderMonthHeader;
+  renderMonthHeader=function(){
+    oldHeader();
+    els.retentionLabel.textContent='写真3か月・料理名6か月を保持';
+  };
+  const oldCalendar=renderCalendar;
+  renderCalendar=function(){
+    oldCalendar();
+    if(!state.favoritesMode){
+      els.calendarSubtitle.textContent=state.calendarMode==='all'
+        ?'直近6か月の記録（写真は3か月）'
+        :'直近6か月・新しい順・'+getMealTimelineRecords(state.calendarMode).length+'件';
+    }
+  };
+  const oldHome=renderHome;
+  renderHome=function(){
+    oldHome();
+    const date=toDateKey(state.today);
+    for(const button of els.homeMealButtons){
+      const rec=state.records.get(recordKey(date,button.dataset.homeMeal));
+      if(rec&&!rec.fullBlob){
+        button.disabled=false;
+        button.classList.remove('is-recorded');
+        const label=button.querySelector('small');
+        if(label)label.textContent='＋ 写真を記録';
+      }
+    }
+  };
+  document.addEventListener('DOMContentLoaded',wireFoodlogUpgrade);
+})();
