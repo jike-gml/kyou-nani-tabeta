@@ -23,6 +23,7 @@ function updatePastMenuOptions(){
     return new Option(year+'年'+Number(month)+'月',key);
   }));
   select.value=foodlogPastMonth;
+  foodlogById('openPastMenus').textContent=foodlogPastMode==='month'?'過去メニュー（1ヶ月分）':'過去メニュー（10日分）';
   foodlogById('pastMenuMonthField').hidden=foodlogPastMode!=='month';
   foodlogById('pastMenu10').setAttribute('aria-pressed',String(foodlogPastMode==='10'));
   foodlogById('pastMenuMonthly').setAttribute('aria-pressed',String(foodlogPastMode==='month'));
