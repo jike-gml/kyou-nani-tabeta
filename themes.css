@@ -964,3 +964,84 @@ html[data-theme="christmas"] #calendarView .calendar-grid.is-all > .day-cell{
 html[data-theme="winter"] #calendarView .calendar-grid.is-all > .day-cell{
   --date-strip:#e0eef7;--date-strip-sun:#f8e1e7;--date-strip-sat:#dceafb;
 }
+
+
+/* 2026-11-23: breathing room around the four meal markers, without widening cells. */
+#calendarView .calendar-grid.is-all > .day-cell::before{height:27px}
+#calendarView .calendar-grid.is-all > .day-cell > .day-number{
+  width:21px;height:20px;margin:0 auto 2px;font-size:.73rem;
+}
+#calendarView .calendar-grid.is-all > .day-cell > .all-meal-list{
+  margin:8px 0 10px;
+  padding:0 2px;
+  min-height:0;
+  grid-template-rows:repeat(4,26px);
+  gap:2px;
+  align-content:start;
+}
+#calendarView .calendar-grid.is-all .all-meal-row{
+  height:26px;min-height:26px;padding:0 1px;
+}
+#calendarView .calendar-grid.is-all .meal-mark,
+#calendarView .calendar-grid.is-all .meal-mark.has-name{
+  width:22px;min-width:22px;height:22px;font-size:.91rem;
+}
+
+/* Cool/dark theme: light calendar surface, while the home screen stays dark. */
+html[data-theme="cool"] #calendarView{
+  --tab-page:#ffffff;
+  color:#293448;
+}
+html[data-theme="cool"] #calendarView .calendar-fixed{
+  background:#ffffff;
+}
+html[data-theme="cool"] #calendarView .view-title h2,
+html[data-theme="cool"] #calendarView .month-center strong{color:#293448}
+html[data-theme="cool"] #calendarView .view-title p,
+html[data-theme="cool"] #calendarView .month-center span,
+html[data-theme="cool"] #calendarView .status{color:#626b7c}
+html[data-theme="cool"] #calendarView .calendar-card{
+  background:#ffffff;border-color:#d8dfeb;color:#293448;
+}
+html[data-theme="cool"] #calendarView #weekdayRow{
+  background:#f2f4f8;border-color:#d8dfeb;
+}
+html[data-theme="cool"] #calendarView #weekdayRow span{
+  background:#f2f4f8;color:#485367;
+}
+html[data-theme="cool"] #calendarView #weekdayRow span:first-child{
+  background:#fbe9ec;color:#ab394d;
+}
+html[data-theme="cool"] #calendarView #weekdayRow span:last-child{
+  background:#eaf2ff;color:#3266a8;
+}
+html[data-theme="cool"] #calendarView .calendar-grid > :is(.day-cell,.day-blank){
+  background:#ffffff;border-color:#e0e5ef;color:#293448;
+}
+html[data-theme="cool"] #calendarView .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n+1){
+  background:#fff5f6;color:#ab394d;
+}
+html[data-theme="cool"] #calendarView .calendar-grid > :is(.day-cell,.day-blank):nth-child(7n){
+  background:#f3f7ff;color:#3266a8;
+}
+html[data-theme="cool"] #calendarView .calendar-grid > .day-cell .day-number{color:#293448}
+html[data-theme="cool"] #calendarView .calendar-grid > .day-cell:nth-child(7n+1) .day-number{color:#ab394d}
+html[data-theme="cool"] #calendarView .calendar-grid > .day-cell:nth-child(7n) .day-number{color:#3266a8}
+html[data-theme="cool"] #calendarView .calendar-grid:not(.is-all) .day-number{
+  background:#f0f2f7;box-shadow:0 1px 5px rgba(50,60,85,.15);
+}
+html[data-theme="cool"] #calendarView .calendar-grid > .day-cell.is-today .day-number,
+html[data-theme="cool"] #calendarView .calendar-grid:not(.is-all) > .day-cell.is-today .day-number{
+  background:#ae6888;color:#ffffff;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#e9edf4;
+  --date-strip-sun:#f3dce3;
+  --date-strip-sat:#dbe8fb;
+}
+html[data-theme="cool"] #calendarView .meal-timeline-entry{
+  background:#ffffff;border-color:#dce2ed;color:#293448;
+}
+html[data-theme="cool"] #calendarView .meal-timeline-name{color:#293448}
+html[data-theme="cool"] #calendarView .meal-timeline-date,
+html[data-theme="cool"] #calendarView .meal-timeline-name.is-empty{color:#626b7c}
