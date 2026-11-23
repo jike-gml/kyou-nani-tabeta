@@ -937,7 +937,10 @@ html[data-theme="christmas"] #detailView .detail-photo-date{
   content:"";
   position:absolute;
   top:0;left:0;right:0;height:33px;
+  box-sizing:border-box;
   background:var(--date-strip);
+  border-right:2px solid #fff;
+  border-bottom:2px solid #fff;
   pointer-events:none;
 }
 #calendarView .calendar-grid.is-all > .day-cell:nth-child(7n+1)::before{background:var(--date-strip-sun)}
