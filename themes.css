@@ -923,3 +923,41 @@ html[data-theme="christmas"] #detailView .detail-photo-date{
   border:1px solid rgba(255,255,255,.7);
   border-radius:999px;
 }
+
+
+/* Calendar date strip: a slightly deeper theme-matched band above meal entries.
+   Keep Sunday red, Saturday blue, and today's date badge legible. */
+#calendarView .calendar-grid.is-all > .day-cell{
+  position:relative;
+  --date-strip:#e7edf6;
+  --date-strip-sun:#f8e0e4;
+  --date-strip-sat:#dde9fa;
+}
+#calendarView .calendar-grid.is-all > .day-cell::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;height:33px;
+  background:var(--date-strip);
+  pointer-events:none;
+}
+#calendarView .calendar-grid.is-all > .day-cell:nth-child(7n+1)::before{background:var(--date-strip-sun)}
+#calendarView .calendar-grid.is-all > .day-cell:nth-child(7n)::before{background:var(--date-strip-sat)}
+#calendarView .calendar-grid.is-all > .day-cell > .day-number{position:relative;z-index:1}
+html[data-theme="pop"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#ffe6cf;--date-strip-sun:#f9dfe4;--date-strip-sat:#dce9ff;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#1a2032;--date-strip-sun:#2a1c2b;--date-strip-sat:#1d2840;
+}
+html[data-theme="green"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#e0e9d1;--date-strip-sun:#f8dfe2;--date-strip-sat:#dce9fa;
+}
+html[data-theme="blue"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#dbe9fa;--date-strip-sun:#f8e0e4;--date-strip-sat:#d4e5fc;
+}
+html[data-theme="christmas"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#eee1c9;--date-strip-sun:#f7dfe1;--date-strip-sat:#dae8f9;
+}
+html[data-theme="winter"] #calendarView .calendar-grid.is-all > .day-cell{
+  --date-strip:#e0eef7;--date-strip-sun:#f8e1e7;--date-strip-sat:#dceafb;
+}
