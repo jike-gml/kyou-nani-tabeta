@@ -1198,10 +1198,10 @@ html[data-theme="cool"] #calendarView .favorites-list .favorite-entry img{
   border-radius:0;
 }
 
-/* Cool theme only: when the calendar is visible, use 5px side gutters on phones.
-   Retain Android safe-area padding; the home view and other themes are unchanged. */
+/* All themes: use 5px side gutters on mobile calendars only.
+   Preserve device safe-area padding; home layouts and vertical spacing stay unchanged. */
 @media (max-width:599px){
-  html[data-theme="cool"] .app-shell:has(> #calendarView:not([hidden])){
+  .app-shell:has(> #calendarView:not([hidden])){
     padding-left:max(5px,env(safe-area-inset-left));
     padding-right:max(5px,env(safe-area-inset-right));
   }
