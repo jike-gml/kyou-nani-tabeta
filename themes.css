@@ -1045,3 +1045,76 @@ html[data-theme="cool"] #calendarView .meal-timeline-entry{
 html[data-theme="cool"] #calendarView .meal-timeline-name{color:#293448}
 html[data-theme="cool"] #calendarView .meal-timeline-date,
 html[data-theme="cool"] #calendarView .meal-timeline-name.is-empty{color:#626b7c}
+
+/* Cool theme calendar: light controls to match the white calendar background.
+   The dark home screen and the other themes intentionally remain unchanged. */
+html[data-theme="cool"] body #calendarView{
+  --tab-paper:#f5f7fb;--tab-page:#ffffff;
+  --tab-edge:#d1dbe9;--tab-ink:#34445b;
+}
+html[data-theme="cool"] body #calendarView[data-active-meal="breakfast"]{
+  --tab-paper:#fff1e6;--tab-edge:#ecd3c0;--tab-ink:#844d36;
+}
+html[data-theme="cool"] body #calendarView[data-active-meal="lunch"]{
+  --tab-paper:#fff7e6;--tab-edge:#ead9b2;--tab-ink:#7a5b25;
+}
+html[data-theme="cool"] body #calendarView[data-active-meal="dinner"]{
+  --tab-paper:#edf8f3;--tab-edge:#cce5db;--tab-ink:#326b58;
+}
+html[data-theme="cool"] body #calendarView[data-active-meal="snack"]{
+  --tab-paper:#f4f0fc;--tab-edge:#ddd4ef;--tab-ink:#68528a;
+}
+html[data-theme="cool"] #calendarView .back-button,
+html[data-theme="cool"] #calendarView .icon-button{
+  background:#ffffff;border-color:#d8dfeb;color:#435c7b;
+  box-shadow:0 1px 4px rgba(40,60,80,.07);
+}
+html[data-theme="cool"] #calendarView .icon-button:disabled{
+  opacity:.38;
+}
+html[data-theme="cool"] #calendarView .favorites-open{
+  background:#fff8fc;border-color:#edd9e6;color:#895b75;
+}
+html[data-theme="cool"] #calendarView .favorites-open.is-active{
+  background:#ffe9f3;border-color:#efb6d2;color:#bd467b;
+}
+html[data-theme="cool"] #calendarView #calendarControls .meal-tabs .meal-tab{
+  background:#ffffff;border-color:#d5ddea;color:#47576e;
+  box-shadow:0 1px 4px rgba(38,50,75,.06);
+}
+html[data-theme="cool"] #calendarView #calendarControls .meal-tabs .meal-tab.is-active{
+  background:var(--tab-paper);color:var(--tab-ink);
+  border-color:var(--tab-edge);border-bottom:0;
+  box-shadow:0 -2px 7px rgba(38,50,75,.07);
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row{
+  background:#f6f8fc;border-color:#dbe2ed;color:#536175;
+  box-shadow:none;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row.breakfast.is-recorded{
+  background:#fff2eb;border-color:#efd8cd;color:#8b4c37;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row.lunch.is-recorded{
+  background:#fff8e9;border-color:#eadcbb;color:#876426;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row.dinner.is-recorded{
+  background:#edf7f3;border-color:#cce5dc;color:#306d5b;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row.snack.is-recorded{
+  background:#f2f0fb;border-color:#ddd8ee;color:#655587;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row.is-text-record{
+  background:#f7f8fb;border:1px dashed #c4cfdf;color:#34445b;
+}
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row.is-recorded .meal-mark.has-name{
+  color:#263449;
+}
+html[data-theme="cool"] #calendarView .meal-timeline-edit{
+  background:#f2f5fa;color:#455a75;border:1px solid #d5deeb;
+}
+html[data-theme="cool"] #calendarView .meal-timeline-favorite{
+  color:#8f8194;
+}
+html[data-theme="cool"] #calendarView .meal-timeline-favorite.is-favorite{
+  color:#df4d88;
+}
