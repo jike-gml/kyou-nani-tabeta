@@ -733,7 +733,7 @@ function renderMealTimeline(records){
     open.type='button';
     open.className='meal-timeline-open';
     const memo=String(record.memo||'').trim();
-    open.setAttribute('aria-label',formatDate(record.date)+'・'+APP.mealNames[meal]+'：'+(memo||'料理名未入力')+'の詳細を開く');
+    open.setAttribute('aria-label',formatDate(record.date)+'・'+APP.mealNames[meal]+(memo?'：'+memo:'')+'の詳細を開く');
     const photo=document.createElement('img');
     photo.className='meal-timeline-photo';
     photo.alt='';
@@ -748,10 +748,13 @@ function renderMealTimeline(records){
     date.className='meal-timeline-date';
     const d=parseDateKey(record.date);
     date.textContent=(record.date===todayKey?'今日 · ':'')+d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+'（'+'日月火水木金土'[d.getDay()]+'）';
-    const name=document.createElement('span');
-    name.className='meal-timeline-name'+(memo?'':' is-empty');
-    name.textContent=memo||'料理名未入力';
-    meta.append(date,name);
+    meta.appendChild(date);
+    if(memo){
+      const name=document.createElement('span');
+      name.className='meal-timeline-name';
+      name.textContent=memo;
+      meta.appendChild(name);
+    }
     open.append(photo,meta);
     open.addEventListener('click',()=>openRecord(record.date,meal));
     const edit=document.createElement('button');
@@ -849,6 +852,6 @@ function setHomeStatus(message){els.homeStatus.textContent=message}function setC
 function cleanupCalendarObjectUrls(){for(const url of state.calendarObjectUrls)URL.revokeObjectURL(url);state.calendarObjectUrls.clear()}function cleanupDetailObjectUrl(){if(state.detailObjectUrl){URL.revokeObjectURL(state.detailObjectUrl);state.detailObjectUrl=null}}function cleanupAllObjectUrls(){cleanupCalendarObjectUrls();cleanupDetailObjectUrl();if(state.midnightTimer)clearTimeout(state.midnightTimer)}
 </script>
 <script src="./backup.js?v=1"></script>
-<script src="./enhancements.js?v=6"></script>
+<script src="./enhancements.js?v=7"></script>
 </body>
 </html>
