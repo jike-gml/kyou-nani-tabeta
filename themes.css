@@ -1046,6 +1046,13 @@ html[data-theme="cool"] #calendarView .meal-timeline-name{color:#293448}
 html[data-theme="cool"] #calendarView .meal-timeline-date,
 html[data-theme="cool"] #calendarView .meal-timeline-name.is-empty{color:#626b7c}
 
+/* Complete the cool calendar's light palette: the tab tray must also be light. */
+html[data-theme="cool"] #calendarView #calendarControls .meal-tabs{
+  background:#edf1f7;
+  border:1px solid #d8e0ec;
+  box-shadow:none;
+}
+
 /* Cool theme calendar: light controls to match the white calendar background.
    The dark home screen and the other themes intentionally remain unchanged. */
 html[data-theme="cool"] body #calendarView{
