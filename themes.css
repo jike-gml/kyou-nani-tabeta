@@ -1130,3 +1130,32 @@ html[data-theme="cool"] #calendarView .meal-timeline-favorite{
 html[data-theme="cool"] #calendarView .meal-timeline-favorite.is-favorite{
   color:#df4d88;
 }
+
+/* Cool calendar header only: keep "Home" centered and distinguish the heading. */
+html[data-theme="cool"] #calendarView #backHome{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 76px;
+  box-sizing:border-box;
+  width:76px;
+  min-width:76px;
+  min-height:46px;
+  padding:0 6px;
+  font-size:.86rem;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:0;
+  white-space:nowrap;
+  text-align:center;
+  color:#28577f;
+  background:#eaf3ff;
+  border:1px solid #bad0e6;
+  border-radius:12px;
+}
+html[data-theme="cool"] #calendarView #calendarHeading{
+  color:#315d85;
+  font-size:clamp(1.05rem,4.8vw,1.28rem);
+  line-height:1.25;
+  white-space:nowrap;
+}
