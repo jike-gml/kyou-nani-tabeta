@@ -1175,3 +1175,25 @@ html[data-theme="cool"] #calendarView #calendarHeading{
 html[data-theme="cool"] #calendarView #calendarSubtitle{
   color:#e9eff8;
 }
+
+/* Cool calendar square-edge finish: prevent rounded layers exposing their backing.
+   Leave the home screen, other themes, and functional round status marks untouched. */
+html[data-theme="cool"] #calendarView{
+  background:#ffffff;
+}
+html[data-theme="cool"] #calendarView .calendar-fixed > .view-header,
+html[data-theme="cool"] #calendarView #backHome,
+html[data-theme="cool"] #calendarView #openFavorites,
+html[data-theme="cool"] #calendarView #calendarControls .meal-tabs,
+html[data-theme="cool"] #calendarView #calendarControls .meal-tabs .meal-tab,
+html[data-theme="cool"] #calendarView #calendarControls #monthToolbar,
+html[data-theme="cool"] #calendarView #weekdayRow,
+html[data-theme="cool"] #calendarView .calendar-card,
+html[data-theme="cool"] #calendarView .calendar-grid.is-all .all-meal-row,
+html[data-theme="cool"] #calendarView .meal-timeline-entry,
+html[data-theme="cool"] #calendarView .meal-timeline-photo,
+html[data-theme="cool"] #calendarView .meal-timeline-edit,
+html[data-theme="cool"] #calendarView .favorites-list .favorite-entry,
+html[data-theme="cool"] #calendarView .favorites-list .favorite-entry img{
+  border-radius:0;
+}
