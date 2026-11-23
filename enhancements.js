@@ -435,7 +435,7 @@ function wireFoodlogUpgrade(){
     '<button id="cancelImport" type="button" class="secondary-button">キャンセル</button>',
     '</div><p id="settingsStatus" class="status" role="status" aria-live="polite"></p>',
     '</section>',
-    '<p class="app-version" aria-label="アプリのバージョン">Version 1.0.3 ｜ 更新日：2026.11.23</p>'
+    '<p class="app-version" aria-label="アプリのバージョン">Version 1.0.4 ｜ 更新日：2026.11.23</p>'
   ].join('');
   foodlogById('homeStatus').after(settings);
   const css=document.createElement('style');
