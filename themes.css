@@ -1159,3 +1159,19 @@ html[data-theme="cool"] #calendarView #calendarHeading{
   line-height:1.25;
   white-space:nowrap;
 }
+
+/* Cool calendar header strip: darken only the home/title/favorites row,
+   including the breathing room above the text; keep tabs and calendar white. */
+html[data-theme="cool"] #calendarView .calendar-fixed > .view-header{
+  margin-bottom:12px;
+  padding:9px 9px 10px;
+  border-radius:13px;
+  background:#27354c;
+  color:#ffffff;
+}
+html[data-theme="cool"] #calendarView #calendarHeading{
+  color:#ffffff;
+}
+html[data-theme="cool"] #calendarView #calendarSubtitle{
+  color:#e9eff8;
+}
