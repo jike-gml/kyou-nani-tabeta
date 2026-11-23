@@ -916,6 +916,11 @@ html[data-theme="christmas"] .calendar-grid:not(.is-all) > .day-cell.is-today .d
 html[data-theme="winter"] .calendar-grid > .day-cell.is-today .day-number,
 html[data-theme="winter"] .calendar-grid:not(.is-all) > .day-cell.is-today .day-number{background:#186f98;color:#ffffff}
 
+/* Christmas calendar: richer gold for the year/month label on the evergreen toolbar. */
+html[data-theme="christmas"] #calendarView #monthLabel{
+  color:#d6ab62;
+}
+
 /* Christmas: readable rounded date chip on enlarged food photos. */
 html[data-theme="christmas"] #detailView .detail-photo-date{
   color:#ffffff;
